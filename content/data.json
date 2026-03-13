@@ -1,0 +1,11 @@
+[
+  {
+    "id": "8791f80c-5328-4ab1-9c31-55afe51abcce",
+    "title": "Les nouveautés au sujet de Node.js",
+    "description": "Node.js évolue vers plus de performance et de simplicité native (v22/v24), incluant le support natif de TypeScript sans configuration, des WebSockets stables, et la commande node --watch pour le développement. Les versions récentes, dont la LTS 24, mettent l'accent sur la sécurité et le remplacement de bibliothèques externes.",
+    "category": "Tech",
+    "imageUrl": null,
+    "viewsCount": 1,
+    "publishedAt": "2026-03-13T16:22:52.982Z"
+  }
+]
