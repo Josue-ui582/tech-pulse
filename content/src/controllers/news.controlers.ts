@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import { createNewsServices, getNewsService } from "../services/news.services.js";
 import { Category } from "../generated/browser.js";
 import fs from "fs/promises"
+import { incrementViewsService } from "../services/news.services.js";
 
 export const getNewsController = async (req: Request, res: Response) => {
     const categoryQuery = req.query.category as string;
@@ -34,3 +35,13 @@ export const createNewsController = async (req: Request, res: Response) => {
         });
     } 
 }
+
+export const incrementViewsController = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const updatedNews = await incrementViewsService(id as string);
+        res.status(200).json(updatedNews);
+    } catch (error: any) {
+        res.status(404).json({ message: error.message });
+    }
+};

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { createNewsController, getNewsController } from "../controllers/news.controlers.js";
 import { upload } from "../middleware/multer.middleware.js";
+import { incrementViewsController } from "../controllers/news.controlers.js";
 const router = Router();
 
 /**
@@ -126,5 +127,30 @@ router.get("/", getNewsController);
  *         description: Données invalides ou format de fichier incorrect
  */
 router.post("/", upload.single('image'), createNewsController);
+
+/**
+ * @openapi
+ * /api/news/{id}/view:
+ *   patch:
+ *     summary: Incrémente le compteur de vues d'un article
+ *     tags: [News]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID de l'article
+ *     responses:
+ *       200:
+ *         description: Compteur mis à jour
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/News'
+ *       404:
+ *         description: Article introuvable
+ */
+router.patch("/:id/view", incrementViewsController);
 
 export default router;
