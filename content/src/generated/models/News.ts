@@ -39,6 +39,7 @@ export type NewsMinAggregateOutputType = {
   title: string | null
   description: string | null
   category: $Enums.Category | null
+  imageUrl: string | null
   viewsCount: number | null
   publishedAt: Date | null
 }
@@ -48,6 +49,7 @@ export type NewsMaxAggregateOutputType = {
   title: string | null
   description: string | null
   category: $Enums.Category | null
+  imageUrl: string | null
   viewsCount: number | null
   publishedAt: Date | null
 }
@@ -57,6 +59,7 @@ export type NewsCountAggregateOutputType = {
   title: number
   description: number
   category: number
+  imageUrl: number
   viewsCount: number
   publishedAt: number
   _all: number
@@ -76,6 +79,7 @@ export type NewsMinAggregateInputType = {
   title?: true
   description?: true
   category?: true
+  imageUrl?: true
   viewsCount?: true
   publishedAt?: true
 }
@@ -85,6 +89,7 @@ export type NewsMaxAggregateInputType = {
   title?: true
   description?: true
   category?: true
+  imageUrl?: true
   viewsCount?: true
   publishedAt?: true
 }
@@ -94,6 +99,7 @@ export type NewsCountAggregateInputType = {
   title?: true
   description?: true
   category?: true
+  imageUrl?: true
   viewsCount?: true
   publishedAt?: true
   _all?: true
@@ -190,6 +196,7 @@ export type NewsGroupByOutputType = {
   title: string
   description: string
   category: $Enums.Category
+  imageUrl: string | null
   viewsCount: number
   publishedAt: Date
   _count: NewsCountAggregateOutputType | null
@@ -222,6 +229,7 @@ export type NewsWhereInput = {
   title?: Prisma.StringFilter<"News"> | string
   description?: Prisma.StringFilter<"News"> | string
   category?: Prisma.EnumCategoryFilter<"News"> | $Enums.Category
+  imageUrl?: Prisma.StringNullableFilter<"News"> | string | null
   viewsCount?: Prisma.IntFilter<"News"> | number
   publishedAt?: Prisma.DateTimeFilter<"News"> | Date | string
 }
@@ -231,6 +239,7 @@ export type NewsOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
 }
@@ -243,6 +252,7 @@ export type NewsWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"News"> | string
   description?: Prisma.StringFilter<"News"> | string
   category?: Prisma.EnumCategoryFilter<"News"> | $Enums.Category
+  imageUrl?: Prisma.StringNullableFilter<"News"> | string | null
   viewsCount?: Prisma.IntFilter<"News"> | number
   publishedAt?: Prisma.DateTimeFilter<"News"> | Date | string
 }, "id">
@@ -252,6 +262,7 @@ export type NewsOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   _count?: Prisma.NewsCountOrderByAggregateInput
@@ -269,6 +280,7 @@ export type NewsScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"News"> | string
   description?: Prisma.StringWithAggregatesFilter<"News"> | string
   category?: Prisma.EnumCategoryWithAggregatesFilter<"News"> | $Enums.Category
+  imageUrl?: Prisma.StringNullableWithAggregatesFilter<"News"> | string | null
   viewsCount?: Prisma.IntWithAggregatesFilter<"News"> | number
   publishedAt?: Prisma.DateTimeWithAggregatesFilter<"News"> | Date | string
 }
@@ -278,6 +290,7 @@ export type NewsCreateInput = {
   title: string
   description: string
   category: $Enums.Category
+  imageUrl?: string | null
   viewsCount?: number
   publishedAt?: Date | string
 }
@@ -287,6 +300,7 @@ export type NewsUncheckedCreateInput = {
   title: string
   description: string
   category: $Enums.Category
+  imageUrl?: string | null
   viewsCount?: number
   publishedAt?: Date | string
 }
@@ -296,6 +310,7 @@ export type NewsUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -305,6 +320,7 @@ export type NewsUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -314,6 +330,7 @@ export type NewsCreateManyInput = {
   title: string
   description: string
   category: $Enums.Category
+  imageUrl?: string | null
   viewsCount?: number
   publishedAt?: Date | string
 }
@@ -323,6 +340,7 @@ export type NewsUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -332,6 +350,7 @@ export type NewsUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -341,6 +360,7 @@ export type NewsCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
 }
@@ -354,6 +374,7 @@ export type NewsMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
 }
@@ -363,6 +384,7 @@ export type NewsMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
 }
@@ -377,6 +399,10 @@ export type StringFieldUpdateOperationsInput = {
 
 export type EnumCategoryFieldUpdateOperationsInput = {
   set?: $Enums.Category
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -398,6 +424,7 @@ export type NewsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   title?: boolean
   description?: boolean
   category?: boolean
+  imageUrl?: boolean
   viewsCount?: boolean
   publishedAt?: boolean
 }, ExtArgs["result"]["news"]>
@@ -407,6 +434,7 @@ export type NewsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   title?: boolean
   description?: boolean
   category?: boolean
+  imageUrl?: boolean
   viewsCount?: boolean
   publishedAt?: boolean
 }, ExtArgs["result"]["news"]>
@@ -416,6 +444,7 @@ export type NewsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   title?: boolean
   description?: boolean
   category?: boolean
+  imageUrl?: boolean
   viewsCount?: boolean
   publishedAt?: boolean
 }, ExtArgs["result"]["news"]>
@@ -425,11 +454,12 @@ export type NewsSelectScalar = {
   title?: boolean
   description?: boolean
   category?: boolean
+  imageUrl?: boolean
   viewsCount?: boolean
   publishedAt?: boolean
 }
 
-export type NewsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "category" | "viewsCount" | "publishedAt", ExtArgs["result"]["news"]>
+export type NewsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "category" | "imageUrl" | "viewsCount" | "publishedAt", ExtArgs["result"]["news"]>
 
 export type $NewsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "News"
@@ -439,6 +469,7 @@ export type $NewsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     title: string
     description: string
     category: $Enums.Category
+    imageUrl: string | null
     viewsCount: number
     publishedAt: Date
   }, ExtArgs["result"]["news"]>
@@ -868,6 +899,7 @@ export interface NewsFieldRefs {
   readonly title: Prisma.FieldRef<"News", 'String'>
   readonly description: Prisma.FieldRef<"News", 'String'>
   readonly category: Prisma.FieldRef<"News", 'Category'>
+  readonly imageUrl: Prisma.FieldRef<"News", 'String'>
   readonly viewsCount: Prisma.FieldRef<"News", 'Int'>
   readonly publishedAt: Prisma.FieldRef<"News", 'DateTime'>
 }
