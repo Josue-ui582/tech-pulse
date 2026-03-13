@@ -7,13 +7,6 @@ import { getNewsController } from "../controllers/news.controlers.js";
  * /api/news:
  *   get:
  *     summary: Récupère la liste des news
- *     parameters:
- *       - in: query
- *         name: category
- *         schema:
- *           type: string
- *           enum: [Tech, AI, Dev]
- *         description: Filtrer par catégorie
  *     responses:
  *       200:
  *         description: Succès
@@ -26,7 +19,15 @@ import { getNewsController } from "../controllers/news.controlers.js";
  *                 properties:
  *                   id: { type: string }
  *                   title: { type: string }
- *                   category: { type: string }
+ *                   description: { type: string }
+ *                   category: { type: string, enum: [Tech, AI, Dev] }
+ *                   imageUrl: { 
+ *                     type: string, 
+ *                     example: "/uploads/17154321-news.jpg",
+ *                     description: "URL relative de l'image stockée sur le serveur"
+ *                   }
  *                   viewsCount: { type: integer }
+ *                   publishedAt: { type: string, format: date-time }
  */
+
 export default router.get("/", getNewsController);

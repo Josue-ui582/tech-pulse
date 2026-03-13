@@ -519,6 +519,7 @@ export const NewsScalarFieldEnum = {
   title: 'title',
   description: 'description',
   category: 'category',
+  imageUrl: 'imageUrl',
   viewsCount: 'viewsCount',
   publishedAt: 'publishedAt'
 } as const
@@ -532,6 +533,14 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 
