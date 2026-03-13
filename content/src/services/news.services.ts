@@ -37,3 +37,17 @@ export const createNewsServices = async (
         return newArticle;
     });
 };
+
+export const incrementViewsService = async (id: string): Promise<News> => {
+    return await withLock(async () => {
+        const news: News[] = await readData();
+        const article = news.find(item => item.id === id);
+        if (!article) {
+            throw new Error(`Article avec l'ID ${id} introuvable`);
+        }
+        article.viewsCount += 1;
+
+        await writeData(news);
+        return article;
+    });
+};
