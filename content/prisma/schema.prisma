@@ -17,6 +17,7 @@ model News {
   title       String
   description String
   category    Category
+  imageUrl    String?
   viewsCount  Int      @default(0)
   publishedAt DateTime @default(now())
 }
