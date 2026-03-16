@@ -1,13 +1,23 @@
 import NewsCard from "../features/news/components/NewsCard";
 import { SearchBar } from "../features/search/components/SearchBar";
 import { getNews } from "../services/api";
-import { News } from "../types/news";
+import { Category, News } from "../types/news";
 
 export const revalidate = 60;
 
-export default async function HomePage({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
+type HomePageProps = {
+  searchParams: {
+    category?: string;
+  };
+};
+
+export default async function HomePage({ searchParams }: HomePageProps) {
   const { category } = await searchParams;
-  const news = await getNews(category);
+  const categoryEnum: Category | undefined =
+    category && ["Tech", "IA", "Dev"].includes(category)
+      ? (category as Category)
+      : undefined;
+  const news = await getNews(categoryEnum);
 
   return (
     <main className="max-w-7xl mx-auto px-6 py-12">
