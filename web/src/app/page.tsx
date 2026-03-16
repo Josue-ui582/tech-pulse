@@ -6,7 +6,7 @@ import { News } from "../types/news";
 export const revalidate = 60;
 
 export default async function HomePage({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
-  const { category }: any = await searchParams;
+  const { category } = await searchParams;
   const news = await getNews(category);
 
   return (

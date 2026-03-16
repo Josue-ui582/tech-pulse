@@ -4,6 +4,7 @@ import { useState } from "react";
 import { News } from "@/src/types/news";
 import Card from "antd/es/card/Card";
 import { formatDate } from "@/src/utils/formatDate";
+import { div } from "framer-motion/client";
 
 const NewsCard = ({ articles }: { articles: News }) => {
   const [expanded, setExpanded] = useState(false);
@@ -37,12 +38,15 @@ const NewsCard = ({ articles }: { articles: News }) => {
         </p>
 
         {articles.description.length > 120 && (
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="text-blue-500 text-sm font-medium hover:underline mb-2"
-          >
-            {expanded ? "Voir moins" : "Voir plus"}
-          </button>
+          <div className="flex justify-between">
+              <button
+              onClick={() => setExpanded(!expanded)}
+              className="text-blue-500 text-sm font-medium hover:underline mb-2"
+            >
+              {expanded ? "Voir moins" : "Voir plus"}
+            </button>
+            <h4 className="text-sm font-semibold">{articles.category}</h4>
+          </div>
         )}
 
         <div className="flex justify-between text-xs text-gray-500 mt-2">
