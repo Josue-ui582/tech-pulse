@@ -4,11 +4,12 @@ import { withLock } from "../../utils/withLock.js";
 import { writeData } from "../../utils/writeData.js";
 
 
-export const getNewsService = async (category?: Category) => {
+export const getNewsService = async (category?: Category, search?: string) => {
     const news: News[] = await readData();
     return news.filter(item => {
         const matchCategory = !category || item.category === category;
-        return matchCategory;
+        const matchSearch = !search || item.title.toLocaleLowerCase().includes(search.toLocaleLowerCase());
+        return {matchCategory, matchSearch};
     }).sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 };
 
