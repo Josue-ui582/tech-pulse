@@ -5,10 +5,10 @@ import { incrementViewsService } from "../services/news.services.js";
 import type { Category } from "../generated/enums.js";
 
 export const getNewsController = async (req: Request, res: Response) => {
-    const category = req.query.category as Category | undefined;
+    const {category, search} = req.query
 
     try {
-        const news = await getNewsService(category);
+        const news = await getNewsService(category as Category, search as string | undefined);
         res.status(200).json(news);
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la récupération des article" });
