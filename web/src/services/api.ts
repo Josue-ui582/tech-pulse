@@ -3,7 +3,7 @@ import { Category } from "../types/news"
 
 const API_URL = "http://localhost:3001/api/news"
 
-export const getNews = async (category: Category) => {
+export const getNews = async (category?: Category) => {
     const params = new URLSearchParams();
     if(category) params.append("category", category);
 
@@ -16,8 +16,6 @@ export const getNews = async (category: Category) => {
             const errorData = await res.json().catch(() => ({}));
             throw new ReferenceError(errorData.error || `Erreur HTTP: ${res.status} (Impossible de charger les articles)`)
         }
-
-        console.log(res);
 
         return await res.json()
     } catch (error) {

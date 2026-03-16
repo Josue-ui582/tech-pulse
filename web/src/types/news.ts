@@ -5,6 +5,7 @@ export interface News {
     title: string,
     description: string,
     imageUrl: string,
+    category: string,
     viewsCount: number,
     publishedAt: Date
 }
