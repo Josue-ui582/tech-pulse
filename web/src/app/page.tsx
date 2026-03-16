@@ -1,12 +1,9 @@
-import { getNews } from "@/services/news";
-import SearchBar from "@/components/search-bar";
-import NewsGrid from "@/components/news-grid";
+import { SearchBar } from "../features/search/components/SearchBar";
 
 export const revalidate = 60;
 
 export default async function HomePage({ searchParams }: { searchParams: { category?: string } }) {
   const category = searchParams.category;
-  const news = await getNews(category);
 
   return (
     <main className="max-w-7xl mx-auto px-6 py-12">
@@ -22,8 +19,6 @@ export default async function HomePage({ searchParams }: { searchParams: { categ
       <div className="mb-10">
         <SearchBar /> 
       </div>
-
-      <NewsGrid initialData={news} />
     </main>
   );
 }
