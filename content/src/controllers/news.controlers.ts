@@ -1,15 +1,14 @@
 import type { Request, Response } from "express";
 import { createNewsServices, getNewsService } from "../services/news.services.js";
-import { Category } from "../generated/browser.js";
 import fs from "fs/promises"
 import { incrementViewsService } from "../services/news.services.js";
+import type { Category } from "../generated/enums.js";
 
 export const getNewsController = async (req: Request, res: Response) => {
-    const categoryQuery = req.query.category as string;
+    const category = req.query.category as Category | undefined;
 
     try {
-        const isValidCategory = Object.values(Category).includes(categoryQuery as Category);
-        const news = await getNewsService(isValidCategory ? (categoryQuery as Category) : undefined);
+        const news = await getNewsService(category);
         res.status(200).json(news);
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la récupération des article" });
