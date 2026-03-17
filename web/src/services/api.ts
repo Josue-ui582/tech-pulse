@@ -35,20 +35,28 @@ export const getNews = async (category?: Category, search?: string) => {
     }
 }
 
-export const CreateNewsForms = async (title: string, description: string, category: Category, imageUrl?: string) => {
+export const CreateNewsForms = async (title: string, description: string, category: Category, imageFile?: File) => {
     try {
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('category', category);
+        
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
+
         const res = await fetch(API_URL, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "x-client-id": getOrCreateId()
+                "x-client-id": getOrCreateId(),
             },
-            body: JSON.stringify({ title, description, category, imageUrl }),
+            body: formData,
         });
 
         if (!res.ok) {
-        const errorBody = await res.json().catch(() => ({})); 
-        throw new Error(errorBody.error || `Erreur serveur : ${res.status}`);
+            const errorBody = await res.json().catch(() => ({})); 
+            throw new Error(errorBody.error || `Erreur serveur : ${res.status}`);
         }
 
         return await res.json();
