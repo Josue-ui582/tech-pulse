@@ -5,6 +5,8 @@ import { News } from "@/src/types/news";
 import Card from "antd/es/card/Card";
 import { formatDate } from "@/src/utils/formatDate";
 
+const BACKEND_URL = "http://localhost:3001";
+
 const NewsCard = ({ articles }: { articles: News }) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -15,8 +17,9 @@ const NewsCard = ({ articles }: { articles: News }) => {
           draggable={false}
           alt={articles.title}
           src={
-            articles.imageUrl ||
-            "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+            articles.imageUrl 
+              ? `${BACKEND_URL}/${articles.imageUrl}` 
+              : "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
           }
           className="absolute w-full h-full object-cover"
         />

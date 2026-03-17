@@ -1,11 +1,12 @@
 "use client"
 
 import React, { useRef, useState } from 'react';
-import { Form, Input, Button, Select, message, Card } from 'antd';
+import { Form, Input, Button, Select, message, Card, Upload } from 'antd';
 import { Category } from '@/src/types/news';
 import { newsSchema } from '@/src/schema/news.schema';
 import { CreateNewsForms } from '@/src/services/api';
 import * as yup from "yup";
+import { UploadOutlined } from '@ant-design/icons';
 
 const CreateNewsForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
@@ -17,26 +18,30 @@ const CreateNewsForm: React.FC = () => {
     setError(null);
 
     try {
-      await newsSchema.validate(values);
+      const fileItem = values.imageUrl?.[0]; 
+      const fileToUpload = fileItem?.originFileObj;
+
+      if (!fileToUpload) {
+        throw new Error("Fichier image introuvable. Veuillez réessayer.");
+      }
 
       await CreateNewsForms(
-        values.title, 
-        values.description || "", 
-        values.category as Category
+        values.title,
+        values.description,
+        values.category,
+        fileToUpload
       );
 
       message.success("Article publié avec succès !");
       form.resetFields();
-    } catch (err) {
-      if (err instanceof yup.ValidationError) {
-        setError(err.message);
-      } else {
-        setError("Une erreur est survenue lors de la création.");
-      }
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+
+
 
   return (
     <div className="max-w-2xl mx-auto py-12">
@@ -69,8 +74,26 @@ const CreateNewsForm: React.FC = () => {
             </Form.Item>
           </div>
 
-          <Form.Item name="imageUrl" label="URL de l'image">
-            <Input type="file" size="large" className="rounded-xl" />
+          <Form.Item 
+            name="imageUrl" 
+            label="Image de l'article"
+            valuePropName="fileList" 
+            getValueFromEvent={(e) => {
+              if (Array.isArray(e)) return e;
+              return e?.fileList;
+            }}
+            rules={[{ required: true, message: "Veuillez sélectionner une image" }]}
+          >
+            <Upload 
+              maxCount={1} 
+              beforeUpload={() => false}
+              listType="picture"
+              className="w-full"
+            >
+              <Button icon={<UploadOutlined />} className="w-full h-12 rounded-xl">
+                Sélectionner hero1.jpg
+              </Button>
+            </Upload>
           </Form.Item>
 
           <Form.Item name="description" label="Contenu de l'article">
