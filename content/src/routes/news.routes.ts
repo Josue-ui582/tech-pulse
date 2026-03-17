@@ -1,7 +1,6 @@
 import { Router } from "express";
-import { createNewsController, getNewsController } from "../controllers/news.controlers.js";
+import { createNewsController, getNewsController, incrementViewsController } from "../controllers/news.controlers.js";
 import { upload } from "../middleware/multer.middleware.js";
-import { incrementViewsController } from "../controllers/news.controlers.js";
 const router = Router();
 
 /**

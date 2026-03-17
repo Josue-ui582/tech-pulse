@@ -4,34 +4,30 @@ import { useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Input } from 'antd';
 
-const { Search } = Input;
-
-
 export const SearchBar = () => {
     const router = useRouter();
     const params = useSearchParams();
 
-    const [search, setSearch] = useState(params.get("category") || "");
+    const [search, setSearch] = useState(params.get("search") || "");
     
     useEffect(() => {
-        setSearch(params.get("category") || "");
+        setSearch(params.get("search") || "");
     }, [params]);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
             const query = new URLSearchParams(params.toString());
 
-            search ? query.set("category", search) : query.delete("category");
+            search ? query.set("search", search) : query.delete("search");
 
             router.push(`/?${query.toString()}`);
         }, 500);
         return () => clearTimeout(timeout);
     }, [search]);
     return (
-        <Search 
+        <Input 
             placeholder="Rechercher un article" 
-            enterButton="Rechercher" 
-            size="large"
+            size="medium"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
         />
