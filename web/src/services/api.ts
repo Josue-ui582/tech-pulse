@@ -1,11 +1,12 @@
-import { Category } from "../types/news"
+import { Category } from "../types/news";
 
 
 const API_URL = "http://localhost:3001/api/news"
 
-export const getNews = async (category?: Category) => {
+export const getNews = async (category?: Category, search?: string) => {
     const params = new URLSearchParams();
     if(category) params.append("category", category);
+    if(search) params.append("search", search);
 
     try {
         const res = await fetch(`${API_URL}?${params.toString()}`, {
@@ -14,10 +15,10 @@ export const getNews = async (category?: Category) => {
 
         if (!res.ok) {
             const errorData = await res.json().catch(() => ({}));
-            throw new ReferenceError(errorData.error || `Erreur HTTP: ${res.status} (Impossible de charger les articles)`)
+            throw new ReferenceError(errorData.error || `Erreur HTTP: ${res.status} (Impossible de charger les articles)`);
         }
 
-        return await res.json()
+        return await res.json();
     } catch (error) {
         if(error instanceof ReferenceError) throw error;
         throw new ReferenceError("Le serveur est injoignable. Vérifier votre connexion");

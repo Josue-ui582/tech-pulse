@@ -9,7 +9,7 @@ export const getNewsService = async (category?: Category, search?: string) => {
     return news.filter(item => {
         const matchCategory = !category || item.category === category;
         const matchSearch = !search || item.title.toLocaleLowerCase().includes(search.toLocaleLowerCase());
-        return {matchCategory, matchSearch};
+        return matchCategory && matchSearch;
     }).sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 };
 
