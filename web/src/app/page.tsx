@@ -52,7 +52,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           </div>
           
           <Link 
-            href="/news/create" 
+            href="/news" 
             className="flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 hover:bg-indigo-600 text-white font-medium rounded-2xl transition-all duration-300 shadow-xl shadow-slate-200 hover:shadow-indigo-200 hover:-translate-y-0.5 whitespace-nowrap"
           >
             <PlusOutlined />

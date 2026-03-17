@@ -1,7 +1,17 @@
-import { Category } from "../types/news";
+import { Category, News } from "../types/news";
 
 
 const API_URL = "http://localhost:3001/api/news"
+
+const getOrCreateId = (): string => {
+  let id = localStorage.getItem("x-client-id");
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem("x-client-id", id);
+  }
+  console.log(id)
+  return id;
+}
 
 export const getNews = async (category?: Category, search?: string) => {
     const params = new URLSearchParams();
@@ -22,5 +32,28 @@ export const getNews = async (category?: Category, search?: string) => {
     } catch (error) {
         if(error instanceof ReferenceError) throw error;
         throw new ReferenceError("Le serveur est injoignable. Vérifier votre connexion");
+    }
+}
+
+export const CreateNewsForms = async (title: string, description: string, category: Category, imageUrl?: string) => {
+    try {
+        const res = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-client-id": getOrCreateId()
+            },
+            body: JSON.stringify({ title, description, category, imageUrl }),
+        });
+
+        if (!res.ok) {
+        const errorBody = await res.json().catch(() => ({})); 
+        throw new Error(errorBody.error || `Erreur serveur : ${res.status}`);
+        }
+
+        return await res.json();
+    } catch (error) {
+        if(error instanceof Error) throw error;
+        throw new Error("Une erreur inconnue est survenue");
     }
 }
