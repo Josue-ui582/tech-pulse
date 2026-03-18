@@ -26,29 +26,19 @@ export const getNewsService = async (category?: Category, search?: string) => {
     });
 }
 
-export const createNewsServices = async (
+export const createNewsService = async (
     title: string, 
     description: string, 
     category: Category, 
-    imageUrl?: string
-) => {
-    return await withLock(async () => {
-        const news: News[] = await readData();
-
-        const newArticle: News = {
-            id: crypto.randomUUID(),
+    imageUrl?: string | null
+): Promise<News> => {
+    return await prisma.news.create({
+        data: {
             title,
             description,
             category,
-            imageUrl: imageUrl || null,
-            viewsCount: 0,
-            publishedAt: new Date(),
-        };
-
-        news.push(newArticle);
-        await writeData(news)
-
-        return newArticle;
+            imageUrl,
+        },
     });
 };
 
