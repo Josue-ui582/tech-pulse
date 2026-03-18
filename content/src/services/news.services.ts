@@ -1,9 +1,6 @@
 import { Category } from '../generated/client.js';
 import type { News } from '../generated/client.js';
-import { readData } from "../../utils/readData.js";
-import { withLock } from "../../utils/withLock.js";
-import { writeData } from "../../utils/writeData.js";
-import prisma from "../lib/pisma.js";
+import prisma from '../lib/pisma.js';
 
 
 export const getNewsService = async (category?: Category, search?: string) => {
@@ -37,21 +34,19 @@ export const createNewsService = async (
             title,
             description,
             category,
-            imageUrl,
+            imageUrl: imageUrl ?? null, 
         },
     });
 };
 
-export const incrementViewsService = async (id: string): Promise<News> => {
-    return await withLock(async () => {
-        const news: News[] = await readData();
-        const article = news.find(item => item.id === id);
-        if (!article) {
-            throw new Error(`Article avec l'ID ${id} introuvable`);
-        }
-        article.viewsCount += 1;
 
-        await writeData(news);
-        return article;
+export const incrementViewsService = async (id: string): Promise<News> => {
+    return await prisma.news.update({
+        where: { id },
+        data: {
+            viewsCount: {
+                increment: 1
+            }
+        }
     });
 };
