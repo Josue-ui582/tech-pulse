@@ -4,7 +4,8 @@ import fs from "fs/promises"
 import { incrementViewsService } from "../services/news.services.js";
 import type { Category } from "../generated/enums.js";
 import { CreateNewsSchema } from "../schema/news.schema.js";
-import z, { any } from "zod";
+import z from "zod";
+import { Prisma } from "../generated/client.js";
 
 export const getNewsController = async (req: Request, res: Response) => {
     const {category, search} = req.query;
@@ -51,12 +52,19 @@ export const createNewsController = async (req: Request, res: Response) => {
     } 
 };
 
-export const incrementViewsController = async (req: Request, res: Response) => {
+export const incrementViewsController = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
+
     try {
         const updatedNews = await incrementViewsService(id as string);
         res.status(200).json(updatedNews);
-    } catch (error: any) {
-        res.status(404).json({ message: error.message });
+    } catch (error: unknown) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+            res.status(404).json({ message: `Article avec l'ID ${id} introuvable` });
+            return;
+        }
+
+        const message = error instanceof Error ? error.message : "Erreur serveur";
+        res.status(500).json({ message });
     }
 };
