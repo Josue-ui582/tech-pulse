@@ -1,17 +1,30 @@
-import { type News, Category } from "../generated/browser.js";
+import { Category } from '../generated/client.js';
+import type { News } from '../generated/client.js';
 import { readData } from "../../utils/readData.js";
 import { withLock } from "../../utils/withLock.js";
 import { writeData } from "../../utils/writeData.js";
+import prisma from "../lib/pisma.js";
 
 
 export const getNewsService = async (category?: Category, search?: string) => {
-    const news: News[] = await readData();
-    return news.filter(item => {
-        const matchCategory = !category || item.category === category;
-        const matchSearch = !search || item.title.toLocaleLowerCase().includes(search.toLocaleLowerCase());
-        return matchCategory && matchSearch;
-    }).sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-};
+  return await prisma.news.findMany({
+    where: {
+      AND: [
+        category ? { category: category } : {},
+        
+        search ? {
+          title: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        } : {},
+      ],
+    },
+    orderBy: {
+      publishedAt: 'desc',
+    },
+    });
+}
 
 export const createNewsServices = async (
     title: string, 
