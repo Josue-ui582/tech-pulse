@@ -972,6 +972,7 @@ __metadata:
     swagger-ui-express: ^5.0.1
     ts-node-dev: ^2.0.0
     typescript: ^5.9.3
+    zod: ^4.3.6
   languageName: unknown
   linkType: soft
 
@@ -3304,5 +3305,12 @@ __metadata:
     grammex: ^3.1.11
     graphmatch: ^1.1.0
   checksum: bef5e7c828975ec317142b10378cd4d90533a1736c79f18fb30418d17fe1d79182854450774ef19f605982c61b6befe52669eb727ef5dbc144707fb59cb125f2
+  languageName: node
+  linkType: hard
+
+"zod@npm:^4.3.6":
+  version: 4.3.6
+  resolution: "zod@npm:4.3.6"
+  checksum: 19cec761b46bae4b6e7e861ea740f3f248e50a6671825afc8a5758e27b35d6f20ccde9942422fd5cf6f8b697f18bd05ef8bb33f5f2db112ab25cc628de2fae47
   languageName: node
   linkType: hard

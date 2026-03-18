@@ -1,8 +1,10 @@
 import type { Request, Response } from "express";
-import { createNewsServices, getNewsService } from "../services/news.services.js";
+import { createNewsService, getNewsService } from "../services/news.services.js";
 import fs from "fs/promises"
 import { incrementViewsService } from "../services/news.services.js";
 import type { Category } from "../generated/enums.js";
+import { CreateNewsSchema } from "../schema/news.schema.js";
+import z, { any } from "zod";
 
 export const getNewsController = async (req: Request, res: Response) => {
     const {category, search} = req.query;
@@ -16,24 +18,38 @@ export const getNewsController = async (req: Request, res: Response) => {
 };
 
 export const createNewsController = async (req: Request, res: Response) => {
-    const {title, description, category} = req.body;
     const imageUrl = req.file ? `uploads/${req.file.filename}` : null;
 
     try {
-        if (!title || !description || !category) {
-            throw new Error("Champs obligatoires manquants")
-        }
-        const news = await createNewsServices(title, description, category, imageUrl ?? undefined);
+        const validateData = CreateNewsSchema.parse({
+            ...req.body,
+            imageUrl
+        })
+
+        const news = await createNewsService(
+            validateData.title, 
+            validateData.description, 
+            validateData.category, 
+            validateData.imageUrl
+        );
+        
         res.status(201).json(news);
-    } catch (error: unknown) {
+    } catch (error: any) {
         if (req.file) {
             await fs.unlink(req.file.path).catch(() => {}); 
         }
+
+        if (error instanceof z.ZodError) {
+            return res.status(400).json({ 
+                errors: error.issues.map(e => ({ path: e.path, message: e.message })) 
+            });
+        }
+        
         res.status(400).json({ 
-            error: "Erreur lors de la création de l'article"
+            error: error.message || "Erreur lors de la création de l'article"
         });
     } 
-}
+};
 
 export const incrementViewsController = async (req: Request, res: Response) => {
     const { id } = req.params;
