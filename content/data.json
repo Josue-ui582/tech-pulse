@@ -16,5 +16,14 @@
     "imageUrl": "uploads/1773740492411_hero1.jpg",
     "viewsCount": 0,
     "publishedAt": "2026-03-17T09:41:32.425Z"
+  },
+  {
+    "id": "2767e83a-d615-4525-b758-c2266dd7886f",
+    "title": "Maîtriser Next.js 15 : Pourquoi le passage aux Server Actions change la donne",
+    "description": "Le développement web moderne évolue vers une simplification extrême de la communication entre le client et le serveur. Avec l'arrivée de Next.js 15 et la stabilisation des Server Actions, la gestion des formulaires devient un jeu d'enfant. Plus besoin de créer des routes API complexes pour chaque interaction : vous pouvez désormais exécuter des fonctions asynchrones directement sur le serveur depuis vos composants React. Dans cet article, nous explorons comment coupler cette puissance avec des bibliothèques comme Zod ou Yup pour garantir une validation de données robuste tout en offrant une expérience utilisateur fluide et ultra-rapide.",
+    "category": "Dev",
+    "imageUrl": "uploads/1773742769146_html-code-on-computer-monitor-software-web-developer-programming-code-photo.jpg",
+    "viewsCount": 0,
+    "publishedAt": "2026-03-17T10:19:29.168Z"
   }
 ]
