@@ -43,4 +43,6 @@ const router = Router();
  *       401:
  *         description: Identifiants incorrects
  */
-router.post("/login", loginUserController);
+router.post("/", loginUserController);
+
+export default router;
