@@ -1,7 +1,8 @@
-import { Category, News } from "../types/news";
+import { Category } from "../types/news";
 
 
 const API_URL = "http://localhost:3001/api/news"
+const API_URL_Auth = "http://localhost:3001/api"
 
 const getOrCreateId = (): string => {
   let id = localStorage.getItem("x-client-id");
@@ -65,3 +66,29 @@ export const CreateNewsForms = async (title: string, description: string, catego
         throw new Error("Une erreur inconnue est survenue");
     }
 }
+
+export const authService = {
+  async register(data: any) {
+    const response = await fetch(`${API_URL_Auth}/users`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.message || "Erreur lors de l'inscription");
+    return result;
+  },
+
+  async login(data: any) {
+    const response = await fetch(`${API_URL_Auth}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.message || "Identifiants incorrects");
+    return result;
+  }
+};
