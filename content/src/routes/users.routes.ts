@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import { createUsersController, getUsers } from "../controllers/users.controllers.js";
+import { createUsersController, getUsers, loginUserController } from "../controllers/users.controllers.js";
 const router = Router();
 
 /**
@@ -117,6 +117,8 @@ router.get("/", getUsers);
  *         description: Erreur serveur
  */
 router.post("/", createUsersController);
+
+
 
 
 export default router;

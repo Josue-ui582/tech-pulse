@@ -1,3 +1,4 @@
+import { email } from "zod";
 import prisma from "../lib/pisma.js"
 import bcrypt from "bcrypt"
 
@@ -24,5 +25,11 @@ export const createUsersService = async (firstName: string, lastName: string, em
             email: email,
             password: hashedPassword
         }
+    })
+}
+
+export const getUserByEmail = async (email: string) => {
+    return await prisma.users.findUnique({
+        where: { email }
     })
 }
