@@ -11,3 +11,5 @@
 #.pnp.*
 
 /src/generated/prisma
+.env
+node_modules
