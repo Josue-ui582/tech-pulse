@@ -1,8 +1,11 @@
-import { createUsersService, getUsersService } from "../services/users.services.js"
+import 'dotenv/config';
+import { createUsersService, getUserByEmail, getUsersService } from "../services/users.services.js"
 import type { Request, Response } from "express";
 import { createUserSchema } from "../schema/users.schema.js";
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 
-
+const JWT_SECRET = process.env.JWT_SECRET_SECRET as string;
 
 export const getUsers = async (req: Request, res: Response) => {
     try {
@@ -45,5 +48,34 @@ export const createUsersController = async (req: Request, res: Response) => {
             message: "Erreur lors de la création de l'utilisateur",
             error: error instanceof Error ? error.message : "Erreur inconnue"
         })
+    }
+}
+
+export const loginUserController = async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+    try {
+        const user = await getUserByEmail(email);
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                massage: "Email ou mot de passe incorrect"
+            })
+        }
+
+        const isValidePassword = bcrypt.compare(password, user.password);
+        if (!isValidePassword) {
+            return res.status(401).json({
+                success: false,
+                message: "Email ou mot de passe incorrect"
+            })
+        }
+
+        const token = jwt.sign(
+            { id: user.id, role: user.role },
+            JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+    } catch (error) {
+        
     }
 }
