@@ -4,9 +4,9 @@ import swaggerSpec from './config/swagger.config.js';
 import swaggerUi from 'swagger-ui-express';
 import newsRoute from "../src/routes/news.routes.js"
 import usersRoute from "../src/routes/users.routes.js"
+import authRoute from "../src/routes/auth.route.js"
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { loginUserController } from './controllers/users.controllers.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,7 +22,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/news", newsRoute);
 app.use("/api/users", usersRoute);
-app.use("/api/auth", loginUserController);
+app.use("/api/login", authRoute);
 
 app.listen(PORT, () => {
   console.log(`[server]: Server running on http://localhost:${PORT}`);
