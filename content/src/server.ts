@@ -3,6 +3,7 @@ import cors from 'cors';
 import swaggerSpec from './config/swagger.config.js';
 import swaggerUi from 'swagger-ui-express';
 import newsRoute from "../src/routes/news.routes.js"
+import usersRoute from "../src/routes/users.routes.js"
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/news", newsRoute);
+app.use("/api/users", usersRoute);
 
 app.listen(PORT, () => {
   console.log(`[server]: Server running on http://localhost:${PORT}`);
