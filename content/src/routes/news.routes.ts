@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { createNewsController, getNewsController, incrementViewsController } from "../controllers/news.controlers.js";
 import { upload } from "../middleware/multer.middleware.js";
+import { authorize } from "../middleware/auth.middleware.js";
 const router = Router();
 
 /**
@@ -125,7 +126,7 @@ router.get("/", getNewsController);
  *       400:
  *         description: Données invalides ou format de fichier incorrect
  */
-router.post("/", upload.single('image'), createNewsController);
+router.post("/", upload.single('image'), authorize('admin'), createNewsController);
 
 /**
  * @openapi
