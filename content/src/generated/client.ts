@@ -46,3 +46,8 @@ export { Prisma }
  * 
  */
 export type News = Prisma.NewsModel
+/**
+ * Model Users
+ * 
+ */
+export type Users = Prisma.UsersModel
