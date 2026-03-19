@@ -75,7 +75,22 @@ export const loginUserController = async (req: Request, res: Response) => {
             JWT_SECRET,
             { expiresIn: '24h' }
         );
+
+        return res.status(200).json({
+            success: true,
+            token: token,
+            user: {
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                role: user.role
+            }
+        })
     } catch (error) {
-        
+        return res.status(500).json({
+            success: false,
+            message: "Erreur lors de la connexion",
+            error: error instanceof Error ? error.message : "Erreur inconnue"
+        });
     }
 }
