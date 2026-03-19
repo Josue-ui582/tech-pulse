@@ -412,6 +412,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/bcrypt@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@types/bcrypt@npm:6.0.0"
+  dependencies:
+    "@types/node": "*"
+  checksum: 628844016504c0d36047ed6c8e97385423c7b6ec6c208569ade8f6f2c685489a5134a38ab61d2ead2c6059983c8804e802d48155d56995805962004ff65c3b6b
+  languageName: node
+  linkType: hard
+
 "@types/body-parser@npm:*":
   version: 1.19.6
   resolution: "@types/body-parser@npm:1.19.6"
@@ -675,6 +684,17 @@ __metadata:
   version: 4.0.4
   resolution: "balanced-match@npm:4.0.4"
   checksum: fb07bb66a0959c2843fc055838047e2a95ccebb837c519614afb067ebfdf2fa967ca8d712c35ced07f2cd26fc6f07964230b094891315ad74f11eba3d53178a0
+  languageName: node
+  linkType: hard
+
+"bcrypt@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "bcrypt@npm:6.0.0"
+  dependencies:
+    node-addon-api: ^8.3.0
+    node-gyp: latest
+    node-gyp-build: ^4.8.4
+  checksum: 004e1920fab7a7183b15467257f3010b45f5db73ad91448fb108c9070dfe56c4e35cb16e12987dd88b9e03b997f08a6070494802cb5fd2a90e1664279ab8aef5
   languageName: node
   linkType: hard
 
@@ -956,12 +976,14 @@ __metadata:
   dependencies:
     "@prisma/adapter-pg": ^7.5.0
     "@prisma/client": ^7.5.0
+    "@types/bcrypt": ^6.0.0
     "@types/cors": ^2.8.19
     "@types/express": ^5.0.6
     "@types/multer": ^2.1.0
     "@types/node": ^25.5.0
     "@types/swagger-jsdoc": ^6.0.4
     "@types/swagger-ui-express": ^4.1.8
+    bcrypt: ^6.0.0
     cors: ^2.8.6
     express: ^5.2.1
     multer: ^2.1.1
@@ -2020,10 +2042,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-addon-api@npm:^8.3.0":
+  version: 8.6.0
+  resolution: "node-addon-api@npm:8.6.0"
+  dependencies:
+    node-gyp: latest
+  checksum: 42b1da894403edafa76ba860dec5ef74cddd6216198e1c9d446e61e11bfccd79da555331f9d049758f1eeb86dfc72a0870052644689a4e26cdc8d85f8c0310f3
+  languageName: node
+  linkType: hard
+
 "node-fetch-native@npm:^1.6.6":
   version: 1.6.7
   resolution: "node-fetch-native@npm:1.6.7"
   checksum: c564e4f098b2ee5f56569a5f7a3c81b86dd11eb626460c332930fbff180df727bf44067268b2f19e646ac2e87632662dabd362df4b6a93c7bd898a94a3af9cb1
+  languageName: node
+  linkType: hard
+
+"node-gyp-build@npm:^4.8.4":
+  version: 4.8.4
+  resolution: "node-gyp-build@npm:4.8.4"
+  bin:
+    node-gyp-build: bin.js
+    node-gyp-build-optional: optional.js
+    node-gyp-build-test: build-test.js
+  checksum: 8b81ca8ffd5fa257ad8d067896d07908a36918bc84fb04647af09d92f58310def2d2b8614d8606d129d9cd9b48890a5d2bec18abe7fcff54818f72bedd3a7d74
   languageName: node
   linkType: hard
 

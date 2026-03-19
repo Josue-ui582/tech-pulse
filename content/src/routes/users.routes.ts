@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import { getUsers } from "../controllers/users.controllers.js";
+import { createUsersController, getUsers } from "../controllers/users.controllers.js";
 const router = Router();
 
 /**
@@ -24,9 +24,6 @@ const router = Router();
  *           type: string
  *           format: email
  *           example: "jean.dupont@example.com"
- *         role:
- *           type: string
- *           example: "admin"
  *         # Le mot de passe est généralement exclu des schémas de réponse pour la sécurité
  */
 
@@ -68,6 +65,58 @@ const router = Router();
  *                   type: string
  */
 router.get("/", getUsers);
+
+/**
+ * @openapi
+ * /api/users:
+ *   post:
+ *     summary: Créer un nouvel utilisateur
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - firstName
+ *               - lastName
+ *               - email
+ *               - password
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *                 example: "Jean"
+ *               lastName:
+ *                 type: string
+ *                 example: "Dupont"
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "jean.dupont@example.com"
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 example: "MonMotDePasseSecurise123"
+ *     responses:
+ *       201:
+ *         description: "Utilisateur créé avec succès"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/User'
+ *       400:
+ *         description: "Données invalides (ex: email déjà utilisé)"
+ *       500:
+ *         description: Erreur serveur
+ */
+router.post("/", createUsersController);
 
 
 export default router;
