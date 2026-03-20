@@ -63,3 +63,9 @@ export const updataNewService = async (id : string, data: UpdateNewsDto) => {
     data: data
   })
 }
+
+export const deleteNewService = async (id: string) => {
+  return await prisma.news.delete({
+    where: { id },
+  });
+};

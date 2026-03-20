@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createNewsController, getNewsController, incrementViewsController, updatedNewsController } from "../controllers/news.controlers.js";
+import { createNewsController, deleteNewController, getNewsController, incrementViewsController, updatedNewsController } from "../controllers/news.controlers.js";
 import { upload } from "../middleware/multer.middleware.js";
 import { authorize } from "../middleware/auth.middleware.js";
 const router = Router();
@@ -202,5 +202,29 @@ router.patch("/:id/view", incrementViewsController);
  *         description: Erreur serveur interne
  */
 router.patch("/:id", updatedNewsController);
+
+/**
+ * @openapi
+ * /api/news/{id}:
+ *   delete:
+ *     summary: Supprime définitivement un article
+ *     tags: [News]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID de l'article à supprimer
+ *     responses:
+ *       200:
+ *         description: Article supprimé avec succès
+ *       404:
+ *         description: Article introuvable
+ *       500:
+ *         description: Erreur serveur
+ */
+router.delete("/:id", deleteNewController);
+
 
 export default router;
