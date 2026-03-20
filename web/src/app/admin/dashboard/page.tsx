@@ -12,6 +12,8 @@ import { formatDate } from '@/src/utils/formatDate';
 
 const { Title, Text } = Typography;
 
+const SERVER_URL = "http://localhost:3001";
+
 export default function NewsAdminPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
@@ -49,7 +51,7 @@ export default function NewsAdminPage() {
       render: (text: string, record: any) => (
         <div className="flex items-center gap-4">
           <Image 
-            src={record.imageUrl || 'https://placehold.co'} 
+            src={`${SERVER_URL}/${record.imageUrl}`}
             className="w-12 h-12 rounded-xl object-cover shadow-sm border border-gray-100 hidden sm:block" 
             alt="news"
             width="50"
@@ -69,7 +71,7 @@ export default function NewsAdminPage() {
       responsive: ['md'],
       render: (cat: string) => (
         <Tag className="rounded-full px-3 border-none bg-blue-50 text-blue-600 font-medium">
-          {cat.toUpperCase()}
+          {cat}
         </Tag>
       )
     },
