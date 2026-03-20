@@ -51,11 +51,12 @@ export default function NewsAdminPage() {
       render: (text: string, record: any) => (
         <div className="flex items-center gap-4">
           <Image 
-            src={`${SERVER_URL}/${record.imageUrl}`}
+            src={record.imageUrl ? `${SERVER_URL}/${record.imageUrl}` : "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"}
             className="w-12 h-12 rounded-xl object-cover shadow-sm border border-gray-100 hidden sm:block" 
             alt="news"
             width="50"
             height="50"
+            unoptimized={true}
           />
           <div className="flex flex-col max-w-50 md:max-w-xs">
             <Text strong className="truncate text-gray-800">{text}</Text>
