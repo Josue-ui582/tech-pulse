@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createNewsController, getNewsController, incrementViewsController } from "../controllers/news.controlers.js";
+import { createNewsController, getNewsController, incrementViewsController, updatedNewsController } from "../controllers/news.controlers.js";
 import { upload } from "../middleware/multer.middleware.js";
 import { authorize } from "../middleware/auth.middleware.js";
 const router = Router();
@@ -152,5 +152,55 @@ router.post("/", upload.single('image'), authorize('admin'), createNewsControlle
  *         description: Article introuvable
  */
 router.patch("/:id/view", incrementViewsController);
+
+/**
+ * @openapi
+ * /api/news/{id}:
+ *   patch:
+ *     summary: Met à jour un article de news existant
+ *     tags: [News]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID unique de l'article (UUID)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: "Nouveau titre de l'article"
+ *               description:
+ *                 type: string
+ *                 example: "Contenu mis à jour de la news..."
+ *               category:
+ *                 type: string
+ *                 enum: [Tech, AI, Dev]
+ *               imageUrl:
+ *                 type: string
+ *                 format: uri
+ *                 nullable: true
+ *                 example: "https://exemple.com"
+ *     responses:
+ *       200:
+ *         description: Article mis à jour avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/News'
+ *       400:
+ *         description: Données de requête invalides
+ *       404:
+ *         description: Article introuvable (ID inexistant)
+ *       500:
+ *         description: Erreur serveur interne
+ */
+router.patch("/:id", updatedNewsController);
 
 export default router;
