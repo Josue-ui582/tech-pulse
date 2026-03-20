@@ -1,4 +1,5 @@
-import { Category } from "../types/news";
+import { FetchEventResult } from "next/dist/server/web/types";
+import { Category, UpdateNewsData } from "../types/news";
 
 
 const API_URL = "http://localhost:3001/api/news"
@@ -87,5 +88,49 @@ export const authService = {
     const result = await response.json();
     if (!response.ok) throw new Error(result.message || "Identifiants incorrects");
     return result;
+  }
+};
+
+export const updateNews = async (id: string, data: UpdateNewsData) => {
+  try {
+    const formData = new FormData();
+
+    if (data.title) formData.append('title', data.title);
+    if (data.description) formData.append('description', data.description);
+    if (data.category) formData.append('category', data.category);
+    if (data.image) formData.append('image', data.image);
+
+    const response = await fetch(`/api/news/${id}`, {
+      method: 'PATCH',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Erreur lors de la mise à jour');
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) {
+        throw error
+    }
+    throw new ReferenceError("Erreur serveur, vérifiez votre connexion")
+  }
+};
+
+export const getNewsById = async (id: string) => {
+  try {
+    const response = await fetch(`/api/news/${id}`);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Impossible de récupérer l'article");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if(error instanceof Error) throw error;
+    throw new ReferenceError("Erreur serveur, vérifiez votre connexion");
   }
 };

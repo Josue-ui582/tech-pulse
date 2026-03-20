@@ -9,6 +9,7 @@ import CreateNewsForm from '../../news/page';
 import { getNews } from '@/src/services/api';
 import Image from 'next/image';
 import { formatDate } from '@/src/utils/formatDate';
+import UpdateNewsForm from '@/src/features/news/components/UpdateNew';
 
 const { Title, Text } = Typography;
 
@@ -16,6 +17,7 @@ const SERVER_URL = "http://localhost:3001";
 
 export default function NewsAdminPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedNewsId, setSelectedNewsId] = useState<string | null>(null);
   const [searchText, setSearchText] = useState('');
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -97,7 +99,11 @@ export default function NewsAdminPage() {
             <Button 
               type="text" 
               className="hover:bg-blue-50 text-blue-500 rounded-lg" 
-              icon={<EditOutlined />} 
+              icon={<EditOutlined />}
+              onClick={() => {
+              setSelectedNewsId(record.id);
+              setIsModalOpen(true);
+            }} 
             />
           </Tooltip>
           <Tooltip title="Supprimer">
@@ -113,6 +119,7 @@ export default function NewsAdminPage() {
       ),
     },
   ];
+
 
   const confirmDelete = (id: string) => {
     Modal.confirm({
@@ -187,6 +194,17 @@ export default function NewsAdminPage() {
          <div className="pt-6">
             <CreateNewsForm />
          </div>
+      </Modal>
+
+      <Modal
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        footer={null}
+        destroyOnClose
+        centered
+        width={700}
+      >
+        {selectedNewsId && <UpdateNewsForm newsId={selectedNewsId} />}
       </Modal>
 
       <style jsx global>{`
