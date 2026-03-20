@@ -1,11 +1,8 @@
 "use client"
 
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button, Select, message, Card, Upload } from 'antd';
-import { Category } from '@/src/types/news';
-import { newsSchema } from '@/src/schema/news.schema';
 import { CreateNewsForms } from '@/src/services/api';
-import * as yup from "yup";
 import { UploadOutlined } from '@ant-design/icons';
 
 const CreateNewsForm: React.FC = () => {
@@ -44,8 +41,8 @@ const CreateNewsForm: React.FC = () => {
 
 
   return (
-    <div className="max-w-2xl mx-auto py-12">
-      <Card className="shadow-2xl rounded-3xl border-none bg-white/80 backdrop-blur-sm">
+    <div className="max-w-2xl mx-auto">
+      <Card className="rounded-3xl border-none bg-white/80 backdrop-blur-sm">
         <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">Créer un nouvel article</h2>
 
         {error && (
