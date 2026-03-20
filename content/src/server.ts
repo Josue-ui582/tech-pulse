@@ -18,6 +18,14 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 
+app.use((req, res, next) => {
+  // Autorise l'image à être chargée par un autre domaine (Next.js)
+  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+  // Désactive la restriction de l'origine pour les ressources statiques
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  next();
+});
+
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/news", newsRoute);
