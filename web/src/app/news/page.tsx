@@ -65,7 +65,7 @@ const CreateNewsForm: React.FC = () => {
             <Form.Item name="category" label="Catégorie">
               <Select size="large" className="rounded-xl">
                 <Select.Option value="Tech">Tech</Select.Option>
-                <Select.Option value="IA">IA</Select.Option>
+                <Select.Option value="AI">AI</Select.Option>
                 <Select.Option value="Dev">Dev</Select.Option>
               </Select>
             </Form.Item>
