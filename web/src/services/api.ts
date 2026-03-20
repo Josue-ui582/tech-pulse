@@ -4,15 +4,6 @@ import { Category } from "../types/news";
 const API_URL = "http://localhost:3001/api/news"
 const API_URL_Auth = "http://localhost:3001/api"
 
-const getOrCreateId = (): string => {
-  let id = localStorage.getItem("x-client-id");
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem("x-client-id", id);
-  }
-  console.log(id)
-  return id;
-}
 
 export const getNews = async (category?: Category, search?: string) => {
     const params = new URLSearchParams();
@@ -37,6 +28,12 @@ export const getNews = async (category?: Category, search?: string) => {
 }
 
 export const CreateNewsForms = async (title: string, description: string, category: Category, imageFile?: File) => {
+    const token = typeof window !== undefined ? localStorage.getItem("token") : null;
+
+    if (!token) {
+        throw new Error("Vous devez être connecté pour publier un article.");
+    }
+
     try {
         const formData = new FormData();
         formData.append('title', title);
@@ -50,14 +47,14 @@ export const CreateNewsForms = async (title: string, description: string, catego
         const res = await fetch(API_URL, {
             method: "POST",
             headers: {
-                "x-client-id": getOrCreateId(),
+                "Authorization": `Bearer ${token}`
             },
             body: formData,
         });
 
         if (!res.ok) {
             const errorBody = await res.json().catch(() => ({})); 
-            throw new Error(errorBody.error || `Erreur serveur : ${res.status}`);
+            throw new Error(errorBody.message || errorBody.error || `Erreur : ${res.status}`);
         }
 
         return await res.json();
