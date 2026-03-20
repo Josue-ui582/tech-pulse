@@ -1,17 +1,45 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table, Button, Space, Tag, Input, Card, Modal, message, Tooltip, Typography } from 'antd';
 import { 
   PlusOutlined, EditOutlined, DeleteOutlined, 
   SearchOutlined, EyeOutlined, MoreOutlined 
 } from '@ant-design/icons';
 import CreateNewsForm from '../../news/page';
+import { getNews } from '@/src/services/api';
+import Image from 'next/image';
+import { formatDate } from '@/src/utils/formatDate';
 
 const { Title, Text } = Typography;
 
 export default function NewsAdminPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchNews = async (search?: string) => {
+    setLoading(true);
+    try {
+      const response = await getNews(undefined, search);
+      setNews(response.data || response);
+    } catch (error: any) {
+      message.error(error.message);
+    }finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchNews();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchNews(searchText);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchText]);
 
   const columns = [
     {
@@ -20,14 +48,16 @@ export default function NewsAdminPage() {
       key: 'title',
       render: (text: string, record: any) => (
         <div className="flex items-center gap-4">
-          <img 
+          <Image 
             src={record.imageUrl || 'https://placehold.co'} 
             className="w-12 h-12 rounded-xl object-cover shadow-sm border border-gray-100 hidden sm:block" 
             alt="news"
+            width="50"
+            height="50"
           />
           <div className="flex flex-col max-w-50 md:max-w-xs">
             <Text strong className="truncate text-gray-800">{text}</Text>
-            <Text type="secondary" className="text-xs italic">Publié le 12/03/24</Text>
+            <Text type="secondary" className="text-xs italic">{formatDate(record.publishedAt)}</Text>
           </div>
         </div>
       ),
@@ -47,10 +77,10 @@ export default function NewsAdminPage() {
       title: 'Performance', 
       dataIndex: 'viewsCount', 
       key: 'views',
-      render: (views: number) => (
+      render: (record: any) => (
         <div className="flex items-center gap-1 text-gray-500">
           <EyeOutlined className="text-xs" />
-          <span className="font-semibold">{views || 0}</span>
+          <span className="font-semibold">{record.viewsCount}</span>
         </div>
       )
     },
@@ -117,9 +147,10 @@ export default function NewsAdminPage() {
       <Card className="rounded-3xl shadow-xl shadow-gray-100/50 border border-gray-100 overflow-hidden">
         <div className="mb-6 flex flex-col md:flex-row gap-4 justify-between">
           <Input 
-            placeholder="Rechercher par titre ou catégorie..." 
+            placeholder="Rechercher par titre..." 
             prefix={<SearchOutlined className="text-gray-400" />} 
             className="h-11 max-w-md rounded-xl bg-gray-50 border-none focus:bg-white transition-all"
+            value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
           <div className="flex gap-2">
@@ -129,12 +160,13 @@ export default function NewsAdminPage() {
 
         <Table 
           columns={columns} 
-          dataSource={[]}
+          dataSource={news}
           pagination={{ 
             pageSize: 6,
             className: "pr-4",
             showSizeChanger: false
           }} 
+          loading={loading}
           rowKey="id"
           scroll={{ x: 'max-content' }}
           className="modern-table"
