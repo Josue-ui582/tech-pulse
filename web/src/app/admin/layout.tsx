@@ -22,7 +22,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     const menuItems = [
         { key: '/admin/dashboard', icon: <DashboardOutlined />, label: 'Dashboard' },
-        { key: '/admin/news', icon: <FileTextOutlined />, label: 'Articles' },
         { key: '/admin/users', icon: <UserOutlined />, label: 'Équipe' },
         { key: '/admin/settings', icon: <SettingOutlined />, label: 'Réglages' },
     ];
