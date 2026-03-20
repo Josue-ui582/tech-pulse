@@ -11,6 +11,7 @@ import {
 } from '@ant-design/icons';
 import { useRouter, usePathname } from 'next/navigation';
 import Loading from './dashboard/loading';
+import AdminAvatar from '@/src/components/layout/Avatar';
 
 const { Header, Content, Sider } = Layout;
 
@@ -72,22 +73,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           <div className="flex items-center gap-5">
             <Badge dot color="blue">
-              <BellOutlined className="text-xl text-gray-400 hover:text-blue-600 cursor-pointer transition-colors" />
+              <BellOutlined style={{ color: 'white' }} className="text-xl font-bold cursor-pointer" />
             </Badge>
-            
-            <Dropdown 
-              menu={{ items: [{ key: 'logout', label: 'Déconnexion', icon: <LogoutOutlined />, danger: true, onClick: handleLogout }] }}
-              placement="bottomRight"
-              arrow
-            >
               <div className="flex items-center gap-3 p-1 pr-3bg-gray-50 rounded-full cursor-pointer transition-all border border-gray-100">
-                <Avatar src="https://api.dicebear.com" className="bg-blue-100 shadow-sm" />
-                <div className="hidden sm:flex flex-col leading-none">
-                  <span className="text-sm font-bold text-gray-100">{user.firstName} Admin</span>
-                  <span className="text-[10px] text-gray-400 lowercase font-bold tracking-tighter">Propriétaire</span>
-                </div>
+                <AdminAvatar user={user} />
               </div>
-            </Dropdown>
           </div>
         </Header>
 
