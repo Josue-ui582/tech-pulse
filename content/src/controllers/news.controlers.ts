@@ -1,11 +1,12 @@
 import type { Request, Response } from "express";
-import { createNewsService, getNewsService, updataNewService } from "../services/news.services.js";
+import { createNewsService, deleteNewService, getNewsService, updataNewService } from "../services/news.services.js";
 import fs from "fs/promises"
 import { incrementViewsService } from "../services/news.services.js";
 import type { Category } from "../generated/enums.js";
 import { CreateNewsSchema } from "../schema/news.schema.js";
 import z, { success, unknown } from "zod";
 import { Prisma } from "../generated/client.js";
+import { PrismaClientUnknownRequestError } from "@prisma/client/runtime/client";
 
 export const getNewsController = async (req: Request, res: Response) => {
     const {category, search} = req.query;
@@ -97,5 +98,26 @@ export const updatedNewsController = async (req: Request<{id: string}>, res: Res
             message: "Erreur lors de la mise à jour", 
             error: errorMessage 
         });
+    }
+}
+
+export const deleteNewController = async (req: Request<{id: string}>, res: Response) => {
+    try {
+        const { id } = req.params;
+        await deleteNewService(id);
+
+        return res.status(200).json({
+        message: "Article supprimé avec succès"
+        });
+
+    } catch (error: unknown) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === 'P2025') {
+                return res.status(404).json({ message: "Cet article n'existe pas ou a déjà été supprimé" });
+            }
+        }
+
+        const errorMessage = error instanceof Error ? error.message : "Erreur serveur";
+        return res.status(500).json({ message: "Erreur lors de la suppression", error: errorMessage });
     }
 }
