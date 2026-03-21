@@ -1,6 +1,4 @@
-import { FetchEventResult } from "next/dist/server/web/types";
 import { Category, UpdateNewsData } from "../types/news";
-import { message } from "antd";
 
 
 const API_URL = "http://localhost:3001/api/news"
@@ -94,16 +92,12 @@ export const authService = {
 
 export const updateNews = async (id: string, data: UpdateNewsData) => {
   try {
-    const formData = new FormData();
-
-    if (data.title) formData.append('title', data.title);
-    if (data.description) formData.append('description', data.description);
-    if (data.category) formData.append('category', data.category);
-    if (data.image) formData.append('image', data.image);
-
     const response = await fetch(`${API_URL}/${id}`, {
       method: 'PATCH',
-      body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data: data }), 
     });
 
     if (!response.ok) {
@@ -113,10 +107,7 @@ export const updateNews = async (id: string, data: UpdateNewsData) => {
 
     return await response.json();
   } catch (error) {
-    if (error instanceof Error) {
-        throw error
-    }
-    throw new ReferenceError("Erreur serveur, vérifiez votre connexion")
+    throw error;
   }
 };
 
