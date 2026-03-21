@@ -9,6 +9,8 @@ interface UpdateNewsFormProps {
   newsId: string;
 }
 
+const SERVER_URL = "http://localhost:3001";
+
 const UpdateNewsForm: React.FC<UpdateNewsFormProps> = ({ newsId }) => {
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
@@ -18,7 +20,7 @@ const UpdateNewsForm: React.FC<UpdateNewsFormProps> = ({ newsId }) => {
     const fetchNews = async () => {
       try {
         const response = await getNewsById(newsId);
-        const news = response.data;
+        const news = response;
 
         form.setFieldsValue({
           title: news.title,
@@ -28,7 +30,7 @@ const UpdateNewsForm: React.FC<UpdateNewsFormProps> = ({ newsId }) => {
             uid: '-1',
             name: 'Image actuelle',
             status: 'done',
-            url: news.imageUrl,
+            url: `${SERVER_URL}/${news.imageUrl}`, 
           }] : [],
         });
       } catch (err) {

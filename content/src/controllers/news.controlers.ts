@@ -1,12 +1,11 @@
 import type { Request, Response } from "express";
-import { createNewsService, deleteNewService, getNewsService, updataNewService } from "../services/news.services.js";
+import { createNewsService, deleteNewService, getNewsService, getUniqueIdService, updataNewService } from "../services/news.services.js";
 import fs from "fs/promises"
 import { incrementViewsService } from "../services/news.services.js";
-import type { Category } from "../generated/enums.js";
+import type { Category } from "../generated/client.js";
 import { CreateNewsSchema } from "../schema/news.schema.js";
-import z, { success, unknown } from "zod";
+import z from "zod";
 import { Prisma } from "../generated/client.js";
-import { PrismaClientUnknownRequestError } from "@prisma/client/runtime/client";
 
 export const getNewsController = async (req: Request, res: Response) => {
     const {category, search} = req.query;
@@ -119,5 +118,31 @@ export const deleteNewController = async (req: Request<{id: string}>, res: Respo
 
         const errorMessage = error instanceof Error ? error.message : "Erreur serveur";
         return res.status(500).json({ message: "Erreur lors de la suppression", error: errorMessage });
+    }
+}
+
+export const getUniqueIdController = async (req: Request<{id: string}>, res: Response) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({
+                message: "L'ID de l'article est requis"
+            });
+        }
+
+        const uniqueNew = await getUniqueIdService(id);
+
+        if (!uniqueNew) {
+            return res.status(404).json({
+                message: "Article non trouvé"
+            });
+        }
+
+        return res.status(200).json(uniqueNew);
+
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Erreur serveur";
+        return res.status(500).json({ message });
     }
 }

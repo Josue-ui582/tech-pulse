@@ -69,3 +69,9 @@ export const deleteNewService = async (id: string) => {
     where: { id },
   });
 };
+
+export const getUniqueIdService = async (id: string) => {
+  return await prisma.news.findUnique({
+    where: { id }
+  })
+}
