@@ -17,6 +17,7 @@ const SERVER_URL = "http://localhost:3001";
 
 export default function NewsAdminPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedNewsId, setSelectedNewsId] = useState<string | null>(null);
   const [searchText, setSearchText] = useState('');
   const [news, setNews] = useState([]);
@@ -102,7 +103,7 @@ export default function NewsAdminPage() {
               icon={<EditOutlined />}
               onClick={() => {
               setSelectedNewsId(record.id);
-              setIsModalOpen(true);
+              setIsUpdateModalOpen(true);
             }} 
             />
           </Tooltip>
@@ -144,7 +145,7 @@ export default function NewsAdminPage() {
           <Text type="secondary">Gérez et publiez vos contenus en toute simplicité</Text>
         </div>
         <Button 
-          type="primary" 
+          type="primary"
           icon={<PlusOutlined />} 
           size="large"
           className="h-12 px-6 bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-100 font-bold border-none"
@@ -189,6 +190,7 @@ export default function NewsAdminPage() {
         footer={null}
         width={700}
         centered
+        destroyOnHidden
         className="rounded-3xl overflow-hidden"
       >
          <div className="pt-6">
@@ -197,10 +199,10 @@ export default function NewsAdminPage() {
       </Modal>
 
       <Modal
-        open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
+        open={isUpdateModalOpen}
+        onCancel={() => setIsUpdateModalOpen(false)}
         footer={null}
-        destroyOnClose
+        destroyOnHidden
         centered
         width={700}
       >
