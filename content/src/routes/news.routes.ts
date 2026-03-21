@@ -1,8 +1,37 @@
 import { Router } from "express";
-import { createNewsController, deleteNewController, getNewsController, incrementViewsController, updatedNewsController } from "../controllers/news.controlers.js";
+import { createNewsController, deleteNewController, getNewsController, getUniqueIdController, incrementViewsController, updatedNewsController } from "../controllers/news.controlers.js";
 import { upload } from "../middleware/multer.middleware.js";
 import { authorize } from "../middleware/auth.middleware.js";
 const router = Router();
+
+/**
+ * @openapi
+ * /api/news/{id}:
+ *   get:
+ *     summary: Récupère un article par son identifiant unique
+ *     tags: [News]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: L'identifiant (UUID) de l'article à récupérer
+ *     responses:
+ *       200:
+ *         description: Article trouvé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/News'
+ *       400:
+ *         description: ID de l'article manquant ou invalide
+ *       404:
+ *         description: Aucun article correspondant à cet ID n'a été trouvé
+ *       500:
+ *         description: Erreur interne du serveur
+ */
+router.get("/:id", getUniqueIdController);
 
 /**
  * @openapi
@@ -225,6 +254,5 @@ router.patch("/:id", updatedNewsController);
  *         description: Erreur serveur
  */
 router.delete("/:id", deleteNewController);
-
 
 export default router;
