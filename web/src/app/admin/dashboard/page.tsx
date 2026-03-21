@@ -6,7 +6,7 @@ import {
   SearchOutlined, EyeOutlined, MoreOutlined 
 } from '@ant-design/icons';
 import CreateNewsForm from '../../news/page';
-import { getNews } from '@/src/services/api';
+import { deleteNew, getNews } from '@/src/services/api';
 import Image from 'next/image';
 import { formatDate } from '@/src/utils/formatDate';
 import UpdateNewsForm from '@/src/features/news/components/UpdateNew';
@@ -133,7 +133,15 @@ export default function NewsAdminPage() {
       centered: true,
       okButtonProps: { className: "rounded-lg" },
       cancelButtonProps: { className: "rounded-lg" },
-      onOk: () => message.success('Article supprimé'),
+      onOk: async () => {
+        try {
+        await deleteNew(id);
+        message.success('Article supprimé');
+        fetchNews();
+      } catch (err) {
+        message.error("Erreur lors de la suppression");
+      }
+      },
     });
   };
 
@@ -194,7 +202,7 @@ export default function NewsAdminPage() {
         className="rounded-3xl overflow-hidden"
       >
          <div className="pt-6">
-            <CreateNewsForm />
+            <CreateNewsForm fetchNews={fetchNews}/>
          </div>
       </Modal>
 
