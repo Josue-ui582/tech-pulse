@@ -86,7 +86,7 @@ export default function NewsAdminPage() {
       render: (record: any) => (
         <div className="flex items-center gap-1 text-gray-500">
           <EyeOutlined className="text-xs" />
-          <span className="font-semibold">{record.viewsCount}</span>
+          <span className="font-semibold">{record}</span>
         </div>
       )
     },

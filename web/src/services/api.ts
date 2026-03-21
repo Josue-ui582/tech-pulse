@@ -1,5 +1,6 @@
 import { FetchEventResult } from "next/dist/server/web/types";
 import { Category, UpdateNewsData } from "../types/news";
+import { message } from "antd";
 
 
 const API_URL = "http://localhost:3001/api/news"
@@ -154,5 +155,25 @@ export const deleteNew = async (id: string) => {
   } catch (error) {
     if (error instanceof Error) throw error;
     throw new ReferenceError("Erreur serveur lors de la suppression");
+  }
+};
+
+export const increateNewView = async (id: string) => {
+  try {
+    const response = await fetch(`${API_URL}/${id}/view`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!response.ok) {
+      throw new Error('Erreur lors de la mise à jour des vues');
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message)
+    }
+    throw error;
   }
 };
