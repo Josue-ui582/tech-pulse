@@ -134,3 +134,25 @@ export const getNewsById = async (id: string) => {
     throw new ReferenceError("Erreur serveur, vérifiez votre connexion");
   }
 };
+
+export const deleteNew = async (id: string) => {
+  
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Impossible de supprimer l'article");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new ReferenceError("Erreur serveur lors de la suppression");
+  }
+};
