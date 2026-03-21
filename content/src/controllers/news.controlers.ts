@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
-import { createNewsService, getNewsService } from "../services/news.services.js";
+import { createNewsService, deleteNewService, getNewsService, getUniqueIdService, updataNewService } from "../services/news.services.js";
 import fs from "fs/promises"
 import { incrementViewsService } from "../services/news.services.js";
-import type { Category } from "../generated/enums.js";
+import type { Category } from "../generated/client.js";
 import { CreateNewsSchema } from "../schema/news.schema.js";
 import z from "zod";
 import { Prisma } from "../generated/client.js";
@@ -68,3 +68,81 @@ export const incrementViewsController = async (req: Request, res: Response): Pro
         res.status(500).json({ message });
     }
 };
+
+export const updatedNewsController = async (req: Request<{id: string}>, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { data } = req.body;
+
+        if (!id) {
+            return res.status(400).json({message: "L'id de l'article est requis"});
+        }
+
+        const updatedNews = await updataNewService(id, data);
+        return res.status(200).json({
+            success: true,
+            message: "Article mise à jour avec succès",
+            data : updatedNews
+        })
+    } catch (error: unknown) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === 'P2025') {
+                return res.status(404).json({ message: "Cet article n'existe pas" });
+            }
+        }
+        
+        const errorMessage = error instanceof Error ? error.message : "Erreur inconnue";
+        
+        return res.status(500).json({ 
+            message: "Erreur lors de la mise à jour", 
+            error: errorMessage 
+        });
+    }
+}
+
+export const deleteNewController = async (req: Request<{id: string}>, res: Response) => {
+    try {
+        const { id } = req.params;
+        await deleteNewService(id);
+
+        return res.status(200).json({
+        message: "Article supprimé avec succès"
+        });
+
+    } catch (error: unknown) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === 'P2025') {
+                return res.status(404).json({ message: "Cet article n'existe pas ou a déjà été supprimé" });
+            }
+        }
+
+        const errorMessage = error instanceof Error ? error.message : "Erreur serveur";
+        return res.status(500).json({ message: "Erreur lors de la suppression", error: errorMessage });
+    }
+}
+
+export const getUniqueIdController = async (req: Request<{id: string}>, res: Response) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({
+                message: "L'ID de l'article est requis"
+            });
+        }
+
+        const uniqueNew = await getUniqueIdService(id);
+
+        if (!uniqueNew) {
+            return res.status(404).json({
+                message: "Article non trouvé"
+            });
+        }
+
+        return res.status(200).json(uniqueNew);
+
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Erreur serveur";
+        return res.status(500).json({ message });
+    }
+}

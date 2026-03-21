@@ -6,9 +6,10 @@ import {
   SearchOutlined, EyeOutlined, MoreOutlined 
 } from '@ant-design/icons';
 import CreateNewsForm from '../../news/page';
-import { getNews } from '@/src/services/api';
+import { deleteNew, getNews } from '@/src/services/api';
 import Image from 'next/image';
 import { formatDate } from '@/src/utils/formatDate';
+import UpdateNewsForm from '@/src/features/news/components/UpdateNew';
 
 const { Title, Text } = Typography;
 
@@ -16,6 +17,8 @@ const SERVER_URL = "http://localhost:3001";
 
 export default function NewsAdminPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedNewsId, setSelectedNewsId] = useState<string | null>(null);
   const [searchText, setSearchText] = useState('');
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -83,7 +86,7 @@ export default function NewsAdminPage() {
       render: (record: any) => (
         <div className="flex items-center gap-1 text-gray-500">
           <EyeOutlined className="text-xs" />
-          <span className="font-semibold">{record.viewsCount}</span>
+          <span className="font-semibold">{record}</span>
         </div>
       )
     },
@@ -97,7 +100,11 @@ export default function NewsAdminPage() {
             <Button 
               type="text" 
               className="hover:bg-blue-50 text-blue-500 rounded-lg" 
-              icon={<EditOutlined />} 
+              icon={<EditOutlined />}
+              onClick={() => {
+              setSelectedNewsId(record.id);
+              setIsUpdateModalOpen(true);
+            }} 
             />
           </Tooltip>
           <Tooltip title="Supprimer">
@@ -114,6 +121,7 @@ export default function NewsAdminPage() {
     },
   ];
 
+
   const confirmDelete = (id: string) => {
     Modal.confirm({
       title: <span className="text-lg font-bold">Confirmer la suppression ?</span>,
@@ -125,7 +133,15 @@ export default function NewsAdminPage() {
       centered: true,
       okButtonProps: { className: "rounded-lg" },
       cancelButtonProps: { className: "rounded-lg" },
-      onOk: () => message.success('Article supprimé'),
+      onOk: async () => {
+        try {
+        await deleteNew(id);
+        message.success('Article supprimé');
+        fetchNews();
+      } catch (err) {
+        message.error("Erreur lors de la suppression");
+      }
+      },
     });
   };
 
@@ -137,7 +153,7 @@ export default function NewsAdminPage() {
           <Text type="secondary">Gérez et publiez vos contenus en toute simplicité</Text>
         </div>
         <Button 
-          type="primary" 
+          type="primary"
           icon={<PlusOutlined />} 
           size="large"
           className="h-12 px-6 bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-100 font-bold border-none"
@@ -182,11 +198,23 @@ export default function NewsAdminPage() {
         footer={null}
         width={700}
         centered
+        destroyOnHidden
         className="rounded-3xl overflow-hidden"
       >
          <div className="pt-6">
-            <CreateNewsForm />
+            <CreateNewsForm fetchNews={fetchNews}/>
          </div>
+      </Modal>
+
+      <Modal
+        open={isUpdateModalOpen}
+        onCancel={() => setIsUpdateModalOpen(false)}
+        footer={null}
+        destroyOnHidden
+        centered
+        width={700}
+      >
+        {selectedNewsId && <UpdateNewsForm newsId={selectedNewsId} />}
       </Modal>
 
       <style jsx global>{`

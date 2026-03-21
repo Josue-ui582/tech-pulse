@@ -1,14 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { News } from "@/src/types/news";
 import Card from "antd/es/card/Card";
 import { formatDate } from "@/src/utils/formatDate";
+import { increateNewView, updateNews } from "@/src/services/api";
 
 const BACKEND_URL = "http://localhost:3001";
 
 const NewsCard = ({ articles }: { articles: News }) => {
   const [expanded, setExpanded] = useState(false);
+  const [currentViews, setCurrentViews] = useState(articles.viewsCount);
+
+  const handleExpand = async () => {
+    setExpanded(!expanded);
+
+    if (!expanded) {
+      const viewedNew = JSON.parse(localStorage.getItem("viewed_news") || "[]");
+      if (!viewedNew.includes(articles.id)) {
+        const updateData = await increateNewView(articles.id);
+        if (updateData) {
+          setCurrentViews(updateData.viewsCount);
+          viewedNew.push(articles.id);
+          localStorage.setItem("viewed_news", JSON.stringify(viewedNew));
+        }
+      }
+    }
+  }
 
   return (
     <Card hoverable className="w-75 rounded-xl overflow-hidden">
@@ -42,7 +60,7 @@ const NewsCard = ({ articles }: { articles: News }) => {
         {articles.description.length > 120 && (
           <div className="flex justify-between">
               <button
-              onClick={() => setExpanded(!expanded)}
+              onClick={handleExpand}
               className="text-blue-500 text-sm font-medium hover:underline mb-2"
             >
               {expanded ? "Voir moins" : "Voir plus"}
@@ -53,7 +71,7 @@ const NewsCard = ({ articles }: { articles: News }) => {
 
         <div className="flex justify-between text-xs text-gray-500 mt-2">
           <span>{formatDate(articles.publishedAt)}</span>
-          <span>👁 {articles.viewsCount}</span>
+          <span>👁 {currentViews}</span>
         </div>
       </div>
     </Card>

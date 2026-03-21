@@ -1,4 +1,4 @@
-import { Category } from "../types/news";
+import { Category, UpdateNewsData } from "../types/news";
 
 
 const API_URL = "http://localhost:3001/api/news"
@@ -87,5 +87,84 @@ export const authService = {
     const result = await response.json();
     if (!response.ok) throw new Error(result.message || "Identifiants incorrects");
     return result;
+  }
+};
+
+export const updateNews = async (id: string, data: UpdateNewsData) => {
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data: data }), 
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Erreur lors de la mise à jour');
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getNewsById = async (id: string) => {
+  try {
+    const response = await fetch(`${API_URL}/${id}`);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Impossible de récupérer l'article");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if(error instanceof Error) throw error;
+    throw new ReferenceError("Erreur serveur, vérifiez votre connexion");
+  }
+};
+
+export const deleteNew = async (id: string) => {
+  
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Impossible de supprimer l'article");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new ReferenceError("Erreur serveur lors de la suppression");
+  }
+};
+
+export const increateNewView = async (id: string) => {
+  try {
+    const response = await fetch(`${API_URL}/${id}/view`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!response.ok) {
+      throw new Error('Erreur lors de la mise à jour des vues');
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message)
+    }
+    throw error;
   }
 };

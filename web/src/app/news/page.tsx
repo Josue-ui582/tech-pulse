@@ -5,7 +5,7 @@ import { Form, Input, Button, Select, message, Card, Upload } from 'antd';
 import { CreateNewsForms } from '@/src/services/api';
 import { UploadOutlined } from '@ant-design/icons';
 
-const CreateNewsForm: React.FC = () => {
+const CreateNewsForm = ({ fetchNews }: { fetchNews: () => void }) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
@@ -31,6 +31,7 @@ const CreateNewsForm: React.FC = () => {
 
       message.success("Article publié avec succès !");
       form.resetFields();
+      fetchNews()
     } catch (err: any) {
       setError(err.message);
     } finally {
