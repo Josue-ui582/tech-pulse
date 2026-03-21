@@ -2,6 +2,12 @@ import { Category } from '../generated/client.js';
 import type { News } from '../generated/client.js';
 import prisma from '../lib/pisma.js';
 
+interface UpdateNewsDto {
+  title?: string;
+  description?: string;
+  category?: Category;
+  imageUrl?: string;
+}
 
 export const getNewsService = async (category?: Category, search?: string) => {
   return await prisma.news.findMany({
@@ -50,3 +56,22 @@ export const incrementViewsService = async (id: string): Promise<News> => {
         }
     });
 };
+
+export const updataNewService = async (id : string, data: UpdateNewsDto) => {
+  return await prisma.news.update({
+    where: { id },
+    data: data
+  })
+}
+
+export const deleteNewService = async (id: string) => {
+  return await prisma.news.delete({
+    where: { id },
+  });
+};
+
+export const getUniqueIdService = async (id: string) => {
+  return await prisma.news.findUnique({
+    where: { id }
+  })
+}
