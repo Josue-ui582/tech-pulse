@@ -100,7 +100,7 @@ export const updateNews = async (id: string, data: UpdateNewsData) => {
     if (data.category) formData.append('category', data.category);
     if (data.image) formData.append('image', data.image);
 
-    const response = await fetch(`/api/news/${id}`, {
+    const response = await fetch(`${API_URL}/${id}`, {
       method: 'PATCH',
       body: formData,
     });
@@ -121,7 +121,7 @@ export const updateNews = async (id: string, data: UpdateNewsData) => {
 
 export const getNewsById = async (id: string) => {
   try {
-    const response = await fetch(`/api/news/${id}`);
+    const response = await fetch(`${API_URL}/${id}`);
 
     if (!response.ok) {
       const errorData = await response.json();
