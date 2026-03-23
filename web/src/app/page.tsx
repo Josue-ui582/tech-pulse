@@ -3,8 +3,6 @@ import { SearchBar } from "../features/search/components/SearchBar";
 import { SearchCategory } from "../features/search/components/searchCategory";
 import { getNews } from "../services/api";
 import { Category, News } from "../types/news";
-import Link from "next/link";
-import { PlusOutlined } from "@ant-design/icons";
 
 export const revalidate = 60;
 
@@ -18,7 +16,7 @@ type HomePageProps = {
 export default async function HomePage({ searchParams }: HomePageProps) {
   const { category, search } = await searchParams;
   const categoryEnum: Category | undefined =
-    category && ["Tech", "IA", "Dev"].includes(category)
+    category && ["Tech", "AI", "Dev"].includes(category)
       ? (category as Category)
       : undefined;
   const news = await getNews(categoryEnum, search);
