@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from 'next/navigation';
 
-const filtre = ["Tech", "IA", "Dev"];
+const filtre = ["Tech", "AI", "Dev"];
 
 export const SearchCategory = () => {
     const router = useRouter();
