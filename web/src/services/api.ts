@@ -7,8 +7,17 @@ const API_URL_Auth = "http://localhost:3001/api"
 
 export const getNews = async (category?: Category, search?: string) => {
     const params = new URLSearchParams();
-    if(category) params.append("category", category);
-    if(search) params.append("search", search);
+    if (category && category.trim() !== "") {
+        params.append("category", category);
+    }
+    
+    if (search && search.trim() !== "") {
+        params.append("search", search);
+    }
+
+    const finalUrl = `${API_URL}?${params.toString()}`;
+    // AJOUTE CE LOG pour vérifier l'URL générée dans ton terminal (si SSR) ou navigateur
+    console.log("Appel API vers :", finalUrl);
 
     try {
         const res = await fetch(`${API_URL}?${params.toString()}`, {
