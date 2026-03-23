@@ -15,10 +15,6 @@ export const getNews = async (category?: Category, search?: string) => {
         params.append("search", search);
     }
 
-    const finalUrl = `${API_URL}?${params.toString()}`;
-    // AJOUTE CE LOG pour vérifier l'URL générée dans ton terminal (si SSR) ou navigateur
-    console.log("Appel API vers :", finalUrl);
-
     try {
         const res = await fetch(`${API_URL}?${params.toString()}`, {
             cache: "no-store"
