@@ -10,24 +10,26 @@ interface UpdateNewsDto {
 }
 
 export const getNewsService = async (category?: Category, search?: string) => {
+  const where: any = {};
+
+  if (category) {
+    where.category = category;
+  }
+
+  if (search) {
+    where.title = {
+      contains: search,
+      mode: 'insensitive',
+    };
+  }
+
   return await prisma.news.findMany({
-    where: {
-      AND: [
-        category ? { category: category } : {},
-        
-        search ? {
-          title: {
-            contains: search,
-            mode: 'insensitive',
-          },
-        } : {},
-      ],
-    },
+    where,
     orderBy: {
       publishedAt: 'desc',
     },
-    });
-}
+  });
+};
 
 export const createNewsService = async (
     title: string, 
