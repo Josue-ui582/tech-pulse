@@ -28,7 +28,7 @@ model User {
   firstName     String?
   lastName      String?
   name          String?
-  email         String
+  email         String    @unique
   emailVerified DateTime?
   password      String?
   image         String?
