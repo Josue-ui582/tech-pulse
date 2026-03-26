@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
         pathname: '/uploads/**',
       },
     ],
+    domains: ["1h3.googleusercontent.com", "avatars.githubusercontent.com"]
   },
 };
 
