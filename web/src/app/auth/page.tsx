@@ -3,14 +3,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Form, Input, Button, Divider, message } from 'antd';
 import { 
-  GoogleOutlined, 
-  TwitterOutlined, 
-  FacebookOutlined, 
-  MailOutlined, 
-  LockOutlined, 
-  UserOutlined 
+  GoogleOutlined, MailOutlined, LockOutlined, 
+  UserOutlined, GithubOutlined 
 } from '@ant-design/icons';
-import { loginSchema, registerSchema } from '@/src/schema/auth.schema';
+import { signIn } from 'next-auth/react';
 import { authService } from '@/src/services/api';
 
 export default function AuthPage() {
@@ -19,121 +15,111 @@ export default function AuthPage() {
   const [form] = Form.useForm();
   const router = useRouter();
 
-  const yupSync = (schema: any) => ({
-    async validator({ field }: any, value: any) {
-      await schema.validateAt(field, form.getFieldsValue());
-    },
-  });
-
   const onFinish = async (values: any) => {
     setLoading(true);
     
     try {
       if (isLogin) {
-        const data = await authService.login({
+        const result = await signIn('credentials', {
           email: values.email,
-          password: values.password
+          password: values.password,
+          redirect: false,
         });
-        
-        message.success("Connexion réussie !");
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
 
-        message.success(`Bienvenue, ${data.user.firstName} !`);
-
-        if (data.user.role === "admin") {
-          router.push("/admin/dashboard")
-        }else{
-          router.push("/auth")
+        if (result?.error) {
+          throw new Error("Identifiants invalides");
         }
+
+        message.success("Connexion réussie !");
+        router.push("/admin/dashboard");
+        router.refresh();
         
       } else {
         await authService.register(values);
-        
-        message.success("Compte créé avec succès ! Connectez-vous.");
+        message.success("Compte créé ! Connectez-vous.");
         setIsLogin(true);
         form.resetFields(['password']);
       }
     } catch (error: any) {
-      message.error(error.message);
+      message.error(error.message || "Une erreur est survenue");
     } finally {
       setLoading(false);
     }
   };
 
-
   return (
-    <div className="bg-white p-8 md:p-12 rounded-4xl shadow-2xl shadow-blue-100 border border-gray-50">
+    <div className="bg-white p-8 md:p-12 rounded-4xl shadow-2xl shadow-blue-100 border border-gray-50 max-w-md mx-auto">
       <div className="mb-10 text-center">
-        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-          {isLogin ? 'Connexion' : 'Créer un compte'}
+        <h1 className="text-3xl font-black text-gray-900 tracking-tight uppercase italic">
+          {isLogin ? 'Connexion' : 'Rejoindre'}
         </h1>
-        <p className="text-gray-500 mt-2">
-          {isLogin ? 'Accédez à votre tableau de bord' : 'Rejoignez notre communauté dès aujourd\'hui'}
+        <p className="text-gray-400 font-medium mt-2">
+          {isLogin ? 'Content de vous revoir !' : 'Créez votre accès admin'}
         </p>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        <Button className="h-12 flex items-center justify-center rounded-xl hover:border-red-500 hover:text-red-500" icon={<GoogleOutlined />} />
-        <Button className="h-12 flex items-center justify-center rounded-xl hover:border-blue-400 hover:text-blue-400" icon={<TwitterOutlined />} />
-        <Button className="h-12 flex items-center justify-center rounded-xl hover:border-blue-800 hover:text-blue-800" icon={<FacebookOutlined />} />
+      <div className="grid grid-cols-2 gap-4 mb-8">
+        <Button 
+          className="h-12 flex items-center justify-center rounded-xl hover:text-red-500 font-bold" 
+          onClick={() => signIn("google", { callbackUrl: "/admin/dashboard" })} 
+          icon={<GoogleOutlined />}
+        > Google </Button>
+        <Button 
+          className="h-12 flex items-center justify-center rounded-xl hover:text-gray-800 font-bold" 
+          onClick={() => signIn("github", { callbackUrl: "/admin/dashboard" })} 
+          icon={<GithubOutlined />} 
+        > GitHub </Button>
       </div>
 
-      <Divider className="text-gray-400 text-xs uppercase tracking-widest">Ou continuer avec</Divider>
+      <Divider plain className="text-gray-300 text-[10px] uppercase font-bold tracking-widest">Ou par email</Divider>
 
       <Form
         form={form}
         layout="vertical"
         onFinish={onFinish}
         requiredMark={false}
-        className="space-y-1"
+        className="space-y-2"
       >
         {!isLogin && (
           <div className="grid grid-cols-2 gap-4">
-            <Form.Item name="firstName" rules={[yupSync(registerSchema)]}>
-              <Input prefix={<UserOutlined className="text-gray-400" />} placeholder="Prénom" className="rounded-xl h-11" />
+            <Form.Item name="firstName" rules={[{ required: true, message: 'Requis' }]}>
+              <Input prefix={<UserOutlined className="text-gray-300" />} placeholder="Prénom" className="rounded-xl h-12 border-gray-100 bg-gray-50" />
             </Form.Item>
-            <Form.Item name="lastName" rules={[yupSync(registerSchema)]}>
-              <Input placeholder="Nom" className="rounded-xl h-11" />
+            <Form.Item name="lastName" rules={[{ required: true, message: 'Requis' }]}>
+              <Input placeholder="Nom" className="rounded-xl h-12 border-gray-100 bg-gray-50" />
             </Form.Item>
           </div>
         )}
 
-        <Form.Item name="email" rules={[yupSync(isLogin ? loginSchema : registerSchema)]}>
-          <Input prefix={<MailOutlined className="text-gray-400" />} placeholder="Email Professionnel" className="rounded-xl h-11" />
+        <Form.Item name="email" rules={[{ required: true, type: 'email' }]}>
+          <Input prefix={<MailOutlined className="text-gray-300" />} placeholder="Email" className="rounded-xl h-12 border-gray-100 bg-gray-50" />
         </Form.Item>
 
-        <Form.Item name="password" rules={[yupSync(isLogin ? loginSchema : registerSchema)]}>
-          <Input.Password prefix={<LockOutlined className="text-gray-400" />} placeholder="Mot de passe" className="rounded-xl h-11" />
+        <Form.Item name="password" rules={[{ required: true, min: 6 }]}>
+          <Input.Password prefix={<LockOutlined className="text-gray-300" />} placeholder="Mot de passe" className="rounded-xl h-12 border-gray-100 bg-gray-50" />
         </Form.Item>
-
-        {isLogin && (
-          <div className="text-right mb-4">
-            <a href="#" className="text-sm text-blue-600 hover:text-blue-700 font-medium">Mot de passe oublié ?</a>
-          </div>
-        )}
 
         <Button 
           type="primary" 
           htmlType="submit" 
           block 
           loading={loading}
-          className="h-12 bg-linear-to-r from-blue-600 to-indigo-600 border-none rounded-xl text-md font-bold shadow-lg shadow-blue-200 mt-4"
+          className="h-14 bg-blue-600 hover:bg-blue-700 border-none rounded-2xl text-lg font-black shadow-xl shadow-blue-100 mt-6 uppercase tracking-wider"
         >
-          {isLogin ? 'Se connecter' : 'Commencer maintenant'}
+          {isLogin ? 'Se connecter' : 'Créer mon compte'}
         </Button>
       </Form>
 
-      <div className="mt-8 text-center">
-        <p className="text-gray-600">
-          {isLogin ? "Vous n'avez pas de compte ?" : "Vous faites déjà partie de l'équipe ?"}
-          <button 
-            onClick={() => { setIsLogin(!isLogin); form.resetFields(); }}
-            className="ml-2 text-blue-600 font-bold hover:text-indigo-600 transition-colors cursor-pointer"
-          >
+      <div className="mt-10 text-center">
+        <button 
+          onClick={() => { setIsLogin(!isLogin); form.resetFields(); }}
+          className="text-gray-400 font-medium hover:text-blue-600 transition-all text-sm"
+        >
+          {isLogin ? "Nouveau ici ? " : "Déjà un compte ? "}
+          <span className="text-blue-600 font-bold underline decoration-2 underline-offset-4">
             {isLogin ? "S'inscrire" : "Se connecter"}
-          </button>
-        </p>
+          </span>
+        </button>
       </div>
     </div>
   );
