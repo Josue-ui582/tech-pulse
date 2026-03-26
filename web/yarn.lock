@@ -121,6 +121,41 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@auth/core@npm:0.41.1":
+  version: 0.41.1
+  resolution: "@auth/core@npm:0.41.1"
+  dependencies:
+    "@panva/hkdf": ^1.2.1
+    jose: ^6.0.6
+    oauth4webapi: ^3.3.0
+    preact: 10.24.3
+    preact-render-to-string: 6.5.11
+  peerDependencies:
+    "@simplewebauthn/browser": ^9.0.1
+    "@simplewebauthn/server": ^9.0.2
+    nodemailer: ^7.0.7
+  peerDependenciesMeta:
+    "@simplewebauthn/browser":
+      optional: true
+    "@simplewebauthn/server":
+      optional: true
+    nodemailer:
+      optional: true
+  checksum: cab0ded061547c9a3bc451affd50f1cabd15c0edcfa2d8a3826d42210c38bb7ca4e61c59d0554fa96b5c7ad0a6663d33e7935618ea29c1c1e0a33029b319ee59
+  languageName: node
+  linkType: hard
+
+"@auth/prisma-adapter@npm:^2.11.1":
+  version: 2.11.1
+  resolution: "@auth/prisma-adapter@npm:2.11.1"
+  dependencies:
+    "@auth/core": 0.41.1
+  peerDependencies:
+    "@prisma/client": ">=2.26.0 || >=3 || >=4 || >=5 || >=6"
+  checksum: a48e0b48accc0d636a0be39ae1cfeeeab3cb00919565a3d1574867a54c315673fb4992c9ae3c0c6bd560f3ddd0f43ffcb5653777d45a7a0334fabe4222cc8043
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:^7.28.6, @babel/code-frame@npm:^7.29.0":
   version: 7.29.0
   resolution: "@babel/code-frame@npm:7.29.0"
@@ -1042,6 +1077,15 @@ __metadata:
     "@prisma/fetch-engine": 7.5.0
     "@prisma/get-platform": 7.5.0
   checksum: e027640d745fe41bc9e1ed59cdd4f9a43c438d0633fe6ac27f2702a9f6e023d209e8d848848eb583d13a2eb798ae9f06659af82bbefb1a111ecfa2f158e82712
+  languageName: node
+  linkType: hard
+
+"@prisma/extension-accelerate@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@prisma/extension-accelerate@npm:3.0.1"
+  peerDependencies:
+    "@prisma/client": ">=4.16.1"
+  checksum: 4628e516c08a092a1fda157312a51aba2591dc7515fad0f858620311ba3351f2e55b99b06bc59fe85a51a32d22a4ce7b27d0cfdd80cdbdeaa62454ff599f36b7
   languageName: node
   linkType: hard
 
@@ -6068,7 +6112,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "web@workspace:."
   dependencies:
+    "@auth/prisma-adapter": ^2.11.1
     "@prisma/client": ^7.5.0
+    "@prisma/extension-accelerate": ^3.0.1
     "@tailwindcss/postcss": ^4.2.1
     "@types/node": ^20
     "@types/react": ^19

@@ -12,6 +12,8 @@
     "node": "20"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.11.1",
+    "@prisma/extension-accelerate": "^3.0.1",
     "antd": "^6.3.3",
     "framer-motion": "^12.36.0",
     "next": "16.1.6",
