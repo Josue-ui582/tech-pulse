@@ -13,12 +13,11 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
-    "@prisma/adapter-pg": "^7.5.0",
+    "@prisma/extension-accelerate": "^3.0.1",
     "antd": "^6.3.3",
     "framer-motion": "^12.36.0",
     "next": "16.1.6",
-    "next-auth": "^4.24.13",
-    "pg": "^8.20.0",
+    "next-auth": "beta",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "yup": "^1.7.1"
@@ -27,7 +26,6 @@
     "@prisma/client": "^7.5.0",
     "@tailwindcss/postcss": "^4.2.1",
     "@types/node": "^20",
-    "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
