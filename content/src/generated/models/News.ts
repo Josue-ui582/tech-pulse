@@ -206,7 +206,7 @@ export type NewsGroupByOutputType = {
   _max: NewsMaxAggregateOutputType | null
 }
 
-type GetNewsGroupByPayload<T extends NewsGroupByArgs> = Prisma.PrismaPromise<
+export type GetNewsGroupByPayload<T extends NewsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<NewsGroupByOutputType, T['by']> &
       {
