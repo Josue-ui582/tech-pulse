@@ -61,13 +61,17 @@ export default function AuthPage() {
       <div className="grid grid-cols-2 gap-4 mb-8">
         <Button 
           className="h-12 flex items-center justify-center rounded-xl hover:text-red-500 font-bold" 
-          onClick={() => signIn("google", { callbackUrl: "/admin/dashboard" })} 
+          onClick={async () => {
+            await signIn("google")
+          }}
           icon={<GoogleOutlined />}
         > Google </Button>
         <Button 
           className="h-12 flex items-center justify-center rounded-xl hover:text-gray-800 font-bold" 
-          onClick={() => signIn("github", { callbackUrl: "/admin/dashboard" })} 
-          icon={<GithubOutlined />} 
+          onClick={async () => {
+            await signIn("github")
+          }}
+          icon={<GithubOutlined />}
         > GitHub </Button>
       </div>
 
