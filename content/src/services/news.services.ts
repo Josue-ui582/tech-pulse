@@ -1,6 +1,6 @@
 import { Category } from '../generated/client.js';
 import type { News } from '../generated/client.js';
-import prisma from '../lib/pisma.js';
+import { prisma } from '../lib/pisma.js';
 
 interface UpdateNewsDto {
   title?: string;

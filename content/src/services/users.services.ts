@@ -1,5 +1,4 @@
-import { email } from "zod";
-import prisma from "../lib/pisma.js"
+import { prisma } from "../lib/pisma.js";
 import bcrypt from "bcrypt"
 
 
