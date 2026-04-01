@@ -9,7 +9,7 @@ export const Navbar = () => (
       </div>
       <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
         <Link href="#features" className="hover:text-indigo-600 transition-colors">Fonctionnalités</Link>
-        <Link href="/news" className="hover:text-indigo-600 transition-colors">Actualités</Link>
+        <Link href="#news" className="hover:text-indigo-600 transition-colors">Actualités</Link>
         <Link href="/about" className="hover:text-indigo-600 transition-colors">À propos</Link>
       </div>
       <button className="bg-slate-900 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-slate-800 transition-all shadow-sm">

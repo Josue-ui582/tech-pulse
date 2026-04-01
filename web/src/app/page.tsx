@@ -1,81 +1,94 @@
-import NewsCard from "../features/news/components/NewsCard";
-import { SearchBar } from "../features/search/components/SearchBar";
-import { SearchCategory } from "../features/search/components/searchCategory";
-import { getNews } from "../services/api";
-import { Category, News } from "../types/news";
+// app/page.tsx
+import { Navbar } from "@/components/ui/navbar";
+import { Hero } from "@/components/ui/hero";
+import { Features } from "@/components/ui/feature";
+import { Footer } from "@/components/ui/footer";
+import NewsCard from "@/features/news/components/NewsCard";
+import { featuredNews } from "@/data/preview";
+import Image from "next/image";
 
-export const revalidate = 60;
-
-type HomePageProps = {
-  searchParams: {
-    category?: string;
-    search?: string
-  };
-};
-
-export default async function HomePage({ searchParams }: HomePageProps) {
-  const { category, search } = await searchParams;
-  const categoryEnum: Category | undefined =
-    category && ["Tech", "AI", "Dev"].includes(category)
-      ? (category as Category)
-      : undefined;
-  const news = await getNews(categoryEnum, search);
+export default function HomePage() {
 
   return (
-    <main className="min-h-screen bg-[#fafafa] selection:bg-indigo-100">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-125 bg-[radial-gradient(45%_40%_at_50%_0%,rgba(79,70,229,0.07)_0%,transparent_100%)] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-6 py-20 relative">
-        <section className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs font-semibold uppercase tracking-wider mb-6">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-            </span>
-            Live Updates
-          </div>
-          <h1 className="text-6xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-slate-900 bg-linear-to-b from-slate-900 via-slate-800 to-slate-500">
-            L'actualité Tech, <br />
-            <span className="text-indigo-600 italic">réinventée.</span>
-          </h1>
-          <p className="text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
-            Découvrez les dernières innovations avec une expérience de lecture fluide, minimaliste et sans distraction.
-          </p>
-        </section>
-
-        <div className="mb-12 flex flex-col md:flex-row items-center justify-between gap-6 p-2 bg-white/60 backdrop-blur-xl border border-white rounded-3xl shadow-sm">
-          <div className="flex flex-col md:flex-row gap-3 w-full">
-            <SearchBar />
-            <SearchCategory />
-          </div>
-        </div>
-
-        <article>
-          {news.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-40 rounded-[3rem] bg-white border border-slate-100 shadow-sm overflow-hidden relative">
-                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-indigo-200 to-transparent" />
-                <div className="relative">
-                  <div className="absolute inset-0 blur-3xl bg-indigo-200/50 rounded-full" />
-                  <span className="relative text-7xl mb-4 block animate-bounce">🔭</span>
-                </div>
-                <h3 className="mt-8 text-2xl font-bold text-slate-900">Aucun résultat</h3>
-                <p className="text-slate-500 mt-2 text-center max-w-sm px-6">
-                  Nous n'avons pas trouvé d'articles pour cette recherche. Essayez d'autres mots-clés ou catégories.
-                </p>
+    <div className="min-h-screen bg-white">
+      <Navbar />
+      <main>
+        <Hero />
+        <section id="news" className="py-20 bg-[#fafafa]">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="flex items-end justify-between mb-12">
+              <div>
+                <h2 className="text-3xl font-bold text-slate-900 mb-4">Dernières pépites</h2>
+                <p className="text-slate-500">Les articles qui font vibrer l'écosystème en ce moment.</p>
+              </div>
+              <button className="hidden sm:block text-indigo-600 font-semibold hover:underline">
+                Voir tout le flux →
+              </button>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
-              {news.map((article: News) => (
-                <div key={article.id} className="group transition-all duration-500">
-                  <div className="relative transform group-hover:-translate-y-2 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
-                    <NewsCard articles={article} />
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {featuredNews.map((item) => (
+                <div key={item.id} className="group bg-white p-3 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-100/50 transition-all duration-500">
+  
+                {/* Container Image avec Aspect Ratio */}
+                <div className="relative aspect-16/10 w-full rounded-4xl overflow-hidden mb-6">
+                  {/* Overlay subtil pour le contraste */}
+                  <div className="absolute inset-0 bg-slate-900/5 z-10 group-hover:bg-transparent transition-colors duration-500" />
+                  
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                  
+                  {/* Badge de catégorie flottant sur l'image */}
+                  <div className="absolute top-4 left-4 z-20">
+                    <span className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold text-slate-900 uppercase tracking-widest shadow-sm">
+                      {item.category}
+                    </span>
                   </div>
                 </div>
+
+                {/* Contenu Texte */}
+                <div className="px-4 pb-4">
+                  <div className="flex items-center gap-3 text-slate-400 text-xs mb-3">
+                    <span className="flex items-center gap-1">
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      {item.date}
+                    </span>
+                    <span>•</span>
+                    <span>5 min de lecture</span>
+                  </div>
+                  
+                  <h3 className="text-xl font-bold text-slate-900 leading-snug group-hover:text-indigo-600 transition-colors duration-300">
+                    {item.title}
+                  </h3>
+                  
+                  <p className="text-slate-500 text-sm mt-3 line-clamp-2 leading-relaxed">
+                    Découvrez comment cette technologie transforme radicalement notre approche du quotidien...
+                  </p>
+
+                  <div className="mt-6 flex items-center gap-2 text-indigo-600 font-bold text-sm">
+                    Lire l'article
+                    <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
               ))}
             </div>
-          )}
-        </article>
-      </div>
-    </main>
+          </div>
+        </section>
+
+        <Features />
+      </main>
+
+      <Footer />
+    </div>
   );
 }
