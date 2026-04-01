@@ -7,6 +7,7 @@ import { MailOutlined, LockOutlined,
 } from '@ant-design/icons';
 import { authService } from '@/services/api';
 import { AuthForm } from '@/types/news';
+import { getUser } from '@/utils/auth';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -20,21 +21,25 @@ export default function AuthPage() {
     try {
       const cleanedValues = {
         ...values,
-        email: values.email.trim(),
+        email: values.email.trim().toLowerCase(),
+        name: `${values.firstName} ${values.lastName}`
       };
 
       if (isLogin) {
         const result = await authService.login(cleanedValues);
         localStorage.setItem("token", result.token);
 
-        message.success("Connexion réussie !");
-        router.push("/admin/dashboard");
+        const user = getUser();
+        if (user.role !== "user") {
+          message.success("Connexion réussie !");
+          router.push("/admin/dashboard");
+        }else{
+          message.success("connexion réussie");
+          router.push("/news");
+        }
         if (result?.error) {
           throw new Error("Identifiants invalides");
         }
-
-        message.success("Connexion réussie !");
-        router.push("/admin/dashboard");
         router.refresh();
         
       } else {
@@ -106,7 +111,7 @@ export default function AuthPage() {
           className="text-gray-400 font-medium hover:text-blue-600 transition-all text-sm"
         >
           {isLogin ? "Nouveau ici ? " : "Déjà un compte ? "}
-          <span className="text-blue-600 font-bold underline decoration-2 underline-offset-4">
+          <span className="text-blue-600 font-bold underline decoration-2 underline-offset-4 cursor-pointer">
             {isLogin ? "S'inscrire" : "Se connecter"}
           </span>
         </button>
