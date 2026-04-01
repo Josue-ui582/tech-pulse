@@ -2,12 +2,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Form, Input, Button, Divider, message } from 'antd';
-import { 
-  GoogleOutlined, MailOutlined, LockOutlined, 
-  UserOutlined, GithubOutlined 
+import { MailOutlined, LockOutlined, 
+  UserOutlined 
 } from '@ant-design/icons';
-import { signIn } from 'next-auth/react';
-import { authService } from '@/src/services/api';
+import { authService } from '@/services/api';
+import { AuthForm } from '@/types/news';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -15,17 +14,21 @@ export default function AuthPage() {
   const [form] = Form.useForm();
   const router = useRouter();
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: AuthForm) => {
     setLoading(true);
     
     try {
-      if (isLogin) {
-        const result = await signIn('credentials', {
-          email: values.email,
-          password: values.password,
-          redirect: false,
-        });
+      const cleanedValues = {
+        ...values,
+        email: values.email.trim(),
+      };
 
+      if (isLogin) {
+        const result = await authService.login(cleanedValues);
+        localStorage.setItem("token", result.token);
+
+        message.success("Connexion réussie !");
+        router.push("/admin/dashboard");
         if (result?.error) {
           throw new Error("Identifiants invalides");
         }
@@ -35,7 +38,7 @@ export default function AuthPage() {
         router.refresh();
         
       } else {
-        await authService.register(values);
+        await authService.register(cleanedValues);
         message.success("Compte créé ! Connectez-vous.");
         setIsLogin(true);
         form.resetFields(['password']);
@@ -56,23 +59,6 @@ export default function AuthPage() {
         <p className="text-gray-400 font-medium mt-2">
           {isLogin ? 'Content de vous revoir !' : 'Créez votre accès admin'}
         </p>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 mb-8">
-        <Button 
-          className="h-12 flex items-center justify-center rounded-xl hover:text-red-500 font-bold" 
-          onClick={async () => {
-            await signIn("google")
-          }}
-          icon={<GoogleOutlined />}
-        > Google </Button>
-        <Button 
-          className="h-12 flex items-center justify-center rounded-xl hover:text-gray-800 font-bold" 
-          onClick={async () => {
-            await signIn("github")
-          }}
-          icon={<GithubOutlined />}
-        > GitHub </Button>
       </div>
 
       <Divider plain className="text-gray-300 text-[10px] uppercase font-bold tracking-widest">Ou par email</Divider>
