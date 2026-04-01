@@ -9,21 +9,17 @@ import {
   LogoutOutlined
 } from '@ant-design/icons';
 import { useRouter, usePathname } from 'next/navigation';
-import { useSession, signOut } from 'next-auth/react';
 import Loading from './dashboard/loading';
-import AdminAvatar from '@/src/components/layout/Avatar';
+import AdminAvatar from '@/components/layout/Avatar';
+import { getUser } from '@/utils/auth';
 
 const { Header, Content, Sider } = Layout;
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { data: session, status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      router.push('/auth');
-    },
-  });
+
+  const user = getUser();
 
   const menuItems = [
     { key: '/admin/dashboard', icon: <DashboardOutlined />, label: 'Dashboard' },
@@ -34,8 +30,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (status === "loading") {
     return <Loading />;
   }
-
-  const user = session?.user;
 
   return (
     <Layout className="min-h-screen bg-[#F8FAFC]">
@@ -64,7 +58,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               icon: <LogoutOutlined />,
               label: 'Déconnexion',
               danger: true,
-              onClick: () => signOut({ callbackUrl: '/auth' })
+              onClick: () => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user"); 
+                router.push("/auth")
+              }
             }
           ]}
           className="border-none px-4 space-y-2"
@@ -75,7 +73,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <Header className="bg-white/80 backdrop-blur-md sticky top-0 z-50 px-6 h-16 flex justify-between items-center border-b border-gray-100">
           <h1 className="text-lg font-bold text-gray-800 lg:hidden">Admin {user?.name?.split(' ')[0]}</h1>
           <div className="hidden lg:block text-gray-400 text-sm font-medium">
-            Bienvenue, <span className="text-gray-800 font-bold">{user?.name}</span> 👋
+            Bienvenue, <span className="font-bold">{user?.name}</span> 👋
           </div>
 
           <div className="flex items-center gap-5">
@@ -111,7 +109,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </button>
           ))}
           <button
-            onClick={() => signOut({ callbackUrl: '/auth' })}
+            onClick={() => (localStorage.removeItem("user"), localStorage.removeItem("token"), router.push("/auth"))}
             className="flex flex-col items-center gap-1 text-red-400"
           >
             <LogoutOutlined className="text-xl" />
