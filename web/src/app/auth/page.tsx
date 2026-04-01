@@ -28,9 +28,10 @@ export default function AuthPage() {
       if (isLogin) {
         const result = await authService.login(cleanedValues);
         localStorage.setItem("token", result.token);
+        localStorage.setItem("user", JSON.stringify(result.user));
 
         const user = getUser();
-        if (user.role !== "user") {
+        if (user.role === "admin") {
           message.success("Connexion réussie !");
           router.push("/admin/dashboard");
         }else{
