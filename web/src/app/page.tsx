@@ -3,7 +3,6 @@ import { Navbar } from "@/components/ui/navbar";
 import { Hero } from "@/components/ui/hero";
 import { Features } from "@/components/ui/feature";
 import { Footer } from "@/components/ui/footer";
-import NewsCard from "@/features/news/components/NewsCard";
 import { featuredNews } from "@/data/preview";
 import Image from "next/image";
 
@@ -30,9 +29,7 @@ export default function HomePage() {
               {featuredNews.map((item) => (
                 <div key={item.id} className="group bg-white p-3 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-100/50 transition-all duration-500">
   
-                {/* Container Image avec Aspect Ratio */}
                 <div className="relative aspect-16/10 w-full rounded-4xl overflow-hidden mb-6">
-                  {/* Overlay subtil pour le contraste */}
                   <div className="absolute inset-0 bg-slate-900/5 z-10 group-hover:bg-transparent transition-colors duration-500" />
                   
                   <Image
@@ -43,7 +40,6 @@ export default function HomePage() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   
-                  {/* Badge de catégorie flottant sur l'image */}
                   <div className="absolute top-4 left-4 z-20">
                     <span className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold text-slate-900 uppercase tracking-widest shadow-sm">
                       {item.category}
@@ -51,7 +47,6 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Contenu Texte */}
                 <div className="px-4 pb-4">
                   <div className="flex items-center gap-3 text-slate-400 text-xs mb-3">
                     <span className="flex items-center gap-1">

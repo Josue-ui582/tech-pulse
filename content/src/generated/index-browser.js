@@ -132,12 +132,9 @@ exports.Prisma.NewsScalarFieldEnum = {
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  firstName: 'firstName',
-  lastName: 'lastName',
   name: 'name',
   email: 'email',
   password: 'password',
-  image: 'image',
   role: 'role'
 };
 
