@@ -5,12 +5,13 @@ import {
   PlusOutlined, EditOutlined, DeleteOutlined, 
   SearchOutlined, EyeOutlined, MoreOutlined 
 } from '@ant-design/icons';
-import CreateNewsForm from '../../news/page';
-import { deleteNew, getNews } from '@/src/services/api';
+import CreateNewsForm from '@/features/news/components/CreateNew';
+import { deleteNew, getNews } from '@/services/api';
 import Image from 'next/image';
-import { formatDate } from '@/src/utils/formatDate';
-import UpdateNewsForm from '@/src/features/news/components/UpdateNew';
-import { useSession } from 'next-auth/react';
+import { formatDate } from '@/utils/formatDate';
+import UpdateNewsForm from '@/features/news/components/UpdateNew';
+import { getUser, isAuthentificated } from '@/utils/auth';
+import { useRouter } from 'next/router';
 
 const { Title, Text } = Typography;
 
@@ -24,7 +25,20 @@ export default function NewsAdminPage() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    const user = getUser();
+
+    if (!isAuthentificated) {
+      router.push("/auth");
+      return;
+    }
+
+    if (user.role !== "admin") {
+      router.push("/unauthorized");
+    }
+  }, []);
 
   const fetchNews = useCallback(async (search?: string) => {
     if (status !== "authenticated") return;
@@ -148,7 +162,6 @@ export default function NewsAdminPage() {
 
   return (
     <>
-      { session?.user && (
         <div className="max-w-350 mx-auto space-y-8 animate-in fade-in duration-500">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
@@ -204,7 +217,7 @@ export default function NewsAdminPage() {
             destroyOnHidden
             className="rounded-3xl overflow-hidden"
           >
-            <CreateNewsForm onSuccess={() => {
+            <CreateNewsForm onSucess={() => {
             setIsModalOpen(false);
             fetchNews();
           }}/>
@@ -246,7 +259,6 @@ export default function NewsAdminPage() {
             }
           `}</style>
         </div>
-      )}
     </>
   );
 }
