@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { News } from "@/src/types/news";
+import { News } from "@/types/news";
 import Card from "antd/es/card/Card";
-import { formatDate } from "@/src/utils/formatDate";
-import { increateNewView, updateNews } from "@/src/services/api";
+import { formatDate } from "@/utils/formatDate";
+import { increateNewView } from "@/services/api";
 
 const BACKEND_URL = "http://localhost:3001";
 
