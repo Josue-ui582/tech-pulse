@@ -16,3 +16,10 @@ export interface UpdateNewsData {
   category?: string;
   image?: File;
 }
+
+export type AuthForm = {
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+};
