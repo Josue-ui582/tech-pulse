@@ -15,7 +15,7 @@ type HomePageProps = {
   searchParams: { category?: string; search?: string };
 };
 
-export default async function HomePage({ searchParams }: HomePageProps) {
+export default async function NewsPage({ searchParams }: HomePageProps) {
   const { category, search } = await searchParams;
   const categoryEnum: Category | undefined =
     category && ["Tech", "AI", "Dev"].includes(category)
