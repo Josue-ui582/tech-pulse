@@ -22,7 +22,7 @@ export const getNews = async (category?: Category, search?: string) => {
 
         if (!res.ok) {
             const errorData = await res.json().catch(() => ({}));
-            throw new ReferenceError(errorData.error || `Erreur HTTP: ${res.status} (Impossible de charger les articles)`);
+            throw new Error(errorData.error || `Erreur HTTP: ${res.status} (Impossible de charger les articles)`);
         }
 
         return await res.json();
