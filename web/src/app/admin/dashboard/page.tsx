@@ -11,7 +11,7 @@ import Image from 'next/image';
 import { formatDate } from '@/utils/formatDate';
 import UpdateNewsForm from '@/features/news/components/UpdateNew';
 import { getUser, isAuthentificated } from '@/utils/auth';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const { Title, Text } = Typography;
 
