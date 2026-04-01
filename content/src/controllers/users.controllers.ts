@@ -35,9 +35,9 @@ export const createUsersController = async (req: Request, res: Response) => {
         })
     }
 
-    const { firstName, lastName, email, password } = validation.data;
+    const { name, email, password } = validation.data;
     try {
-        const newUsers = await createUsersService(firstName, lastName, email, password);
+        const newUsers = await createUsersService(name, email, password);
         return res.status(201).json({
             success: true,
             data: newUsers
@@ -81,8 +81,7 @@ export const loginUserController = async (req: Request, res: Response) => {
             token: token,
             user: {
                 id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
+                name: user.name,
                 role: user.role
             }
         })
