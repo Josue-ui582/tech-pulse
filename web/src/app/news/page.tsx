@@ -1,81 +1,104 @@
+"use client"
+
 import NewsCard from "@/features/news/components/NewsCard";
 import { SearchBar } from "@/features/search/components/SearchBar";
 import { SearchCategory } from "@/features/search/components/searchCategory";
 import { getNews } from "@/services/api";
 import { Category, News } from "@/types/news";
+import { isAuthentificated } from "@/utils/auth";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export const revalidate = 60;
 
 type HomePageProps = {
-  searchParams: {
-    category?: string;
-    search?: string
-  };
+  searchParams: { category?: string; search?: string };
 };
 
 export default async function HomePage({ searchParams }: HomePageProps) {
   const { category, search } = await searchParams;
   const categoryEnum: Category | undefined =
     category && ["Tech", "AI", "Dev"].includes(category)
-      ? (category as Category)
-      : undefined;
+      ? (category as Category) : undefined;
+
+  const router = useRouter();
+  
   const news = await getNews(categoryEnum, search);
 
-  return (
-    <main className="min-h-screen bg-[#fafafa] selection:bg-indigo-100">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-125 bg-[radial-gradient(45%_40%_at_50%_0%,rgba(79,70,229,0.07)_0%,transparent_100%)] pointer-events-none" />
+  useEffect(() => {
 
-      <div className="max-w-7xl mx-auto px-6 py-20 relative">
-        <section className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs font-semibold uppercase tracking-wider mb-6">
+    if (!isAuthentificated()) {
+      router.push("/auth");
+      return;
+    }
+  }, []);
+
+  return (
+    <main className="min-h-screen bg-[#FAFAFA] selection:bg-indigo-100">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-150 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(79,70,229,0.04)_0%,transparent_100%)] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-6 py-16 md:py-24 relative">
+        
+        <header className="text-center mb-16 md:mb-24">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm text-indigo-600 text-[11px] font-bold uppercase tracking-[0.2em] mb-8 animate-fade-in">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
             </span>
-            Live Updates
+            Flux en direct
           </div>
-          <h1 className="text-6xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-slate-900 bg-linear-to-b from-slate-900 via-slate-800 to-slate-500">
+          
+          <h1 className="text-5xl md:text-8xl font-black tracking-tight text-slate-900 mb-8 leading-[0.9]">
             L'actualité Tech, <br />
-            <span className="text-indigo-600 italic">réinventée.</span>
+            <span className="text-indigo-600 font-serif italic font-medium">réinventée.</span>
           </h1>
-          <p className="text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
-            Découvrez les dernières innovations avec une expérience de lecture fluide, minimaliste et sans distraction.
+          
+          <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed font-medium">
+            Le condensé d'innovation pour les bâtisseurs de demain. 
+            Une expérience sans distraction, focalisée sur l'essentiel.
           </p>
-        </section>
+        </header>
 
-        <div className="mb-12 flex flex-col md:flex-row items-center justify-between gap-6 p-2 bg-white/60 backdrop-blur-xl border border-white rounded-3xl shadow-sm">
-          <div className="flex flex-col md:flex-row gap-3 w-full">
+        <div className="sticky top-6 z-30 mb-16">
+          <div className="p-2 bg-white/70 backdrop-blur-2xl border border-white/50 rounded-[2.5rem] shadow-xl shadow-slate-200/50 flex flex-col md:flex-row items-center gap-3">
             <SearchBar />
+            <div className="h-8 w-px bg-slate-200 hidden md:block" />
             <SearchCategory />
           </div>
         </div>
 
-        <article>
+        <article className="relative">
           {news.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-40 rounded-[3rem] bg-white border border-slate-100 shadow-sm overflow-hidden relative">
-                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-indigo-200 to-transparent" />
-                <div className="relative">
-                  <div className="absolute inset-0 blur-3xl bg-indigo-200/50 rounded-full" />
-                  <span className="relative text-7xl mb-4 block animate-bounce">🔭</span>
+            <div className="flex flex-col items-center justify-center py-32 rounded-[3.5rem] bg-white border border-slate-100 shadow-sm relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(79,70,229,0.03),transparent)]" />
+                <div className="relative flex flex-col items-center">
+                  <span className="text-6xl mb-6 grayscale opacity-50">🔭</span>
+                  <h3 className="text-2xl font-bold text-slate-900">Silence radio...</h3>
+                  <p className="text-slate-500 mt-3 text-center max-w-xs leading-relaxed">
+                    Aucun article ne correspond à votre recherche. Essayez de varier les mots-clés.
+                  </p>
                 </div>
-                <h3 className="mt-8 text-2xl font-bold text-slate-900">Aucun résultat</h3>
-                <p className="text-slate-500 mt-2 text-center max-w-sm px-6">
-                  Nous n'avons pas trouvé d'articles pour cette recherche. Essayez d'autres mots-clés ou catégories.
-                </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16">
               {news.map((article: News) => (
-                <div key={article.id} className="group transition-all duration-500">
-                  <div className="relative transform group-hover:-translate-y-2 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
-                    <NewsCard articles={article} />
-                  </div>
+                <div 
+                  key={article.id} 
+                  className="group flex flex-col"
+                >
+                  <NewsCard articles={article} />
                 </div>
               ))}
             </div>
           )}
         </article>
       </div>
+
+      <footer className="max-w-7xl mx-auto px-6 py-20 border-t border-slate-100 mt-20 text-center">
+          <p className="text-sm text-slate-400 font-medium">
+            © {new Date().getFullYear()} TechPulse — Fabriqué pour les passionnés.
+          </p>
+      </footer>
     </main>
   );
 }
