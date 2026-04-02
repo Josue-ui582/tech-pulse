@@ -18,7 +18,7 @@ export default function AdminAvatar({ user }: { user: any }) {
       key: 'profile',
       label: (
         <div className="px-1 py-2 min-w-40">
-          <Text strong>{user?.firstName} {user?.lastName}</Text>
+          <Text strong>{user?.name}</Text>
           <Text type="secondary" className="text-xs">{user?.email}</Text>
         </div>
       ),

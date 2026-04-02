@@ -20,28 +20,29 @@ export default function AuthPage() {
     try {
       const cleanedValues = {
         ...values,
-        email: values.email.trim(),
+        email: values.email.trim().toLowerCase(),
+        name: `${values.firstName} ${values.lastName}`
       };
 
       if (isLogin) {
         const result = await authService.login(cleanedValues);
-        localStorage.setItem("token", result.token);
-
-        message.success("Connexion réussie !");
-        router.push("/admin/dashboard");
         if (result?.error) {
           throw new Error("Identifiants invalides");
         }
 
-        message.success("Connexion réussie !");
-        router.push("/admin/dashboard");
-        router.refresh();
+        if (result.user.role === "admin") {
+          message.success("Connexion réussie !");
+          router.replace("/admin/dashboard");
+        }else{
+          message.success("connexion réussie");
+          router.replace("/news");
+        }
         
       } else {
         await authService.register(cleanedValues);
         message.success("Compte créé ! Connectez-vous.");
         setIsLogin(true);
-        form.resetFields(['password']);
+        form.resetFields();
       }
     } catch (error: any) {
       message.error(error.message || "Une erreur est survenue");
@@ -106,7 +107,7 @@ export default function AuthPage() {
           className="text-gray-400 font-medium hover:text-blue-600 transition-all text-sm"
         >
           {isLogin ? "Nouveau ici ? " : "Déjà un compte ? "}
-          <span className="text-blue-600 font-bold underline decoration-2 underline-offset-4">
+          <span className="text-blue-600 font-bold underline decoration-2 underline-offset-4 cursor-pointer">
             {isLogin ? "S'inscrire" : "Se connecter"}
           </span>
         </button>
