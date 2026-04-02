@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model News {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  category    Category
+  imageUrl    String?
+  viewsCount  Int      @default(0)
+  publishedAt DateTime @default(now())
+}
+
+enum Category {
+  Tech
+  AI
+  Dev
+}
+
+model User {
+  id       String  @id @default(uuid())
+  name     String?
+  email    String  @unique
+  password String?
+  role     Role    @default(user)
+}
+
+enum Role {
+  admin
+  user
+}

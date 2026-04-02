@@ -1,19 +1,22 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Space, Tag, Input, Card, Modal, message, Tooltip, Typography } from 'antd';
 import { 
   PlusOutlined, EditOutlined, DeleteOutlined, 
   SearchOutlined, EyeOutlined, MoreOutlined 
 } from '@ant-design/icons';
-import CreateNewsForm from '../../news/page';
-import { deleteNew, getNews } from '@/src/services/api';
+import CreateNewsForm from '@/features/news/components/CreateNew';
+import { deleteNew, getNews } from '@/services/api';
 import Image from 'next/image';
-import { formatDate } from '@/src/utils/formatDate';
-import UpdateNewsForm from '@/src/features/news/components/UpdateNew';
+import { formatDate } from '@/utils/formatDate';
+import UpdateNewsForm from '@/features/news/components/UpdateNew';
+import { getUser } from '@/utils/auth';
+import { useRouter } from 'next/navigation';
 
 const { Title, Text } = Typography;
 
-const SERVER_URL = "http://localhost:3001";
+const SERVER_URL = process.env.NEXT_PUBLIC_API_URL;
+
 
 export default function NewsAdminPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,28 +26,44 @@ export default function NewsAdminPage() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchNews = async (search?: string) => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const userData = await getUser();
+
+    if(!userData) {
+      router.replace("/auth");
+      return;
+    }
+
+    if (userData.role !== "admin") {
+      router.push("/unauthorized");
+    }
+  }
+  checkAuth();
+  }, []);
+
+  const fetchNews = useCallback(async (search?: string) => {
+    if (status !== "authenticated") return;
+    
     setLoading(true);
     try {
       const response = await getNews(undefined, search);
       setNews(response.data || response);
     } catch (error: any) {
-      message.error(error.message);
-    }finally {
+      message.error(error.message || "Erreur de chargement");
+    } finally {
       setLoading(false);
     }
-  }
-
-  useEffect(() => {
-    fetchNews();
-  }, []);
+  }, [status]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchNews(searchText);
     }, 500);
     return () => clearTimeout(timer);
-  }, [searchText]);
+  }, [searchText, fetchNews]);
 
   const columns = [
     {
@@ -146,95 +165,104 @@ export default function NewsAdminPage() {
   };
 
   return (
-    <div className="max-w-350 mx-auto space-y-8 animate-in fade-in duration-500">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <Title level={2} className="m-0! font-black! tracking-tight text-gray-900">Articles</Title>
-          <Text type="secondary">Gérez et publiez vos contenus en toute simplicité</Text>
-        </div>
-        <Button 
-          type="primary"
-          icon={<PlusOutlined />} 
-          size="large"
-          className="h-12 px-6 bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-100 font-bold border-none"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Nouvel Article
-        </Button>
-      </div>
-
-      <Card className="rounded-3xl shadow-xl shadow-gray-100/50 border border-gray-100 overflow-hidden">
-        <div className="mb-6 flex flex-col md:flex-row gap-4 justify-between">
-          <Input 
-            placeholder="Rechercher par titre..." 
-            prefix={<SearchOutlined className="text-gray-400" />} 
-            className="h-11 max-w-md rounded-xl bg-gray-50 border-none focus:bg-white transition-all"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-          />
-          <div className="flex gap-2">
-             <Button icon={<MoreOutlined />} className="rounded-xl h-11" />
+    <>
+        <div className="max-w-350 mx-auto space-y-8 animate-in fade-in duration-500">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <Title level={2} className="m-0! font-black! tracking-tight text-gray-900">Articles</Title>
+              <Text type="secondary">Gérez et publiez vos contenus en toute simplicité</Text>
+            </div>
+            <Button 
+              type="primary"
+              icon={<PlusOutlined />} 
+              size="large"
+              className="h-12 px-6 bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-100 font-bold border-none"
+              onClick={() => setIsModalOpen(true)}
+            >
+              Nouvel Article
+            </Button>
           </div>
+
+          <Card className="rounded-3xl shadow-xl shadow-gray-100/50 border border-gray-100 overflow-hidden">
+            <div className="mb-6 flex flex-col md:flex-row gap-4 justify-between">
+              <Input 
+                placeholder="Rechercher par titre..." 
+                prefix={<SearchOutlined className="text-gray-400" />} 
+                className="h-11 max-w-md rounded-xl bg-gray-50 border-none focus:bg-white transition-all"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+              <div className="flex gap-2">
+                <Button icon={<MoreOutlined />} className="rounded-xl h-11" />
+              </div>
+            </div>
+
+            <Table 
+              columns={columns} 
+              dataSource={news}
+              pagination={{ 
+                pageSize: 6,
+                className: "pr-4",
+                showSizeChanger: false
+              }} 
+              loading={loading}
+              rowKey="id"
+              scroll={{ x: 'max-content' }}
+              className="modern-table"
+            />
+          </Card>
+
+          <Modal 
+            open={isModalOpen} 
+            onCancel={() => setIsModalOpen(false)} 
+            footer={null}
+            width={700}
+            centered
+            destroyOnHidden
+            className="rounded-3xl overflow-hidden"
+          >
+            <CreateNewsForm onSucess={() => {
+            setIsModalOpen(false);
+            fetchNews();
+          }}/>
+          </Modal>
+
+          <Modal
+            open={isUpdateModalOpen}
+            onCancel={() => setIsUpdateModalOpen(false)}
+            footer={null}
+            destroyOnHidden
+            centered
+            width={700}
+          >
+            {selectedNewsId && <UpdateNewsForm
+              newsId={selectedNewsId}
+              onSuccess={() => {
+                setIsUpdateModalOpen(false);
+                fetchNews();
+              }}
+            />}
+          </Modal>
+
+          <style jsx global>{`
+            .modern-table .ant-table-thead > tr > th {
+              background: transparent !important;
+              color: #8c8c8c !important;
+              font-weight: 600;
+              text-transform: uppercase;
+              font-size: 11px;
+              letter-spacing: 0.05em;
+              border-bottom: 1px solid #f0f0f0;
+            }
+            .modern-table .ant-table-tbody > tr > td {
+              border-bottom: 1px solid #f9f9f9;
+              padding: 16px !important;
+            }
+            .modern-table .ant-table-row:hover {
+              background-color: #fafafa !important;
+            }
+          `}</style>
         </div>
-
-        <Table 
-          columns={columns} 
-          dataSource={news}
-          pagination={{ 
-            pageSize: 6,
-            className: "pr-4",
-            showSizeChanger: false
-          }} 
-          loading={loading}
-          rowKey="id"
-          scroll={{ x: 'max-content' }}
-          className="modern-table"
-        />
-      </Card>
-
-      <Modal 
-        open={isModalOpen} 
-        onCancel={() => setIsModalOpen(false)} 
-        footer={null}
-        width={700}
-        centered
-        destroyOnHidden
-        className="rounded-3xl overflow-hidden"
-      >
-         <div className="pt-6">
-            <CreateNewsForm fetchNews={fetchNews}/>
-         </div>
-      </Modal>
-
-      <Modal
-        open={isUpdateModalOpen}
-        onCancel={() => setIsUpdateModalOpen(false)}
-        footer={null}
-        destroyOnHidden
-        centered
-        width={700}
-      >
-        {selectedNewsId && <UpdateNewsForm newsId={selectedNewsId} />}
-      </Modal>
-
-      <style jsx global>{`
-        .modern-table .ant-table-thead > tr > th {
-          background: transparent !important;
-          color: #8c8c8c !important;
-          font-weight: 600;
-          text-transform: uppercase;
-          font-size: 11px;
-          letter-spacing: 0.05em;
-          border-bottom: 1px solid #f0f0f0;
-        }
-        .modern-table .ant-table-tbody > tr > td {
-          border-bottom: 1px solid #f9f9f9;
-          padding: 16px !important;
-        }
-        .modern-table .ant-table-row:hover {
-          background-color: #fafafa !important;
-        }
-      `}</style>
-    </div>
+    </>
   );
 }

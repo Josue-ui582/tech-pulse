@@ -15,10 +15,6 @@ export const getNews = async (category?: Category, search?: string) => {
         params.append("search", search);
     }
 
-    const finalUrl = `${API_URL}?${params.toString()}`;
-    // AJOUTE CE LOG pour vérifier l'URL générée dans ton terminal (si SSR) ou navigateur
-    console.log("Appel API vers :", finalUrl);
-
     try {
         const res = await fetch(`${API_URL}?${params.toString()}`, {
             cache: "no-store"
@@ -26,7 +22,7 @@ export const getNews = async (category?: Category, search?: string) => {
 
         if (!res.ok) {
             const errorData = await res.json().catch(() => ({}));
-            throw new ReferenceError(errorData.error || `Erreur HTTP: ${res.status} (Impossible de charger les articles)`);
+            throw new Error(errorData.error || `Erreur HTTP: ${res.status} (Impossible de charger les articles)`);
         }
 
         return await res.json();
@@ -89,6 +85,7 @@ export const authService = {
   async login(data: any) {
     const response = await fetch(`${API_URL_Auth}/login`, {
       method: 'POST',
+      credentials: 'include', // Important pour inclure les cookies
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });

@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { createUsersService, getUserByEmail, getUsersService } from "../services/users.services.js"
+import { createUsersService, getUserByEmail, getUserById, getUsersService } from "../services/users.services.js"
 import type { Request, Response } from "express";
 import { createUserSchema } from "../schema/users.schema.js";
 import bcrypt from "bcrypt"
@@ -35,9 +35,9 @@ export const createUsersController = async (req: Request, res: Response) => {
         })
     }
 
-    const { firstName, lastName, email, password } = validation.data;
+    const { name, email, password } = validation.data;
     try {
-        const newUsers = await createUsersService(firstName, lastName, email, password);
+        const newUsers = await createUsersService(name, email, password);
         return res.status(201).json({
             success: true,
             data: newUsers
@@ -62,7 +62,7 @@ export const loginUserController = async (req: Request, res: Response) => {
             })
         }
 
-        const isValidePassword = bcrypt.compare(password, user.password);
+        const isValidePassword = await bcrypt.compare(password, user.password as string);
         if (!isValidePassword) {
             return res.status(401).json({
                 success: false,
@@ -76,16 +76,21 @@ export const loginUserController = async (req: Request, res: Response) => {
             { expiresIn: '24h' }
         );
 
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            maxAge: 24 * 60 * 60 * 1000
+        });
+
         return res.status(200).json({
             success: true,
-            token: token,
             user: {
                 id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
+                name: user.name,
                 role: user.role
             }
-        })
+        });
     } catch (error) {
         return res.status(500).json({
             success: false,
@@ -94,3 +99,42 @@ export const loginUserController = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const meController = async (req: Request, res: Response) => {
+    const token = req.cookies.token;
+
+    if (!token) {
+        return res.status(401).json({
+            success: false,
+            message: "Non authentifié"
+        });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET) as { id: string, role: string };
+
+        const user = await getUserById(decoded.id);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "Utilisateur non trouvé"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            user: {
+                id: user.id,
+                name: user.name,
+                role: user.role
+            }
+        });
+
+    } catch (error) {
+        return res.status(401).json({
+            success: false,
+            message: "Token invalide ou expiré"
+        });
+    }
+};

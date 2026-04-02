@@ -13,7 +13,6 @@ export const getNewsController = async (req: Request, res: Response) => {
     try {
         const news = await getNewsService(category as Category, search as string);
         res.status(200).json(news);
-        console.log("Valeur brute catégorie :", req.query.category);
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la récupération des article" });
     }
