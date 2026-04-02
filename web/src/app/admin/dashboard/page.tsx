@@ -45,7 +45,6 @@ export default function NewsAdminPage() {
   }, []);
 
   const fetchNews = useCallback(async (search?: string) => {
-    if (status !== "authenticated") return;
     
     setLoading(true);
     try {
@@ -57,6 +56,8 @@ export default function NewsAdminPage() {
       setLoading(false);
     }
   }, [status]);
+
+  console.log("News dans le composant:", news);
 
   useEffect(() => {
     const timer = setTimeout(() => {
