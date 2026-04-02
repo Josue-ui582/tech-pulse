@@ -1,80 +1,100 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { News } from "@/types/news";
-import Card from "antd/es/card/Card";
 import { formatDate } from "@/utils/formatDate";
 import { increateNewView } from "@/services/api";
 
 const BACKEND_URL = "http://localhost:3001";
 
-const NewsCard = ({ articles }: { articles: News }) => {
+const NewsCard = ({ article }: { article: News }) => {
   const [expanded, setExpanded] = useState(false);
-  const [currentViews, setCurrentViews] = useState(articles.viewsCount);
+  const [currentViews, setCurrentViews] = useState(article.viewsCount);
 
   const handleExpand = async () => {
-    setExpanded(!expanded);
+    setExpanded(prev => !prev);
 
     if (!expanded) {
-      const viewedNew = JSON.parse(localStorage.getItem("viewed_news") || "[]");
-      if (!viewedNew.includes(articles.id)) {
-        const updateData = await increateNewView(articles.id);
-        if (updateData) {
-          setCurrentViews(updateData.viewsCount);
-          viewedNew.push(articles.id);
-          localStorage.setItem("viewed_news", JSON.stringify(viewedNew));
+      try {
+        const stored = localStorage.getItem("viewed_news");
+        const viewedNews = stored ? JSON.parse(stored) : [];
+
+        if (!viewedNews.includes(article.id)) {
+          const updateData = await increateNewView(article.id);
+
+          if (updateData) {
+            setCurrentViews(updateData.viewsCount);
+            viewedNews.push(article.id);
+            localStorage.setItem("viewed_news", JSON.stringify(viewedNews));
+          }
         }
+      } catch (error) {
+        console.error("Erreur gestion des vues :", error);
       }
     }
-  }
+  };
 
   return (
-    <Card hoverable className="w-75 rounded-xl overflow-hidden">
-      <div className="relative w-full pb-[56.25%]">
+    <>
+      <div 
+        onClick={handleExpand}
+        className="relative aspect-16/10 w-full rounded-4xl overflow-hidden mb-6 cursor-pointer group"
+      >
+        <div className="absolute inset-0 bg-slate-900/5 z-10 group-hover:bg-transparent transition-colors duration-500" />
+
         <img
           draggable={false}
-          alt={articles.title}
+          alt={article.title}
           src={
-            articles.imageUrl 
-              ? `${BACKEND_URL}/${articles.imageUrl}` 
+            article.imageUrl
+              ? `${BACKEND_URL}/${article.imageUrl}`
               : "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
           }
-          className="absolute w-full h-full object-cover"
+          className="object-cover w-full h-full transition-transform duration-700 ease-out group-hover:scale-110"
         />
-      </div>
 
-      <div className="mt-3">
-
-        <h3 className="text-lg font-bold leading-snug line-clamp-2 mb-2">
-          {articles.title}
-        </h3>
-
-        <p
-          className={`text-sm text-gray-600 mb-2 ${
-            expanded ? "" : "line-clamp-3"
-          }`}
-        >
-          {articles.description}
-        </p>
-
-        {articles.description.length > 120 && (
-          <div className="flex justify-between">
-              <button
-              onClick={handleExpand}
-              className="text-blue-500 text-sm font-medium hover:underline mb-2"
-            >
-              {expanded ? "Voir moins" : "Voir plus"}
-            </button>
-            <h4 className="text-sm font-semibold">{articles.category}</h4>
-          </div>
-        )}
-
-        <div className="flex justify-between text-xs text-gray-500 mt-2">
-          <span>{formatDate(articles.publishedAt)}</span>
-          <span>👁 {currentViews}</span>
+        <div className="absolute top-4 left-4 z-20">
+          <span className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold text-slate-900 uppercase tracking-widest shadow-sm">
+            {article.category}
+          </span>
         </div>
       </div>
-    </Card>
+
+      <div className="px-4 pb-4">
+        <div className="flex items-center gap-3 text-slate-400 text-xs mb-3">
+          <span className="flex items-center gap-1">
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {formatDate(article.publishedAt)}
+          </span>
+
+          <span>•</span>
+          <span>5 min de lecture</span>
+        </div>
+
+        <h3 className="text-xl font-bold text-slate-900 leading-snug group-hover:text-indigo-600 transition-colors duration-300">
+          {article.title}
+        </h3>
+
+        <p className="text-slate-500 text-sm mt-3 line-clamp-2 leading-relaxed">
+          {article.description}
+        </p>
+
+        <div className="mt-6 flex items-center gap-4 text-sm">
+          <span className="text-gray-500">
+            👁 {currentViews}
+          </span>
+
+          <div className="flex items-center gap-2 text-indigo-600 font-bold cursor-pointer">
+            Lire l'article
+            <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

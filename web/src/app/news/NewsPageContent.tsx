@@ -86,9 +86,9 @@ export default function NewsPageContent({ news }: { news: News[] }) {
               {news.map((article: News) => (
                 <div 
                   key={article.id} 
-                  className="group flex flex-col"
+                  className="group bg-white p-3 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-100/50 transition-all duration-500"
                 >
-                  <NewsCard articles={article} />
+                  <NewsCard article={article} />
                 </div>
               ))}
             </div>
