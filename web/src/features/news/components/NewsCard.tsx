@@ -4,6 +4,7 @@ import { useState } from "react";
 import { News } from "@/types/news";
 import { formatDate } from "@/utils/formatDate";
 import { increateNewView } from "@/services/api";
+import { ReadMoreIcon } from "../../../../public/icons/readMoreIcon";
 
 const BACKEND_URL = "http://localhost:3001";
 
@@ -88,9 +89,7 @@ const NewsCard = ({ article }: { article: News }) => {
 
           <div className="flex items-center gap-2 text-indigo-600 font-bold cursor-pointer">
             Lire l'article
-            <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
+            <ReadMoreIcon />
           </div>
         </div>
       </div>
