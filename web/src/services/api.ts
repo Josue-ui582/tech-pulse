@@ -85,6 +85,7 @@ export const authService = {
   async login(data: any) {
     const response = await fetch(`${API_URL_Auth}/login`, {
       method: 'POST',
+      credentials: 'include', // Important pour inclure les cookies
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });

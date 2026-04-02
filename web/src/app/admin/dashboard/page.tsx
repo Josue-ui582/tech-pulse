@@ -10,12 +10,13 @@ import { deleteNew, getNews } from '@/services/api';
 import Image from 'next/image';
 import { formatDate } from '@/utils/formatDate';
 import UpdateNewsForm from '@/features/news/components/UpdateNew';
-import { getUser, isAuthentificated } from '@/utils/auth';
-import { useRouter } from 'next/router';
+import { getUser } from '@/utils/auth';
+import { useRouter } from 'next/navigation';
 
 const { Title, Text } = Typography;
 
 const SERVER_URL = process.env.NEXT_PUBLIC_API_URL;
+
 
 export default function NewsAdminPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,16 +29,19 @@ export default function NewsAdminPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const user = getUser();
+    const checkAuth = async () => {
+      const userData = await getUser();
 
-    if (!isAuthentificated) {
-      router.push("/auth");
+    if(!userData) {
+      router.replace("/auth");
       return;
     }
 
-    if (user.role !== "admin") {
+    if (userData.role !== "admin") {
       router.push("/unauthorized");
     }
+  }
+  checkAuth();
   }, []);
 
   const fetchNews = useCallback(async (search?: string) => {
