@@ -15,15 +15,16 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = 3001;
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser());
 
 app.use((req, res, next) => {
   // Autorise l'image à être chargée par un autre domaine (Next.js)
   res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
-  // Désactive la restriction de l'origine pour les ressources statiques
-  res.setHeader("Access-Control-Allow-Origin", "*");
   next();
 });
 
@@ -32,6 +33,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/news", newsRoute);
 app.use("/api/users", usersRoute);
 app.use("/api/login", authRoute);
+app.use("/api/auth", authRoute);
 
 app.listen(PORT, () => {
   console.log(`[server]: Server running on http://localhost:${PORT}`);

@@ -6,21 +6,34 @@ import { SearchCategory } from "@/features/search/components/searchCategory";
 import { News } from "@/types/news";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { isAuthentificated } from "@/utils/auth";
+import { getUser } from "@/utils/auth";
+import Loading from "../admin/dashboard/loading";
 
 export default function NewsPageContent({ news }: { news: News[] }) {
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+ useEffect(() => {
+  const checkAuth = async () => {
+    const userData = await getUser();
 
-  useEffect(() => {
-    if (mounted && !isAuthentificated()) {
+    if (!userData) {
       router.replace("/auth");
+      return;
     }
-  }, [mounted]);
+
+    if (userData.role !== "user") {
+      router.replace("/unauthorized");
+      return;
+    }
+
+    setLoading(false);
+  };
+
+  checkAuth();
+}, []);
+
+  if (loading) return <Loading />;
 
   return (
     <main className="min-h-screen bg-[#FAFAFA] selection:bg-indigo-100">

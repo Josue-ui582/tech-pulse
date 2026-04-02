@@ -7,7 +7,6 @@ import { MailOutlined, LockOutlined,
 } from '@ant-design/icons';
 import { authService } from '@/services/api';
 import { AuthForm } from '@/types/news';
-import { getUser } from '@/utils/auth';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -31,11 +30,7 @@ export default function AuthPage() {
           throw new Error("Identifiants invalides");
         }
 
-        localStorage.setItem("token", result.token);
-        localStorage.setItem("user", JSON.stringify(result.user));
-
-        const user = getUser();
-        if (user.role === "admin") {
+        if (result.user.role === "admin") {
           message.success("Connexion réussie !");
           router.replace("/admin/dashboard");
         }else{

@@ -12,8 +12,3 @@ export const getUser = async () => {
     return null;
   }
 };
-
-export const isAuthentificated = async () => {
-  const user = await getUser();
-  return !!user;
-};

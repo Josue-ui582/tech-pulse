@@ -1,12 +1,13 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Input } from 'antd';
 
 export const SearchBar = () => {
     const router = useRouter();
     const params = useSearchParams();
+    const pathname = usePathname();
 
     const [search, setSearch] = useState(params.get("search") || "");
     
@@ -20,10 +21,10 @@ export const SearchBar = () => {
 
             search ? query.set("search", search) : query.delete("search");
 
-            router.push(`/?${query.toString()}`);
+            router.push(`${pathname}?${query.toString()}`);
         }, 500);
         return () => clearTimeout(timeout);
-    }, [search]);
+    }, [search, pathname, params]);
     return (
         <Input 
             placeholder="Rechercher un article" 
