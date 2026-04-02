@@ -4,7 +4,7 @@ import { Features } from "@/components/ui/feature";
 import { Footer } from "@/components/ui/footer";
 import { featuredNews } from "@/data/preview";
 import Image from "next/image";
-import { getUser, isAuthentificated } from "@/utils/auth";
+import { getUser } from "@/utils/auth";
 
 export default function HomePage() {
   const user = getUser();

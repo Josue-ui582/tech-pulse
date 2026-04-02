@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { loginUserController } from "../controllers/users.controllers.js";
+import { loginUserController, meController } from "../controllers/users.controllers.js";
 
 const router = Router();
 
@@ -44,5 +44,7 @@ const router = Router();
  *         description: Identifiants incorrects
  */
 router.post("/", loginUserController);
+
+router.get("/me", meController);
 
 export default router;

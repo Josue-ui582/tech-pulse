@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { createUsersService, getUserByEmail, getUsersService } from "../services/users.services.js"
+import { createUsersService, getUserByEmail, getUserById, getUsersService } from "../services/users.services.js"
 import type { Request, Response } from "express";
 import { createUserSchema } from "../schema/users.schema.js";
 import bcrypt from "bcrypt"
@@ -102,6 +102,7 @@ export const loginUserController = async (req: Request, res: Response) => {
 
 export const meController = async (req: Request, res: Response) => {
     const token = req.cookies.token;
+
     if (!token) {
         return res.status(401).json({
             success: false,
@@ -111,7 +112,9 @@ export const meController = async (req: Request, res: Response) => {
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET) as { id: string, role: string };
-        const user = await getUserByEmail(decoded.id);
+
+        const user = await getUserById(decoded.id);
+
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -127,11 +130,11 @@ export const meController = async (req: Request, res: Response) => {
                 role: user.role
             }
         });
+
     } catch (error) {
         return res.status(401).json({
             success: false,
-            message: "Token invalide ou expiré",
-            error: error instanceof Error ? error.message : "Erreur inconnue"
+            message: "Token invalide ou expiré"
         });
     }
-}
+};

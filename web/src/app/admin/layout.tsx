@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout, Menu, Badge } from 'antd';
 import {
   DashboardOutlined,
@@ -15,11 +15,38 @@ import { getUser } from '@/utils/auth';
 
 const { Header, Content, Sider } = Layout;
 
+type User = {
+  id: string;
+  name: string;
+  role: string;
+};
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const user = getUser();
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userData = await getUser();
+      
+      if (!userData) {
+        router.replace("/auth");
+        return;
+      }
+
+      setUser(userData);
+      setLoading(false);
+    };
+
+    fetchUser();
+  }, []);
+  console.log(user)
+
+  if(loading) {
+    return <Loading />;
+  }
 
   const menuItems = [
     { key: '/admin/dashboard', icon: <DashboardOutlined />, label: 'Dashboard' },
@@ -27,7 +54,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { key: '/admin/settings', icon: <SettingOutlined />, label: 'Réglages' },
   ];
 
-  if (status === "loading") {
+  if (loading) {
     return <Loading />;
   }
 
