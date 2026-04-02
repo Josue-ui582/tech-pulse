@@ -1,6 +1,6 @@
 export const getUser = async () => {
   try {
-    const res = await fetch("http://localhost:3001/api/users", {
+    const res = await fetch("http://localhost:3001/api/auth/me", {
       credentials: "include",
     });
 
