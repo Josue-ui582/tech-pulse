@@ -62,7 +62,7 @@ export const loginUserController = async (req: Request, res: Response) => {
             })
         }
 
-        const isValidePassword = bcrypt.compare(password, user.password as string);
+        const isValidePassword = await bcrypt.compare(password, user.password as string);
         if (!isValidePassword) {
             return res.status(401).json({
                 success: false,
@@ -76,15 +76,21 @@ export const loginUserController = async (req: Request, res: Response) => {
             { expiresIn: '24h' }
         );
 
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            maxAge: 24 * 60 * 60 * 1000
+        });
+
         return res.status(200).json({
             success: true,
-            token: token,
             user: {
                 id: user.id,
                 name: user.name,
                 role: user.role
             }
-        })
+        });
     } catch (error) {
         return res.status(500).json({
             success: false,

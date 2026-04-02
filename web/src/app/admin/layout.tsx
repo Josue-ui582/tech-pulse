@@ -109,7 +109,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </button>
           ))}
           <button
-            onClick={() => (localStorage.removeItem("user"), localStorage.removeItem("token"), router.push("/auth"))}
+            onClick={() => (localStorage.removeItem("user"), localStorage.removeItem("token"), router.replace("/auth"))}
             className="flex flex-col items-center gap-1 text-red-400"
           >
             <LogoutOutlined className="text-xl" />

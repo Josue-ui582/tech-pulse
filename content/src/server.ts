@@ -7,16 +7,17 @@ import usersRoute from "../src/routes/users.routes.js"
 import authRoute from "../src/routes/auth.route.js"
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import cookieParser from "cookie-parser";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 
 const app = express();
 const PORT = 3001;
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.use((req, res, next) => {
   // Autorise l'image à être chargée par un autre domaine (Next.js)
