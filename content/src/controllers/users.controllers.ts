@@ -99,3 +99,39 @@ export const loginUserController = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const meController = async (req: Request, res: Response) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(401).json({
+            success: false,
+            message: "Non authentifié"
+        });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET) as { id: string, role: string };
+        const user = await getUserByEmail(decoded.id);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "Utilisateur non trouvé"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            user: {
+                id: user.id,
+                name: user.name,
+                role: user.role
+            }
+        });
+    } catch (error) {
+        return res.status(401).json({
+            success: false,
+            message: "Token invalide ou expiré",
+            error: error instanceof Error ? error.message : "Erreur inconnue"
+        });
+    }
+}
