@@ -4,7 +4,8 @@ import path from "node:path";
 const MIME_TYPES: Record<string, string> = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
-  'image/png': 'png'
+  'image/png': 'png',
+  'image/avif': 'avif',
 };
 
 const storage = multer.diskStorage({
