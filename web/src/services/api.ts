@@ -47,6 +47,7 @@ export const CreateNewsForms = async (title: string, description: string, catego
         const res = await fetch(API_URL, {
             method: "POST",
             body: formData,
+            credentials: 'include', // Important pour inclure les cookies d'authentification
         });
 
         if (!res.ok) {
