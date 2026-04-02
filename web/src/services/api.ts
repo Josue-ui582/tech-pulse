@@ -33,11 +33,6 @@ export const getNews = async (category?: Category, search?: string) => {
 }
 
 export const CreateNewsForms = async (title: string, description: string, category: Category, imageFile?: File) => {
-    const token = typeof window !== undefined ? localStorage.getItem("token") : null;
-
-    if (!token) {
-        throw new Error("Vous devez être connecté pour publier un article.");
-    }
 
     try {
         const formData = new FormData();
@@ -51,10 +46,8 @@ export const CreateNewsForms = async (title: string, description: string, catego
 
         const res = await fetch(API_URL, {
             method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            },
             body: formData,
+            credentials: 'include', // Important pour inclure les cookies d'authentification
         });
 
         if (!res.ok) {
