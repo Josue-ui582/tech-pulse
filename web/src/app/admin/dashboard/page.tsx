@@ -30,7 +30,7 @@ export default function NewsAdminPage() {
   useEffect(() => {
     const user = getUser();
 
-    if (!isAuthentificated) {
+    if (!isAuthentificated()) {
       router.push("/auth");
       return;
     }

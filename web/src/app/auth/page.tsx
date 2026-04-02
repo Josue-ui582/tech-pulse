@@ -27,27 +27,27 @@ export default function AuthPage() {
 
       if (isLogin) {
         const result = await authService.login(cleanedValues);
+        if (result?.error) {
+          throw new Error("Identifiants invalides");
+        }
+
         localStorage.setItem("token", result.token);
         localStorage.setItem("user", JSON.stringify(result.user));
 
         const user = getUser();
         if (user.role === "admin") {
           message.success("Connexion réussie !");
-          router.push("/admin/dashboard");
+          router.replace("/admin/dashboard");
         }else{
           message.success("connexion réussie");
-          router.push("/news");
+          router.replace("/news");
         }
-        if (result?.error) {
-          throw new Error("Identifiants invalides");
-        }
-        router.refresh();
         
       } else {
         await authService.register(cleanedValues);
         message.success("Compte créé ! Connectez-vous.");
         setIsLogin(true);
-        form.resetFields(['password']);
+        form.resetFields();
       }
     } catch (error: any) {
       message.error(error.message || "Une erreur est survenue");

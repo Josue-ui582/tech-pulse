@@ -1,12 +1,14 @@
-// app/page.tsx
 import { Navbar } from "@/components/ui/navbar";
 import { Hero } from "@/components/ui/hero";
 import { Features } from "@/components/ui/feature";
 import { Footer } from "@/components/ui/footer";
 import { featuredNews } from "@/data/preview";
 import Image from "next/image";
+import { getUser, isAuthentificated } from "@/utils/auth";
 
 export default function HomePage() {
+  const user = getUser();
+      console.log("USER ", user);
 
   return (
     <div className="min-h-screen bg-white">
