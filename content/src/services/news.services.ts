@@ -72,7 +72,7 @@ export const deleteNewService = async (id: string) => {
   });
 };
 
-export const getUniqueIdService = async (id: string) => {
+export const getUniqueNewService = async (id: string) => {
   return await prisma.news.findUnique({
     where: { id }
   })

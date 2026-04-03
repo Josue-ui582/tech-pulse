@@ -1,5 +1,5 @@
-import type { Request, Response, NextFunction } from "express"
-import jwt from "jsonwebtoken"
+import type { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 
 interface TokenPayload {
     id: string;
@@ -16,29 +16,41 @@ declare global {
 
 const JWT_SECRET = process.env.JWT_SECRET_SECRET as string;
 
-export const authorize = (requiredRole: string) => {
-    return (req: Request, res: Response, next: NextFunction) => {
-        const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return res.status(401).json({
-                message: "Accès refusé, Token manquant"
-            })
-        }
+const extractToken = (req: Request): string | null => {
+    if (req.cookies?.token) {
+        return req.cookies.token;
+    }
 
-        const token = authHeader.split(' ')[1] as string;
+    return null;
+};
+
+export const authorize = (requiredRole?: string) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        const token = extractToken(req);
+        console.log("Token extrait:", token);
+
+        if (!token) {
+            return res.status(401).json({
+                message: "Accès refusé, Token manquant",
+            });
+        }
 
         try {
             const decoded = jwt.verify(token, JWT_SECRET) as TokenPayload;
-            if (decoded.role !== requiredRole) {
-                return res.status(403).json({ 
-                    message: `Accès interdit. Rôle ${requiredRole} requis.` 
+
+            req.user = decoded;
+
+            if (requiredRole && decoded.role !== requiredRole) {
+                return res.status(403).json({
+                    message: `Accès interdit. Rôle ${requiredRole} requis.`,
                 });
             }
 
-            req.user = decoded
-            next()
+            next();
         } catch (error) {
-            return res.status(401).json({ message: "Token invalide ou expiré." });
+            return res.status(401).json({
+                message: "Token invalide ou expiré.",
+            });
         }
-    }
-}
+    };
+};
