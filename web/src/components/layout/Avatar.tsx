@@ -1,5 +1,5 @@
 'use client';
-import { Avatar, Badge, Dropdown, Space, Tag, Typography } from 'antd';
+import { Avatar, Badge, Dropdown, Tag, Typography } from 'antd';
 import { 
   UserOutlined, 
   LogoutOutlined, 
@@ -50,7 +50,7 @@ export default function AdminAvatar({ user }: { user: any }) {
 
   return (
     <Dropdown menu={{ items }} placement="bottomRight" arrow={{ pointAtCenter: true }} trigger={['click']}>
-      <div className="flex items-center gap-3 p-1.5 pr-4 rounded-full transition-all cursor-pointer group">
+      <div className="flex items-center gap-3 p-1.5 pr-4 rounded-full transition-all cursor-pointer group bg-transparent">
         <Badge dot status="processing" offset={[-2, 32]} color="">
           <Avatar 
             size={40} 
@@ -61,8 +61,8 @@ export default function AdminAvatar({ user }: { user: any }) {
         </Badge>
         
         <div className="hidden md:flex flex-col items-start leading-tight">
-            <Text style={{ color: 'white' }} className="font-bold text-sm">
-                {user?.firstName}
+            <Text style={{ color: 'blue-500' }} className="font-bold text-sm">
+                {user?.name}
             </Text>
 
           <Tag className="m-0 border-none bg-blue-50 text-[10px] font-black lowercase tracking-tighter px-1.5">
