@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getUser } from "@/utils/auth";
 import Loading from "../admin/dashboard/loading";
+import { Navbar } from "@/components/ui/navbar";
 
 export default function NewsPageContent({ news }: { news: News[] }) {
   const router = useRouter();
@@ -37,6 +38,7 @@ export default function NewsPageContent({ news }: { news: News[] }) {
 
   return (
     <main className="min-h-screen bg-[#FAFAFA] selection:bg-indigo-100">
+      <Navbar />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-150 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(79,70,229,0.04)_0%,transparent_100%)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 py-16 md:py-24 relative">
