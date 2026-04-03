@@ -32,6 +32,24 @@ export const getNews = async (category?: Category, search?: string) => {
     }
 }
 
+export const getUniqueNew = async (id: string) => {
+    try {
+        const res = await fetch(`${API_URL}/${id}`, {
+            cache: "no-store"
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({}));
+            throw new Error(errorData.error || `Erreur HTTP: ${res.status} (Impossible de charger l'article)`);
+        }
+
+        return await res.json();
+    } catch (error) {
+        if(error instanceof ReferenceError) throw error;
+        throw new ReferenceError("Article introuvable ou serveur injoignable. Vérifier votre connexion");
+    }
+}
+
 export const CreateNewsForms = async (title: string, description: string, category: Category, imageFile?: File) => {
 
     try {
