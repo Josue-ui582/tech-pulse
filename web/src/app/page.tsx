@@ -1,3 +1,5 @@
+"use client";
+
 import { Navbar } from "@/components/ui/navbar";
 import { Hero } from "@/components/ui/hero";
 import { Features } from "@/components/ui/feature";
@@ -5,11 +7,17 @@ import { Footer } from "@/components/ui/footer";
 import { featuredNews } from "@/data/preview";
 import Image from "next/image";
 import { ReadMoreIcon } from "../../public/icons/readMoreIcon";
+import { motion } from "framer-motion";
 
 export default function HomePage() {
 
   return (
-    <div className="min-h-screen bg-white">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-white"
+    >
       <Navbar />
       <main>
         <Hero />
@@ -25,7 +33,18 @@ export default function HomePage() {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: {
+                    staggerChildren: 0.2,
+                  },
+                },
+              }}
+              className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {featuredNews.map((item) => (
                 <div key={item.id} className="group bg-white p-3 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-100/50 transition-all duration-500">
   
@@ -74,7 +93,7 @@ export default function HomePage() {
                 </div>
               </div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -82,6 +101,6 @@ export default function HomePage() {
       </main>
 
       <Footer />
-    </div>
+    </motion.div>
   );
 }
