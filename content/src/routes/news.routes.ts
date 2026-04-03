@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createNewsController, deleteNewController, getNewsController, getUniqueIdController, incrementViewsController, updatedNewsController } from "../controllers/news.controlers.js";
+import { createNewsController, deleteNewController, getNewsController, getUniqueNewController, incrementViewsController, updatedNewsController } from "../controllers/news.controlers.js";
 import { upload } from "../middleware/multer.middleware.js";
 import { authorize } from "../middleware/auth.middleware.js";
 const router = Router();
@@ -31,7 +31,7 @@ const router = Router();
  *       500:
  *         description: Erreur interne du serveur
  */
-router.get("/:id", getUniqueIdController);
+router.get("/:id", getUniqueNewController);
 
 /**
  * @openapi
