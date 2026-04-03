@@ -1,3 +1,5 @@
+import { GlobalOutlined, SafetyCertificateOutlined, RocketOutlined } from "@ant-design/icons";
+
 export const previw = [
     { 
         title: "Curation IA", 
@@ -39,3 +41,21 @@ export const featuredNews = [
     image: "/tech.avif"
   },
 ];
+
+export const aboutPreview = [
+  { 
+    icon: <GlobalOutlined />,
+    title: "Portée Mondiale", 
+    desc: "Couverture instantanée des événements aux quatre coins du globe." 
+  },
+  { 
+    icon: <SafetyCertificateOutlined />, 
+    title: "Vérification", 
+    desc: "Chaque information est sourcée et vérifiée avant publication." 
+  },
+  { 
+    icon: <RocketOutlined />, 
+    title: "Innovation", 
+    desc: "Une expérience utilisateur pensée pour la lecture numérique moderne." 
+  }
+]
