@@ -5,12 +5,14 @@ import { News } from "@/types/news";
 import { formatDate } from "@/utils/formatDate";
 import { increateNewView } from "@/services/api";
 import { ReadMoreIcon } from "../../../../public/icons/readMoreIcon";
+import { useRouter } from "next/navigation";
 
 const BACKEND_URL = "http://localhost:3001";
 
 const NewsCard = ({ article }: { article: News }) => {
   const [expanded, setExpanded] = useState(false);
   const [currentViews, setCurrentViews] = useState(article.viewsCount);
+  const router = useRouter();
 
   const handleExpand = async () => {
     setExpanded(prev => !prev);
@@ -87,10 +89,10 @@ const NewsCard = ({ article }: { article: News }) => {
             👁 {currentViews}
           </span>
 
-          <div className="flex items-center gap-2 text-indigo-600 font-bold cursor-pointer">
+          <button className="flex items-center gap-2 text-indigo-600 font-bold cursor-pointer" onClick={() => router.replace(`/news/${article.id}`)}>
             Lire l'article
             <ReadMoreIcon />
-          </div>
+          </button>
         </div>
       </div>
     </>
