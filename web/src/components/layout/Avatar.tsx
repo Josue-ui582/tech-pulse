@@ -7,6 +7,7 @@ import {
   SafetyCertificateOutlined 
 } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
+import { logOutUser } from '@/services/api';
 
 const { Text } = Typography;
 
@@ -42,7 +43,7 @@ export default function AdminAvatar({ user }: { user: any }) {
       icon: <LogoutOutlined />,
       danger: true,
       onClick: () => {
-        localStorage.clear();
+        logOutUser();
         router.push('/auth');
       },
     },
