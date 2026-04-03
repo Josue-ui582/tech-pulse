@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { getUser } from "@/utils/auth";
 import Loading from "../admin/dashboard/loading";
 import { Navbar } from "@/components/ui/navbar";
+import { motion } from "framer-motion";
 
 export default function NewsPageContent({ news }: { news: News[] }) {
   const router = useRouter();
@@ -37,7 +38,12 @@ export default function NewsPageContent({ news }: { news: News[] }) {
   if (loading) return <Loading />;
 
   return (
-    <main className="min-h-screen bg-[#FAFAFA] selection:bg-indigo-100">
+    <motion.main
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-[#FAFAFA] selection:bg-indigo-100"
+    >
       <Navbar />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-150 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(79,70,229,0.04)_0%,transparent_100%)] pointer-events-none" />
 
@@ -103,6 +109,6 @@ export default function NewsPageContent({ news }: { news: News[] }) {
             © {new Date().getFullYear()} TechPulse — Fabriqué pour les passionnés.
           </p>
       </footer>
-    </main>
+    </motion.main>
   );
 }
