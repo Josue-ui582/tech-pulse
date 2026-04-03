@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { createNewsService, deleteNewService, getNewsService, getUniqueIdService, updataNewService } from "../services/news.services.js";
+import { createNewsService, deleteNewService, getNewsService, getUniqueNewService, updataNewService } from "../services/news.services.js";
 import fs from "fs/promises"
 import { incrementViewsService } from "../services/news.services.js";
 import type { Category } from "../generated/client.js";
@@ -121,7 +121,7 @@ export const deleteNewController = async (req: Request<{id: string}>, res: Respo
     }
 }
 
-export const getUniqueIdController = async (req: Request<{id: string}>, res: Response) => {
+export const getUniqueNewController = async (req: Request<{id: string}>, res: Response) => {
     try {
         const { id } = req.params;
 
@@ -131,7 +131,7 @@ export const getUniqueIdController = async (req: Request<{id: string}>, res: Res
             });
         }
 
-        const uniqueNew = await getUniqueIdService(id);
+        const uniqueNew = await getUniqueNewService(id);
 
         if (!uniqueNew) {
             return res.status(404).json({
