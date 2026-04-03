@@ -100,15 +100,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <Header className="bg-white/80 backdrop-blur-md sticky top-0 z-50 px-6 h-16 flex justify-between items-center border-b border-gray-100">
           <h1 className="text-lg font-bold text-gray-800 lg:hidden">Admin {user?.name?.split(' ')[0]}</h1>
           <div className="hidden lg:block text-gray-400 text-sm font-medium">
-            Bienvenue, <span className="font-bold">{user?.name}</span> 👋
+            Bienvenue, <span className="font-bold">{user?.name.split(' ')[1]}</span> 👋
           </div>
 
           <div className="flex items-center gap-5">
             <Badge dot color="blue">
               <BellOutlined className="text-xl cursor-pointer text-gray-400 hover:text-blue-600 transition-colors" />
             </Badge>
-            <div 
-              onClick={() => router.push('/admin/settings')}
+            <div
               className="flex items-center gap-3 p-1 pr-3 bg-gray-50 rounded-full cursor-pointer hover:bg-gray-100 transition-all border border-gray-100"
             >
               <AdminAvatar user={user} />

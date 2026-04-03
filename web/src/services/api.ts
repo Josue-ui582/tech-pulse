@@ -32,12 +32,25 @@ export const getNews = async (category?: Category, search?: string) => {
     }
 }
 
-export const CreateNewsForms = async (title: string, description: string, category: Category, imageFile?: File) => {
-    const token = typeof window !== undefined ? localStorage.getItem("token") : null;
+export const getUniqueNew = async (id: string) => {
+    try {
+        const res = await fetch(`${API_URL}/${id}`, {
+            cache: "no-store"
+        });
 
-    if (!token) {
-        throw new Error("Vous devez être connecté pour publier un article.");
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({}));
+            throw new Error(errorData.error || `Erreur HTTP: ${res.status} (Impossible de charger l'article)`);
+        }
+
+        return await res.json();
+    } catch (error) {
+        if(error instanceof ReferenceError) throw error;
+        throw new ReferenceError("Article introuvable ou serveur injoignable. Vérifier votre connexion");
     }
+}
+
+export const CreateNewsForms = async (title: string, description: string, category: Category, imageFile?: File) => {
 
     try {
         const formData = new FormData();
@@ -51,10 +64,8 @@ export const CreateNewsForms = async (title: string, description: string, catego
 
         const res = await fetch(API_URL, {
             method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            },
             body: formData,
+            credentials: 'include', // Important pour inclure les cookies d'authentification
         });
 
         if (!res.ok) {
@@ -172,5 +183,24 @@ export const increateNewView = async (id: string) => {
       throw new Error(error.message)
     }
     throw error;
+  }
+};
+
+export const logOutUser = async () => {
+  try {
+    const response = await fetch(`${API_URL_Auth}/users/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erreur lors de la déconnexion");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new Error("Une erreur inconnue est survenue lors de la déconnexion");
   }
 };

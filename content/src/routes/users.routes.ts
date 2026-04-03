@@ -1,6 +1,7 @@
 
 import { Router } from "express";
-import { createUsersController, getUsers, meController } from "../controllers/users.controllers.js";
+import { createUsersController, getUsers, logoutController } from "../controllers/users.controllers.js";
+
 const router = Router();
 
 /**
@@ -118,6 +119,6 @@ router.get("/", getUsers);
  */
 router.post("/", createUsersController);
 
-
+router.post("/logout", logoutController);
 
 export default router;
