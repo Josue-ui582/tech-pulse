@@ -5,8 +5,9 @@ import {
   SafetyCertificateOutlined, 
   GlobalOutlined,
 } from "@ant-design/icons";
+import { aboutPreview } from "@/data/preview";
 
-const { Title, Paragraph, Text } = Typography;
+const { Title } = Typography;
 
 const fadeIn = {
   initial: { opacity: 0, y: 30 },
@@ -28,18 +29,14 @@ export const AboutMissions = () => {
           viewport={{ once: true }}
           className="grid grid-cols-1 md:grid-cols-3 gap-8"
         >
-          {[
-            { icon: <GlobalOutlined />, title: "Portée Mondiale", desc: "Couverture instantanée des événements aux quatre coins du globe." },
-            { icon: <SafetyCertificateOutlined />, title: "Vérification", desc: "Chaque information est sourcée et vérifiée avant publication." },
-            { icon: <RocketOutlined />, title: "Innovation", desc: "Une expérience utilisateur pensée pour la lecture numérique moderne." }
-          ].map((item, index) => (
+          {aboutPreview.map((item, index) => (
             <motion.div key={index} variants={fadeIn}>
               <Card className="h-full border-none shadow-xl hover:shadow-2xl transition-all duration-300 rounded-3xl p-4 bg-slate-50 group">
                 <div className="text-4xl text-indigo-600 mb-6 group-hover:scale-110 transition-transform duration-300">
                   {item.icon}
                 </div>
                 <Title level={3} className="text-slate-900!">{item.title}</Title>
-                <Paragraph className="text-slate-500 text-base">{item.desc}</Paragraph>
+                <p className="text-slate-500 text-base">{item.desc}</p>
               </Card>
             </motion.div>
           ))}

@@ -1,14 +1,14 @@
-import { Tag, Typography, } from "antd";
+import { Typography, } from "antd";
 import { motion } from "framer-motion";
 
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 
 export default function AboutHeader() {
     return (
         <section className="relative h-[70vh] flex items-center justify-center overflow-hidden bg-slate-900 text-white px-4">
         <div className="absolute inset-0 z-0 opacity-40">
           <img 
-            src="https://unsplash.com" 
+            src="/background.avif" 
             alt="Background" 
             className="w-full h-full object-cover"
           />
@@ -27,11 +27,18 @@ export default function AboutHeader() {
           <Title className="text-white! text-5xl! md:text-7xl! font-black! mb-6">
             L'information, <span className="text-indigo-400">redéfinie</span>.
           </Title>
-          <Paragraph className="text-slate-300 text-lg md:text-xl leading-relaxed">
+          <p className="text-slate-300 text-lg md:text-xl leading-relaxed">
             Nous croyons en un journalisme transparent, rapide et accessible à tous. 
-            Une plateforme où chaque nouvelle compte.
-          </Paragraph>
+            Une plateforme où chaque nouvelle (IA, Tech et Développement web) compte.
+          </p>
         </motion.div>
       </section>
     )
 }
+
+// Petit composant Tag pour éviter les erreurs d'import AntD
+const Tag = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+  <span className={`inline-block px-3 py-1 rounded text-xs font-bold ${className}`}>
+    {children}
+  </span>
+);
