@@ -1,37 +1,53 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Button, Tag, Divider, Spin, Typography } from "antd";
+import { Button, Tag, Divider, Typography, message } from "antd";
 import { ArrowLeftOutlined, CalendarOutlined, EyeOutlined, ClockCircleOutlined, ShareAltOutlined } from "@ant-design/icons";
 import { News } from "@/types/news";
 import { formatDate } from "@/utils/formatDate";
-// Importe ton service pour récupérer un article par son ID/slug
-// import { getNewsById } from "@/services/api"; 
+import { getUniqueNew } from "@/services/api";
+import Loading from "@/app/admin/dashboard/loading";
 
 const { Title, Paragraph } = Typography;
 const BACKEND_URL = "http://localhost:3001";
 
-export default function NewsDetailPage({ params }: { params: { slug: string } }) {
+export default function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = use(params); 
+  const slug = resolvedParams.slug;
+
   const router = useRouter();
   const [article, setArticle] = useState<News | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Simulation de récupération de données (à remplacer par ton fetch réel)
   useEffect(() => {
-    // const fetchData = async () => {
-    //   const data = await getNewsById(params.slug);
-    //   setArticle(data);
-    //   setLoading(false);
-    // };
-    // fetchData();
-    
-    // Simulation pour le design :
-    setLoading(false);
-  }, [params.slug]);
+    const fetchArticle = async () => {
+      try {
+        const data = await getUniqueNew(slug);
+        setArticle(data);
+      } catch (error: unknown) {
+        message.error("Erreur lors de la récupération de l'article :");
+        setError(error instanceof Error ? error.message : "Erreur inconnue");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (loading) return <div className="h-screen flex justify-center items-center"><Spin size="large" /></div>;
+    fetchArticle();
+    setLoading(false);
+  }, [slug]);
+
+  if (loading) return <Loading />;
+  if (error) return (
+    <div className="h-screen flex flex-col items-center justify-center">
+        <div className="max-w-2xl mx-auto p-6 bg-rose-50 border border-rose-100 text-rose-600 rounded-xl text-center group-[]:">
+        <p className="text-lg font-semibold">⚠️ {error}</p>
+        <Button className="mt-4 hover:bg-blue-600 hover:text-white hover:font-bold translate-0.5" onClick={() => router.replace("/news")}>Retour aux actualités</Button>
+        </div>
+    </div>
+  );
 
   return (
     <motion.main 
@@ -40,7 +56,6 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
       transition={{ duration: 0.5 }}
       className="max-w-4xl mx-auto px-4 py-12"
     >
-      {/* Barre de navigation haute */}
       <nav className="mb-8 flex justify-between items-center">
         <Button 
           type="text" 
@@ -53,7 +68,6 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
         <Button shape="circle" icon={<ShareAltOutlined />} />
       </nav>
 
-      {/* En-tête de l'article */}
       <header className="mb-10 text-center md:text-left">
         <motion.div
           initial={{ opacity: 0 }}
@@ -84,7 +98,6 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
         </motion.div>
       </header>
 
-      {/* Image à la Une */}
       <motion.div 
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -98,28 +111,14 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
         />
       </motion.div>
 
-      {/* Contenu de l'article */}
       <article className="prose prose-slate prose-lg max-w-none">
         <Paragraph className="text-xl text-slate-600 font-medium leading-relaxed italic mb-8 border-l-4 border-indigo-500 pl-6">
           {article?.description || "Résumé de l'article..."}
         </Paragraph>
         
         <Divider />
-
-        <div className="text-slate-800 leading-loose space-y-6 text-lg">
-           {/* C'est ici que tu injecterais le contenu riche (Rich Text) de ton backend */}
-           <p>
-             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-           </p>
-           <p>
-             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-             Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-           </p>
-        </div>
       </article>
 
-      {/* Footer de l'article */}
       <footer className="mt-16 pt-8 border-t border-slate-100 flex flex-col items-center">
         <h4 className="text-slate-900 font-bold mb-4">Partagez cet article</h4>
         <div className="flex gap-4">
