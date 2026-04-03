@@ -138,3 +138,17 @@ export const meController = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const logoutController = (req: Request, res: Response) => {
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        expires: new Date(0)
+    });
+
+    return res.status(200).json({
+        success: true,
+        message: "Déconnexion réussie"
+    });
+}

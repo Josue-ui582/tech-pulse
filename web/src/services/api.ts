@@ -185,3 +185,22 @@ export const increateNewView = async (id: string) => {
     throw error;
   }
 };
+
+export const logOutUser = async () => {
+  try {
+    const response = await fetch(`${API_URL_Auth}/users/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erreur lors de la déconnexion");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new Error("Une erreur inconnue est survenue lors de la déconnexion");
+  }
+};
