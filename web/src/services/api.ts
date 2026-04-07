@@ -207,7 +207,7 @@ export const logOutUser = async () => {
   }
 };
 
-export const updateUserSettings = async (data: any) => {
+export const updateUserSettings = async ( data: any) => {
   try {
     const response = await fetch(`${API_URL_Auth}/users`, {
       method: 'PATCH',

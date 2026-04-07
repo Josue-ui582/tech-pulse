@@ -121,6 +121,6 @@ router.get("/", getUsers);
 router.post("/", createUsersController);
 
 router.post("/logout", logoutController);
-router.patch("/", upload.single('image'), updateUserController);
+router.patch("/", upload.single('profileImage'), updateUserController);
 
 export default router;
