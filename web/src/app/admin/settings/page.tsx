@@ -9,30 +9,45 @@ import {
 } from "antd";
 import { 
   UserOutlined, LockOutlined, BellOutlined, 
-  CameraOutlined, GlobalOutlined, SaveOutlined 
+  CameraOutlined, SaveOutlined, 
+  MailFilled
 } from "@ant-design/icons";
 import { getUser } from "@/utils/auth";
+import Loading from "../dashboard/loading";
 
 const { Title, Text, Paragraph } = Typography;
 
 type User = {
   id: string;
   name: string;
+  email: string;
   role: string;
 };
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [form] = Form.useForm();
 
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await getUser();
       setUser(userData);
+
+      form.setFieldsValue({
+        name: userData?.name,
+        email: userData?.email,
+      });
     };
 
     fetchUser();
   }, []);
+
+  if (!user) {
+    return (
+      <Loading />
+    );
+  }
 
 
   const onFinish = (values: any) => {
@@ -52,7 +67,6 @@ export default function SettingsPage() {
       children: (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex flex-col md:flex-row gap-8 items-start">
-            {/* Avatar Section */}
             <div className="flex flex-col items-center gap-4 bg-slate-50 p-6 rounded-3xl border border-dashed border-slate-200">
               <div className="relative group cursor-pointer">
                 <Avatar size={120} icon={<UserOutlined />} className="shadow-xl" />
@@ -66,14 +80,13 @@ export default function SettingsPage() {
               <Text type="secondary" className="text-[10px] text-center">JPG, PNG ou GIF. <br/> Max 2Mo.</Text>
             </div>
 
-            {/* Form Section */}
-            <Form layout="vertical" className="flex-1 w-full" onFinish={onFinish}>
+            <Form layout="vertical" className="flex-1 w-full" onFinish={onFinish} form={form}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
-                <Form.Item label="Nom complet" name="name" initialValue={user?.name}>
+                <Form.Item label="Nom complet" name="name">
                   <Input prefix={<UserOutlined className="text-slate-400" />} className="rounded-xl h-11" />
                 </Form.Item>
-                <Form.Item label="Adresse Email" name="email" initialValue={user?.name}>
-                  <Input disabled className="rounded-xl h-11 bg-slate-50" />
+                <Form.Item label="Adresse Email" name="email">
+                  <Input prefix={<MailFilled className="text-slate-400" />} className="rounded-xl h-11 bg-slate-50" />
                 </Form.Item>
               </div>
               <Form.Item label="Biographie courte" name="bio">

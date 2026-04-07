@@ -7,6 +7,7 @@ export const getUser = async () => {
     if (!res.ok) return null;
 
     const data = await res.json();
+    console.log("User data:", data);
     return data.user;
   } catch {
     return null;
