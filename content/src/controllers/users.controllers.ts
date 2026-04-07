@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { createUsersService, getUserByEmail, getUserById, getUsersService } from "../services/users.services.js"
+import { createUsersService, getUserByEmail, getUserById, getUsersService, updateUserService } from "../services/users.services.js"
 import type { Request, Response } from "express";
 import { createUserSchema } from "../schema/users.schema.js";
 import bcrypt from "bcrypt"
@@ -129,7 +129,9 @@ export const meController = async (req: Request, res: Response) => {
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                role: user.role
+                role: user.role,
+                profileImage: user.profileImage,
+                bio: user.bio
             }
         });
 
@@ -153,4 +155,42 @@ export const logoutController = (req: Request, res: Response) => {
         success: true,
         message: "Déconnexion réussie"
     });
+}
+
+export const updateUserController = async (req: Request, res: Response) => {
+    const token = req.cookies.token;
+
+    if (!token) {
+        return res.status(401).json({
+            success: false,
+            message: "Non authentifié"
+        });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET) as { id: string, role: string };
+        const userId = decoded.id;
+
+        const { name, email, profileImage, bio } = req.body;
+
+        const updatedUser = await updateUserService(userId, name, email, profileImage, bio);
+
+        return res.status(200).json({
+            success: true,
+            user: {
+                id: updatedUser.id,
+                name: updatedUser.name,
+                email: updatedUser.email,
+                role: updatedUser.role,
+                profileImage: updatedUser.profileImage,
+                bio: updatedUser.bio
+             }
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message:    "Erreur lors de la mise à jour du profil",
+            error: error instanceof Error ? error.message : "Erreur inconnue"
+        });
+    }
 }
