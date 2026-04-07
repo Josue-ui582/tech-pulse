@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getUser } from "@/utils/auth";
 import Loading from "../admin/dashboard/loading";
-import { Navbar } from "@/components/ui/navbar";
+import { Navbar } from "@/components/layout/navbar";
 import { motion } from "framer-motion";
 
 export default function NewsPageContent({ news }: { news: News[] }) {

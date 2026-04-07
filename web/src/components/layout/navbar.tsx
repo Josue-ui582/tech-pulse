@@ -16,6 +16,7 @@ export const Navbar = () => {
           <Link href="#features" className="hover:text-indigo-600 transition-colors">Fonctionnalités</Link>
           <Link href="#news" className="hover:text-indigo-600 transition-colors">Actualités</Link>
           <Link href="/about" className="hover:text-indigo-600 transition-colors">À propos</Link>
+          <Link href="/contact" className="hover:text-indigo-600 transition-colors">Contact</Link>
         </div>
         <button className="bg-slate-900 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-slate-800 transition-all shadow-sm cursor-pointer" onClick={() => router.push("/auth")}>
           S'abonner
