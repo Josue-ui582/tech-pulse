@@ -14,6 +14,10 @@ import {
 } from "@ant-design/icons";
 import { getUser } from "@/utils/auth";
 import Loading from "../dashboard/loading";
+import { updateUserSettings } from "@/services/api";
+
+
+const SERVER_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -22,6 +26,8 @@ type User = {
   name: string;
   email: string;
   role: string;
+  bio?: string;
+  profileImage?: string;
 };
 
 export default function SettingsPage() {
@@ -37,6 +43,14 @@ export default function SettingsPage() {
       form.setFieldsValue({
         name: userData?.name,
         email: userData?.email,
+        bio: userData?.bio || "",
+        profilePictureUrl: userData?.profileImage ? [{
+          uid: '-1',
+          name: 'Photo de profil actuelle',
+          status: 'done',
+          url: `${SERVER_URL}/${userData.profileImage}`,
+        }] : [],
+
       });
     };
 
@@ -50,14 +64,28 @@ export default function SettingsPage() {
   }
 
 
-  const onFinish = (values: any) => {
-    setLoading(true);
-    // Simulation d'appel API
-    setTimeout(() => {
-      console.log("Success:", values);
-      message.success("Paramètres mis à jour avec succès");
-      setLoading(false);
-    }, 1500);
+  const onFinish = async  (values: any) => {
+      setLoading(true);
+      try {
+        const formData = new FormData();
+        formData.append("name", values.name);
+        formData.append("email", values.email);
+        formData.append("bio", values.bio);
+
+        const fileItem = values.profilePictureUrl?.[0];
+        const newFile = fileItem?.originFileObj;
+        
+        if (newFile) {
+          formData.append("profileImage", newFile);
+        }
+
+        await updateUserSettings(formData);
+        message.success("Profil mis à jour avec succès !");
+      } catch (err) {
+        message.error("Une erreur est survenue lors de la mise à jour du profil.");
+      } finally {
+        setLoading(false);
+      }
   };
 
   const tabItems = [
@@ -69,14 +97,31 @@ export default function SettingsPage() {
           <div className="flex flex-col md:flex-row gap-8 items-start">
             <div className="flex flex-col items-center gap-4 bg-slate-50 p-6 rounded-3xl border border-dashed border-slate-200">
               <div className="relative group cursor-pointer">
-                <Avatar size={120} icon={<UserOutlined />} className="shadow-xl" />
+                <Avatar 
+                    size={120} 
+                    icon={<UserOutlined />} 
+                    className="shadow-xl"
+                    src={user?.profileImage ? `${SERVER_URL}/${user.profileImage}` : undefined}
+                />
                 <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <CameraOutlined className="text-white text-2xl" />
                 </div>
               </div>
-              <Upload showUploadList={false}>
-                <Button type="dashed" size="small">Changer la photo</Button>
-              </Upload>
+              <Form.Item
+                    name="profilePictureUrl"
+                    valuePropName="fileList"
+                    getValueFromEvent={(e) => e.fileList}
+                    >
+                    <Upload
+                        listType="picture-circle"
+                        maxCount={1}
+                        beforeUpload={() => false}
+                    >
+                        <Button type="dashed" size="small">
+                        Changer la photo
+                        </Button>
+                    </Upload>
+                </Form.Item>
               <Text type="secondary" className="text-[10px] text-center">JPG, PNG ou GIF. <br/> Max 2Mo.</Text>
             </div>
 

@@ -114,6 +114,7 @@ export const updateNews = async (id: string, data: UpdateNewsData) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({ data: data }), 
     });
 
@@ -152,6 +153,7 @@ export const deleteNew = async (id: string) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -202,5 +204,25 @@ export const logOutUser = async () => {
   } catch (error) {
     if (error instanceof Error) throw error;
     throw new Error("Une erreur inconnue est survenue lors de la déconnexion");
+  }
+};
+
+export const updateUserSettings = async (data: any) => {
+  try {
+    const response = await fetch(`${API_URL_Auth}/users`, {
+      method: 'PATCH',
+      credentials: 'include',
+      body: data,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erreur lors de la mise à jour des paramètres");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new Error("Une erreur inconnue est survenue lors de la mise à jour des paramètres");
   }
 };
