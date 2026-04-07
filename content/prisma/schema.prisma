@@ -29,6 +29,8 @@ model User {
   email         String    @unique
   password      String?
   role          Role      @default(user)
+  profileImage  String?
+  bio           String?
 }
 
 enum Role {
