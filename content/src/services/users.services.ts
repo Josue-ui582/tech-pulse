@@ -37,13 +37,13 @@ export const getUserById = async (id: string) => {
     })
 }
 
-export const updateUserService = async (id: string, name: string, email: string, profileImage: string, bio: string) => {
+export const updateUserService = async (id: string, name: string, email: string, profileImagePath: string | null, bio: string) => {
     return await prisma.user.update({
         where: { id },
         data: {
             name,
             email,
-            profileImage: profileImage ?? null,
+            profileImage: profileImagePath ?? null,
             bio
         }
     })

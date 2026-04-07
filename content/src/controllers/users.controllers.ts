@@ -171,20 +171,19 @@ export const updateUserController = async (req: Request, res: Response) => {
         const decoded = jwt.verify(token, JWT_SECRET) as { id: string, role: string };
         const userId = decoded.id;
 
-        const { name, email, profileImage, bio } = req.body;
+        const { name, email, bio } = req.body;
+        const file = req.file;
+        let profileImage: string | null = null;
+
+        if (file) {
+            profileImage = file.path;
+        }
 
         const updatedUser = await updateUserService(userId, name, email, profileImage, bio);
 
         return res.status(200).json({
             success: true,
-            user: {
-                id: updatedUser.id,
-                name: updatedUser.name,
-                email: updatedUser.email,
-                role: updatedUser.role,
-                profileImage: updatedUser.profileImage,
-                bio: updatedUser.bio
-             }
+            user: updatedUser
         });
     } catch (error) {
         return res.status(500).json({

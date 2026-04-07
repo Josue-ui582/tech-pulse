@@ -11,6 +11,8 @@ import { logOutUser } from '@/services/api';
 
 const { Text } = Typography;
 
+const SERVER_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function AdminAvatar({ user }: { user: any }) {
   const router = useRouter();
 
@@ -20,7 +22,6 @@ export default function AdminAvatar({ user }: { user: any }) {
       label: (
         <div className="px-1 py-2 min-w-40">
           <Text strong>{user?.name}</Text>
-          <Text type="secondary" className="text-xs">{user?.email}</Text>
         </div>
       ),
     },
@@ -55,7 +56,7 @@ export default function AdminAvatar({ user }: { user: any }) {
         <Badge dot status="processing" offset={[-2, 32]} color="">
           <Avatar 
             size={40} 
-            src={`https://api.dicebear.com{user?.firstName || 'Admin'}`}
+            src={user?.profileImage ? `${SERVER_URL}/${user.profileImage}` : undefined}
             className="bg-blue-100 border-2 border-white shadow-sm group-hover:scale-105 transition-transform"
             icon={<UserOutlined />}
           />
