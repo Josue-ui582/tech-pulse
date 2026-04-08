@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { 
   Card, Tabs, Input, Button, Upload, 
   Switch, Divider, Typography, message, 
@@ -33,6 +34,24 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [form] = Form.useForm();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const userData = await getUser();
+
+    if(!userData) {
+      router.replace("/auth");
+      return;
+    }
+
+    if (userData.role !== "admin") {
+      router.push("/unauthorized");
+    }
+  }
+  checkAuth();
+  }, []);
 
   useEffect(() => {
     const fetchUser = async () => {

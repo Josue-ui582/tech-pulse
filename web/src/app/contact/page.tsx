@@ -1,8 +1,7 @@
 "use client";
 
-import React from 'react';
 import { motion } from "framer-motion";
-import { Form, Input, Button, Card, Typography, Row, Col, message } from "antd";
+import { Typography, Row, } from "antd";
 import ContactInfo from '@/components/layout/contactInfo';
 import ContactForm from '@/components/layout/contactForm';
 import { Navbar } from '@/components/layout/navbar';
