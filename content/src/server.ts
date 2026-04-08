@@ -8,6 +8,7 @@ import authRoute from "../src/routes/auth.route.js"
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import cookieParser from "cookie-parser";
+import contactRoute from './routes/contact.route.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,6 +35,7 @@ app.use("/api/news", newsRoute);
 app.use("/api/users", usersRoute);
 app.use("/api/login", authRoute);
 app.use("/api/auth", authRoute);
+app.use("/api/contact", contactRoute);
 
 app.listen(PORT, () => {
   console.log(`[server]: Server running on http://localhost:${PORT}`);
