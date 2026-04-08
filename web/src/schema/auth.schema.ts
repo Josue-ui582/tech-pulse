@@ -12,12 +12,8 @@ export const loginSchema = yup.object({
 });
 
 export const registerSchema = loginSchema.shape({
-  firstName: yup
+  name: yup
     .string()
-    .min(2, "Prénom trop court")
-    .required("Prénom obligatoire"),
-  lastName: yup
-    .string()
-    .min(2, "Nom trop court")
-    .required("Nom obligatoire"),
+    .min(8, "Le nom doit faire au moins 8 caractères")
+    .required("Le nom est obligatoire"),
 });
