@@ -3,6 +3,7 @@ import { Category, UpdateNewsData } from "../types/news";
 
 const API_URL = "http://localhost:3001/api/news"
 const API_URL_Auth = "http://localhost:3001/api"
+const API_URL_Contact = "http://localhost:3001/api/contact"
 
 
 export const getNews = async (category?: Category, search?: string) => {
@@ -224,5 +225,25 @@ export const updateUserSettings = async ( data: any) => {
   } catch (error) {
     if (error instanceof Error) throw error;
     throw new Error("Une erreur inconnue est survenue lors de la mise à jour des paramètres");
+  }
+};
+
+export const contactSupport = async (data: any) => {
+  try {
+    const response = await fetch(`${API_URL_Contact}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erreur lors de l'envoi du message");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new Error("Une erreur inconnue est survenue lors de l'envoi du message");
   }
 };

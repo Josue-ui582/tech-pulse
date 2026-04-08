@@ -4,14 +4,14 @@ import { SendOutlined } from "@ant-design/icons"
 import { motion } from "framer-motion"
 import { ValidationError } from "yup"
 import { contactFormSchema } from "../../schema/contactFormSchema"
+import { contactSupport } from "@/services/api"
 
 const ContactForm = () => {
   const [form] = Form.useForm()
   const onFinish = async (values: any) => {
     try {
       await contactFormSchema.validate(values, { abortEarly: false })
-      // Simulate form submission (e.g., API call)
-      console.log("Form values:", values)
+      await contactSupport(values)
       message.success("Votre message a été envoyé avec succès !")
       form.resetFields()
     } catch (err : unknown) {
