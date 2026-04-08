@@ -24,15 +24,7 @@ export default function UnauthorizedPage() {
           Il semblerait que vous n'ayez pas les privilèges nécessaires pour accéder à cette section de <span className="font-bold text-slate-800">TechPulse</span>.
         </p>
 
-        {/* Actions */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button 
-            onClick={() => router.back()}
-            className="w-full sm:w-auto px-8 py-4 bg-white text-slate-900 border border-slate-200 rounded-2xl font-bold text-sm hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm cursor-pointer"
-          >
-            Retourner en arrière
-          </button>
-          
           <Link 
             href="/"
             className="w-full sm:w-auto px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-indigo-600 transition-all shadow-lg shadow-slate-200 cursor-pointer"
