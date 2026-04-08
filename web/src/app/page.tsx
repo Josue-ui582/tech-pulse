@@ -1,9 +1,9 @@
 "use client";
 
-import { Navbar } from "@/components/ui/navbar";
-import { Hero } from "@/components/ui/hero";
-import { Features } from "@/components/ui/feature";
-import { Footer } from "@/components/ui/footer";
+import { Navbar } from "@/components/layout/navbar";
+import { Hero } from "@/components/layout/hero";
+import { Features } from "@/components/layout/feature";
+import { Footer } from "@/components/layout/footer";
 import { featuredNews } from "@/data/preview";
 import Image from "next/image";
 import { ReadMoreIcon } from "../../public/icons/readMoreIcon";
