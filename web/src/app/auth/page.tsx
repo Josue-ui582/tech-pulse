@@ -7,6 +7,7 @@ import { MailOutlined, LockOutlined,
 } from '@ant-design/icons';
 import { authService } from '@/services/api';
 import { AuthForm } from '@/types/news';
+import { loginSchema, registerSchema } from '@/schema/auth.schema';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -18,13 +19,9 @@ export default function AuthPage() {
     setLoading(true);
     
     try {
-      const cleanedValues = {
-        ...values,
-        email: values.email.trim().toLowerCase(),
-        name: `${values.firstName} ${values.lastName}`
-      };
 
       if (isLogin) {
+        const cleanedValues = await loginSchema.validate(values, { abortEarly: false });
         const result = await authService.login(cleanedValues);
         if (result?.error) {
           throw new Error("Identifiants invalides");
@@ -39,6 +36,7 @@ export default function AuthPage() {
         }
         
       } else {
+        const cleanedValues = await registerSchema.validate(values, { abortEarly: false });
         await authService.register(cleanedValues);
         message.success("Compte créé ! Connectez-vous.");
         setIsLogin(true);
