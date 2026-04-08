@@ -652,6 +652,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/nodemailer@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@types/nodemailer@npm:8.0.0"
+  dependencies:
+    "@types/node": "*"
+  checksum: 9d3e762737c54df69538b9ecb14730499131c3573c6dd64dee3057553303b507dc3072489ce55ecda863c13b5ca9f713540885ae113f015e2a241bdc6e8a7ff3
+  languageName: node
+  linkType: hard
+
 "@types/pg@npm:^8.16.0":
   version: 8.20.0
   resolution: "@types/pg@npm:8.20.0"
@@ -1155,6 +1164,7 @@ __metadata:
     "@types/jsonwebtoken": ^9.0.10
     "@types/multer": ^2.1.0
     "@types/node": ^25.5.0
+    "@types/nodemailer": ^8.0.0
     "@types/swagger-jsdoc": ^6.0.4
     "@types/swagger-ui-express": ^4.1.8
     bcrypt: ^6.0.0
@@ -1163,6 +1173,7 @@ __metadata:
     express: ^5.2.1
     jsonwebtoken: ^9.0.3
     multer: ^2.1.1
+    nodemailer: ^8.0.5
     nodemon: ^3.1.14
     pg: ^8.20.0
     prisma: ^7.5.0
@@ -2384,6 +2395,13 @@ __metadata:
   bin:
     node-gyp: bin/node-gyp.js
   checksum: d4ce0acd08bd41004f45e10cef468f4bd15eaafb3acc388a0c567416e1746dc005cc080b8a3495e4e2ae2eed170a2123ff622c2d6614062f4a839837dcf1dd9d
+  languageName: node
+  linkType: hard
+
+"nodemailer@npm:^8.0.5":
+  version: 8.0.5
+  resolution: "nodemailer@npm:8.0.5"
+  checksum: 72f3ba14b11b047caec0d850e241fefb52e13230cd99babb7e9c3f481c2ba76ea58c82a6a47351022fb630d5b9192a8c275af1d185634f88d1a83209cfb78608
   languageName: node
   linkType: hard
 
