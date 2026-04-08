@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Form, Input, Button, Card, Typography, Row, Col, message } from "antd";
 import ContactInfo from '@/components/layout/contactInfo';
 import ContactForm from '@/components/layout/contactForm';
+import { Navbar } from '@/components/layout/navbar';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -12,9 +13,9 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] py-16 px-6">
+      <Navbar />
       <div className="max-w-6xl mx-auto">
         
-        {/* EN-TÊTE */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
