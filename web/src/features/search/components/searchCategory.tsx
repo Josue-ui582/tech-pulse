@@ -1,6 +1,6 @@
 "use client"
 
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 const filtre = ["Tech", "AI", "Dev"];
 
@@ -8,11 +8,12 @@ export const SearchCategory = () => {
     const router = useRouter();
     const params = useSearchParams();
     const currentCategory = params.get("category");
+    const pathname = usePathname();
 
     const handleChange = (category: string) => {
         const query = new URLSearchParams(params.toString());
         query.set("category", category);
-        router.push(`/?${query.toString()}`);
+        router.push(`${pathname}?${query.toString()}`);
     }
 
     const getStyle = (f: string) => {
@@ -59,7 +60,7 @@ export const SearchCategory = () => {
 
             {currentCategory && (
                 <button 
-                onClick={() => router.push('/')}
+                onClick={() => router.push(`${pathname}`)}
                 className="ml-1 p-2 text-slate-400 hover:text-rose-500 transition-colors cursor-pointer"
                 title="Effacer le filtre"
                 >
