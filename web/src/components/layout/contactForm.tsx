@@ -2,16 +2,30 @@
 import { Form, Input, Button, Row, Col, message, Card } from "antd"
 import { SendOutlined } from "@ant-design/icons"
 import { motion } from "framer-motion"
-
+import { ValidationError } from "yup"
+import { contactFormSchema } from "../../schema/contactFormSchema"
 
 const ContactForm = () => {
-    const [form] = Form.useForm();
-
-    const onFinish = (values: any) => {
-        console.log("Contact form values:", values);
-        message.success("Votre message a été envoyé avec succès !");
-        form.resetFields();
-    };
+  const [form] = Form.useForm()
+  const onFinish = async (values: any) => {
+    try {
+      await contactFormSchema.validate(values, { abortEarly: false })
+      // Simulate form submission (e.g., API call)
+      console.log("Form values:", values)
+      message.success("Votre message a été envoyé avec succès !")
+      form.resetFields()
+    } catch (err : unknown) {
+      if (err instanceof ValidationError) {
+        const errorFields = err.inner.map((error : any) => ({
+          name: error.path,
+          errors: [error.message],
+        }))
+        form.setFields(errorFields)
+      } else {
+        message.error("Une erreur est survenue lors de l'envoi du message.")
+      }
+    }
+  }
     return (
     <Col xs={24} lg={14}>
         <motion.div
