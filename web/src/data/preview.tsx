@@ -1,4 +1,4 @@
-import { GlobalOutlined, SafetyCertificateOutlined, RocketOutlined } from "@ant-design/icons";
+import { GlobalOutlined, SafetyCertificateOutlined, RocketOutlined, MailOutlined, CustomerServiceOutlined, EnvironmentOutlined } from "@ant-design/icons";
 
 export const previw = [
     { 
@@ -59,3 +59,24 @@ export const aboutPreview = [
     desc: "Une expérience utilisateur pensée pour la lecture numérique moderne." 
   }
 ]
+
+export const contactInfos = [
+    {
+      icon: <MailOutlined className="text-2xl text-blue-600" />,
+      title: "Email",
+      value: "contact@techpulse.com",
+      desc: "Réponse sous 24h"
+    },
+    {
+      icon: <CustomerServiceOutlined className="text-2xl text-indigo-600" />,
+      title: "Support Admin",
+      value: "+229 01 23 45 67 89",
+      desc: "Lun-Ven, 9h-18h"
+    },
+    {
+      icon: <EnvironmentOutlined className="text-2xl text-purple-600" />,
+      title: "Bureaux",
+      value: "Cotonou, Bénin City",
+      desc: "Visites sur rendez-vous uniquement"
+    }
+  ];

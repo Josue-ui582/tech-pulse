@@ -57,8 +57,6 @@ export default function NewsAdminPage() {
     }
   }, [status]);
 
-  console.log("News dans le composant:", news);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchNews(searchText);

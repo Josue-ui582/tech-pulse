@@ -12,6 +12,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Loading from './dashboard/loading';
 import AdminAvatar from '@/components/layout/Avatar';
 import { getUser } from '@/utils/auth';
+import { logOutUser } from '@/services/api';
 
 const { Header, Content, Sider } = Layout;
 
@@ -42,7 +43,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     fetchUser();
   }, []);
-  console.log(user)
 
   if(loading) {
     return <Loading />;
@@ -86,8 +86,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               label: 'Déconnexion',
               danger: true,
               onClick: () => {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user"); 
+                logOutUser();
                 router.push("/auth")
               }
             }

@@ -6,7 +6,8 @@ import { MailOutlined, LockOutlined,
   UserOutlined 
 } from '@ant-design/icons';
 import { authService } from '@/services/api';
-import { AuthForm } from '@/types/news';
+import { AuthForm } from '@/types/globalTypes';
+import { loginSchema, registerSchema } from '@/schema/auth.schema';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -18,13 +19,9 @@ export default function AuthPage() {
     setLoading(true);
     
     try {
-      const cleanedValues = {
-        ...values,
-        email: values.email.trim().toLowerCase(),
-        name: `${values.firstName} ${values.lastName}`
-      };
 
       if (isLogin) {
+        const cleanedValues = await loginSchema.validate(values, { abortEarly: false });
         const result = await authService.login(cleanedValues);
         if (result?.error) {
           throw new Error("Identifiants invalides");
@@ -39,6 +36,7 @@ export default function AuthPage() {
         }
         
       } else {
+        const cleanedValues = await registerSchema.validate(values, { abortEarly: false });
         await authService.register(cleanedValues);
         message.success("Compte créé ! Connectez-vous.");
         setIsLogin(true);
@@ -72,12 +70,9 @@ export default function AuthPage() {
         className="space-y-2"
       >
         {!isLogin && (
-          <div className="grid grid-cols-2 gap-4">
-            <Form.Item name="firstName" rules={[{ required: true, message: 'Requis' }]}>
-              <Input prefix={<UserOutlined className="text-gray-300" />} placeholder="Prénom" className="rounded-xl h-12 border-gray-100 bg-gray-50" />
-            </Form.Item>
-            <Form.Item name="lastName" rules={[{ required: true, message: 'Requis' }]}>
-              <Input placeholder="Nom" className="rounded-xl h-12 border-gray-100 bg-gray-50" />
+          <div>
+            <Form.Item name="name" rules={[{ required: true, message: 'Requis' }]}>
+              <Input prefix={<UserOutlined className="text-gray-300" />} placeholder="Nom complet" className="rounded-xl h-12 border-gray-100 bg-gray-50" />
             </Form.Item>
           </div>
         )}

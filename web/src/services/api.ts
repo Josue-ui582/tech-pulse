@@ -1,8 +1,9 @@
-import { Category, UpdateNewsData } from "../types/news";
+import { Category, SupportData, UpdateNewsData } from "../types/globalTypes";
 
 
 const API_URL = "http://localhost:3001/api/news"
 const API_URL_Auth = "http://localhost:3001/api"
+const API_URL_Contact = "http://localhost:3001/api/contact"
 
 
 export const getNews = async (category?: Category, search?: string) => {
@@ -114,6 +115,7 @@ export const updateNews = async (id: string, data: UpdateNewsData) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({ data: data }), 
     });
 
@@ -152,6 +154,7 @@ export const deleteNew = async (id: string) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -202,5 +205,66 @@ export const logOutUser = async () => {
   } catch (error) {
     if (error instanceof Error) throw error;
     throw new Error("Une erreur inconnue est survenue lors de la déconnexion");
+  }
+};
+
+export const updateAdminProfileSettings = async ( data: any) => {
+  try {
+    const response = await fetch(`${API_URL_Auth}/users`, {
+      method: 'PATCH',
+      credentials: 'include',
+      body: data,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erreur lors de la mise à jour des paramètres");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new Error("Une erreur inconnue est survenue lors de la mise à jour des paramètres");
+  }
+};
+
+export const contactSupport = async (data: SupportData) => {
+  try {
+    const response = await fetch(`${API_URL_Contact}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erreur lors de l'envoi du message");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new Error("Une erreur inconnue est survenue lors de l'envoi du message");
+  }
+};
+
+export const updateAdminPasswordSettings = async (password: unknown) => {
+  try {
+    const response = await fetch(`${API_URL_Auth}/users/password`, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(password),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erreur lors de la mise à jour du mot de passe");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new Error("Une erreur inconnue est survenue lors de la mise à jour du mot de passe");
   }
 };

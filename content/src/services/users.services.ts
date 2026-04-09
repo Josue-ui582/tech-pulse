@@ -36,3 +36,26 @@ export const getUserById = async (id: string) => {
         where: { id }
     })
 }
+
+export const updateUserService = async (id: string, name: string, email: string, profileImagePath: string | null, bio: string) => {
+    return await prisma.user.update({
+        where: { id },
+        data: {
+            name,
+            email,
+            profileImage: profileImagePath ?? null,
+            bio
+        }
+    })
+}
+
+export const updateUserPasswordService = async (id: string, newPassword: string) => {
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    return await prisma.user.update({
+        where: { id },
+        data: {
+            password: hashedPassword
+        }
+    })
+}
