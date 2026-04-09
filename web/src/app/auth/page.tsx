@@ -6,7 +6,7 @@ import { MailOutlined, LockOutlined,
   UserOutlined 
 } from '@ant-design/icons';
 import { authService } from '@/services/api';
-import { AuthForm } from '@/types/news';
+import { AuthForm } from '@/types/globalTypes';
 import { loginSchema, registerSchema } from '@/schema/auth.schema';
 
 export default function AuthPage() {
@@ -70,12 +70,9 @@ export default function AuthPage() {
         className="space-y-2"
       >
         {!isLogin && (
-          <div className="grid grid-cols-2 gap-4">
-            <Form.Item name="firstName" rules={[{ required: true, message: 'Requis' }]}>
-              <Input prefix={<UserOutlined className="text-gray-300" />} placeholder="Prénom" className="rounded-xl h-12 border-gray-100 bg-gray-50" />
-            </Form.Item>
-            <Form.Item name="lastName" rules={[{ required: true, message: 'Requis' }]}>
-              <Input placeholder="Nom" className="rounded-xl h-12 border-gray-100 bg-gray-50" />
+          <div>
+            <Form.Item name="name" rules={[{ required: true, message: 'Requis' }]}>
+              <Input prefix={<UserOutlined className="text-gray-300" />} placeholder="Nom complet" className="rounded-xl h-12 border-gray-100 bg-gray-50" />
             </Form.Item>
           </div>
         )}
