@@ -1,4 +1,4 @@
-import { Category, UpdateNewsData } from "../types/news";
+import { Category, SupportData, UpdateNewsData } from "../types/globalTypes";
 
 
 const API_URL = "http://localhost:3001/api/news"
@@ -208,7 +208,7 @@ export const logOutUser = async () => {
   }
 };
 
-export const updateUserSettings = async ( data: any) => {
+export const updateAdminProfileSettings = async ( data: any) => {
   try {
     const response = await fetch(`${API_URL_Auth}/users`, {
       method: 'PATCH',
@@ -228,7 +228,7 @@ export const updateUserSettings = async ( data: any) => {
   }
 };
 
-export const contactSupport = async (data: any) => {
+export const contactSupport = async (data: SupportData) => {
   try {
     const response = await fetch(`${API_URL_Contact}`, {
       method: 'POST',
@@ -245,5 +245,26 @@ export const contactSupport = async (data: any) => {
   } catch (error) {
     if (error instanceof Error) throw error;
     throw new Error("Une erreur inconnue est survenue lors de l'envoi du message");
+  }
+};
+
+export const updateAdminPasswordSettings = async (password: unknown) => {
+  try {
+    const response = await fetch(`${API_URL_Auth}/users/password`, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(password),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erreur lors de la mise à jour du mot de passe");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new Error("Une erreur inconnue est survenue lors de la mise à jour du mot de passe");
   }
 };
