@@ -24,13 +24,15 @@ enum Category {
 }
 
 model User {
-  id           String  @id @default(uuid())
-  name         String?
-  email        String  @unique
-  password     String?
-  role         Role    @default(user)
-  profileImage String?
-  bio          String?
+  id                 String  @id @default(uuid())
+  name               String?
+  email              String  @unique
+  password           String?
+  role               Role    @default(user)
+  profileImage       String?
+  bio                String?
+  isTwoFactorEnabled Boolean @default(false)
+  twoFactorSecret    String?
 }
 
 enum Role {
