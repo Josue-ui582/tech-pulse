@@ -16,4 +16,12 @@ export const registerSchema = loginSchema.shape({
     .string()
     .min(8, "Le nom doit faire au moins 8 caractères")
     .required("Le nom est obligatoire"),
+  email: yup
+    .string()
+    .email("Format d'email invalide")
+    .required("L'email est obligatoire"),
+  password: yup
+    .string()
+    .min(8, "Le mot de passe doit faire au moins 8 caractères")
+    .required("Le mot de passe est obligatoire"),
 });
