@@ -1,4 +1,4 @@
-export type Category = "Tech"| "IA" | "Dev";
+export type Category = "Tech"| "AI" | "Dev";
 
 export interface News {
     id: string,
