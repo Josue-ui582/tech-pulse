@@ -15,20 +15,13 @@ import {
 } from "@ant-design/icons";
 import { getUser } from "@/utils/auth";
 import Loading from "../dashboard/loading";
-import { updateUserSettings } from "@/services/api";
+import { updateAdminPasswordSettings, updateAdminProfileSettings } from "@/services/api";
+import { User, SettingsProfileFormValues, SettingsPasswordFormValues } from "@/types/globalTypes";
 
 
 const SERVER_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const { Title, Text, Paragraph } = Typography;
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  bio?: string;
-  profileImage?: string;
-};
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
@@ -81,31 +74,47 @@ export default function SettingsPage() {
   }
 
 
-  const onFinish = async (values: any) => {
-    setLoading(true);
+  const onProfileFinish = async (values: SettingsProfileFormValues) => {
+  setLoading(true);
 
     try {
-        const formData = new FormData();
+      const formData = new FormData();
 
-        formData.append("name", values.name);
-        formData.append("email", values.email);
-        formData.append("bio", values.bio);
+      formData.append("name", values.name);
+      formData.append("email", values.email);
+      formData.append("bio", values.bio);
 
-        const fileItem = values.profilePictureUrl?.[0];
+      const fileItem = values.profilePictureUrl?.[0];
 
-        if (fileItem?.originFileObj) {
+      if (fileItem?.originFileObj) {
         formData.append("profileImage", fileItem.originFileObj);
-        }
+      }
 
-        console.log("VALUES:", values);
+      await updateAdminProfileSettings(formData);
 
-        await updateUserSettings(formData);
-
-        message.success("Profil mis à jour avec succès !");
+      message.success("Profil mis à jour avec succès !");
     } catch (err) {
-        message.error("Une erreur est survenue");
+      message.error("Une erreur est survenue");
     } finally {
-        setLoading(false);
+      setLoading(false);
+    }
+  };
+
+  const onPasswordFinish = async (values: SettingsPasswordFormValues) => {
+    setLoading(true);
+    
+    try {
+      if (values.newPassword !== values.confirmNewPassword) {
+        message.error("Les mots de passe ne correspondent pas");
+        return;
+      }
+
+      await updateAdminPasswordSettings(values.confirmNewPassword);
+      message.success("Mot de passe mis à jour !");
+    } catch (err) {
+      message.error("Une erreur est survenue");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -115,7 +124,7 @@ export default function SettingsPage() {
       label: (<span><UserOutlined />Profil</span>),
       children: (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            <Form form={form} layout="vertical" onFinish={onFinish} className="max-w-2xl">
+            <Form form={form} layout="vertical" onFinish={onProfileFinish} className="max-w-2xl">
                 <div className="flex flex-col md:flex-row gap-8 items-start">
                     <div className="flex flex-col items-center gap-4 bg-slate-50 p-6 rounded-3xl border border-dashed border-slate-200">
                         <div className="relative group cursor-pointer">
@@ -171,17 +180,14 @@ export default function SettingsPage() {
       children: (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="max-w-md">
           <Title level={4} className="mb-6">Changer le mot de passe</Title>
-          <Form layout="vertical">
-            <Form.Item label="Mot de passe actuel">
-              <Input.Password className="rounded-xl h-11" />
-            </Form.Item>
+          <Form layout="vertical" form={form} onFinish={onPasswordFinish}>
             <Form.Item label="Nouveau mot de passe">
               <Input.Password className="rounded-xl h-11" />
             </Form.Item>
             <Form.Item label="Confirmer le nouveau mot de passe">
               <Input.Password className="rounded-xl h-11" />
             </Form.Item>
-            <Button type="primary" className="h-11 rounded-xl bg-slate-900 border-none px-8">
+            <Button type="primary" className="h-11 rounded-xl bg-slate-900 border-none px-8" htmlType="submit">
               Mettre à jour le mot de passe
             </Button>
           </Form>
