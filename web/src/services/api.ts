@@ -1,4 +1,4 @@
-import { Category, UpdateNewsData } from "../types/globalTypes";
+import { Category, SupportData, UpdateNewsData } from "../types/globalTypes";
 
 
 const API_URL = "http://localhost:3001/api/news"
@@ -228,7 +228,7 @@ export const updateAdminProfileSettings = async ( data: any) => {
   }
 };
 
-export const contactSupport = async (data: any) => {
+export const contactSupport = async (data: SupportData) => {
   try {
     const response = await fetch(`${API_URL_Contact}`, {
       method: 'POST',
@@ -248,7 +248,7 @@ export const contactSupport = async (data: any) => {
   }
 };
 
-export const updateAdminPasswordSettings = async (password: any) => {
+export const updateAdminPasswordSettings = async (password: unknown) => {
   try {
     const response = await fetch(`${API_URL_Auth}/users/password`, {
       method: 'PATCH',

@@ -181,10 +181,10 @@ export default function SettingsPage() {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="max-w-md">
           <Title level={4} className="mb-6">Changer le mot de passe</Title>
           <Form layout="vertical" form={form} onFinish={onPasswordFinish}>
-            <Form.Item label="Nouveau mot de passe">
+            <Form.Item label="Nouveau mot de passe" name="newPassword" rules={[{ required: true, message: "Veuillez entrer un nouveau mot de passe" }]}>
               <Input.Password className="rounded-xl h-11" />
             </Form.Item>
-            <Form.Item label="Confirmer le nouveau mot de passe">
+            <Form.Item label="Confirmer le nouveau mot de passe" name="confirmNewPassword" rules={[{ required: true, message: "Veuillez confirmer votre nouveau mot de passe" }]}>
               <Input.Password className="rounded-xl h-11" />
             </Form.Item>
             <Button type="primary" className="h-11 rounded-xl bg-slate-900 border-none px-8" htmlType="submit">

@@ -49,3 +49,9 @@ export type SettingsPasswordFormValues = {
   newPassword: string;
   confirmNewPassword: string;
 };
+
+export type SupportData = {
+  name: string;
+  email: string;
+  message: string;
+};
