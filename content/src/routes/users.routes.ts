@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import { createUsersController, getUsers, logoutController, updateUserController } from "../controllers/users.controllers.js";
+import { createUsersController, getUsers, logoutController, updateUserController, updateUserPasswordController } from "../controllers/users.controllers.js";
 import { upload } from "../middleware/multer.middleware.js";
 
 const router = Router();
@@ -122,5 +122,6 @@ router.post("/", createUsersController);
 
 router.post("/logout", logoutController);
 router.patch("/", upload.single('profileImage'), updateUserController);
+router.patch("/password", updateUserPasswordController);
 
 export default router;

@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { createUsersService, getUserByEmail, getUserById, getUsersService, updateUserService } from "../services/users.services.js"
+import { createUsersService, getUserByEmail, getUserById, getUsersService, updateUserPasswordService, updateUserService } from "../services/users.services.js"
 import type { Request, Response } from "express";
 import { createUserSchema } from "../schema/users.schema.js";
 import bcrypt from "bcrypt"
@@ -189,6 +189,37 @@ export const updateUserController = async (req: Request, res: Response) => {
         return res.status(500).json({
             success: false,
             message:    "Erreur lors de la mise à jour du profil",
+            error: error instanceof Error ? error.message : "Erreur inconnue"
+        });
+    }
+}
+
+export const updateUserPasswordController = async (req: Request, res: Response) => {
+    const token = req.cookies.token;
+
+    if (!token) {
+        return res.status(401).json({
+            success: false,
+            message: "Non authentifié"
+        });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET) as { id: string, role: string };
+        const userId = decoded.id;
+
+        const { newPassword } = req.body;
+
+        await updateUserPasswordService(userId, newPassword);
+
+        return res.status(200).json({
+            success: true,
+            message: "Mot de passe mis à jour avec succès"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Erreur lors de la mise à jour du mot de passe",
             error: error instanceof Error ? error.message : "Erreur inconnue"
         });
     }
