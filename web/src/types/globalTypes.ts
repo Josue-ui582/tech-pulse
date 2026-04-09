@@ -23,3 +23,29 @@ export type AuthForm = {
   firstName?: string;
   lastName?: string;
 };
+
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  bio?: string;
+  profileImage?: string;
+};
+
+export type SettingsTab = {
+  key: string;
+  label: React.ReactNode;
+  children: React.ReactNode;
+};
+
+export type SettingsProfileFormValues = {
+  name: string;
+  email: string;
+  bio: string;
+  profilePictureUrl?: any[];
+};
+
+export type SettingsPasswordFormValues = {
+  newPassword: string;
+  confirmNewPassword: string;
+};
