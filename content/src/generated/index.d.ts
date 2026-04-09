@@ -2156,6 +2156,8 @@ export namespace Prisma {
     role: $Enums.Role | null
     profileImage: string | null
     bio: string | null
+    isTwoFactorEnabled: boolean | null
+    twoFactorSecret: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2166,6 +2168,8 @@ export namespace Prisma {
     role: $Enums.Role | null
     profileImage: string | null
     bio: string | null
+    isTwoFactorEnabled: boolean | null
+    twoFactorSecret: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2176,6 +2180,8 @@ export namespace Prisma {
     role: number
     profileImage: number
     bio: number
+    isTwoFactorEnabled: number
+    twoFactorSecret: number
     _all: number
   }
 
@@ -2188,6 +2194,8 @@ export namespace Prisma {
     role?: true
     profileImage?: true
     bio?: true
+    isTwoFactorEnabled?: true
+    twoFactorSecret?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2198,6 +2206,8 @@ export namespace Prisma {
     role?: true
     profileImage?: true
     bio?: true
+    isTwoFactorEnabled?: true
+    twoFactorSecret?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2208,6 +2218,8 @@ export namespace Prisma {
     role?: true
     profileImage?: true
     bio?: true
+    isTwoFactorEnabled?: true
+    twoFactorSecret?: true
     _all?: true
   }
 
@@ -2291,6 +2303,8 @@ export namespace Prisma {
     role: $Enums.Role
     profileImage: string | null
     bio: string | null
+    isTwoFactorEnabled: boolean
+    twoFactorSecret: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -2318,6 +2332,8 @@ export namespace Prisma {
     role?: boolean
     profileImage?: boolean
     bio?: boolean
+    isTwoFactorEnabled?: boolean
+    twoFactorSecret?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2328,6 +2344,8 @@ export namespace Prisma {
     role?: boolean
     profileImage?: boolean
     bio?: boolean
+    isTwoFactorEnabled?: boolean
+    twoFactorSecret?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2338,6 +2356,8 @@ export namespace Prisma {
     role?: boolean
     profileImage?: boolean
     bio?: boolean
+    isTwoFactorEnabled?: boolean
+    twoFactorSecret?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2348,9 +2368,11 @@ export namespace Prisma {
     role?: boolean
     profileImage?: boolean
     bio?: boolean
+    isTwoFactorEnabled?: boolean
+    twoFactorSecret?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "profileImage" | "bio", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "profileImage" | "bio" | "isTwoFactorEnabled" | "twoFactorSecret", ExtArgs["result"]["user"]>
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
@@ -2363,6 +2385,8 @@ export namespace Prisma {
       role: $Enums.Role
       profileImage: string | null
       bio: string | null
+      isTwoFactorEnabled: boolean
+      twoFactorSecret: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2793,6 +2817,8 @@ export namespace Prisma {
     readonly role: FieldRef<"User", 'Role'>
     readonly profileImage: FieldRef<"User", 'String'>
     readonly bio: FieldRef<"User", 'String'>
+    readonly isTwoFactorEnabled: FieldRef<"User", 'Boolean'>
+    readonly twoFactorSecret: FieldRef<"User", 'String'>
   }
     
 
@@ -4224,7 +4250,9 @@ export namespace Prisma {
     password: 'password',
     role: 'role',
     profileImage: 'profileImage',
-    bio: 'bio'
+    bio: 'bio',
+    isTwoFactorEnabled: 'isTwoFactorEnabled',
+    twoFactorSecret: 'twoFactorSecret'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -4441,6 +4469,8 @@ export namespace Prisma {
     role?: EnumRoleFilter<"User"> | $Enums.Role
     profileImage?: StringNullableFilter<"User"> | string | null
     bio?: StringNullableFilter<"User"> | string | null
+    isTwoFactorEnabled?: BoolFilter<"User"> | boolean
+    twoFactorSecret?: StringNullableFilter<"User"> | string | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -4451,6 +4481,8 @@ export namespace Prisma {
     role?: SortOrder
     profileImage?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
+    isTwoFactorEnabled?: SortOrder
+    twoFactorSecret?: SortOrderInput | SortOrder
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -4464,6 +4496,8 @@ export namespace Prisma {
     role?: EnumRoleFilter<"User"> | $Enums.Role
     profileImage?: StringNullableFilter<"User"> | string | null
     bio?: StringNullableFilter<"User"> | string | null
+    isTwoFactorEnabled?: BoolFilter<"User"> | boolean
+    twoFactorSecret?: StringNullableFilter<"User"> | string | null
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -4474,6 +4508,8 @@ export namespace Prisma {
     role?: SortOrder
     profileImage?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
+    isTwoFactorEnabled?: SortOrder
+    twoFactorSecret?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -4490,6 +4526,8 @@ export namespace Prisma {
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
     profileImage?: StringNullableWithAggregatesFilter<"User"> | string | null
     bio?: StringNullableWithAggregatesFilter<"User"> | string | null
+    isTwoFactorEnabled?: BoolWithAggregatesFilter<"User"> | boolean
+    twoFactorSecret?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type ContactMessageWhereInput = {
@@ -4632,6 +4670,8 @@ export namespace Prisma {
     role?: $Enums.Role
     profileImage?: string | null
     bio?: string | null
+    isTwoFactorEnabled?: boolean
+    twoFactorSecret?: string | null
   }
 
   export type UserUncheckedCreateInput = {
@@ -4642,6 +4682,8 @@ export namespace Prisma {
     role?: $Enums.Role
     profileImage?: string | null
     bio?: string | null
+    isTwoFactorEnabled?: boolean
+    twoFactorSecret?: string | null
   }
 
   export type UserUpdateInput = {
@@ -4652,6 +4694,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    isTwoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateInput = {
@@ -4662,6 +4706,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    isTwoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserCreateManyInput = {
@@ -4672,6 +4718,8 @@ export namespace Prisma {
     role?: $Enums.Role
     profileImage?: string | null
     bio?: string | null
+    isTwoFactorEnabled?: boolean
+    twoFactorSecret?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -4682,6 +4730,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    isTwoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -4692,6 +4742,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    isTwoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ContactMessageCreateInput = {
@@ -4949,6 +5001,11 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -4957,6 +5014,8 @@ export namespace Prisma {
     role?: SortOrder
     profileImage?: SortOrder
     bio?: SortOrder
+    isTwoFactorEnabled?: SortOrder
+    twoFactorSecret?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -4967,6 +5026,8 @@ export namespace Prisma {
     role?: SortOrder
     profileImage?: SortOrder
     bio?: SortOrder
+    isTwoFactorEnabled?: SortOrder
+    twoFactorSecret?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -4977,6 +5038,8 @@ export namespace Prisma {
     role?: SortOrder
     profileImage?: SortOrder
     bio?: SortOrder
+    isTwoFactorEnabled?: SortOrder
+    twoFactorSecret?: SortOrder
   }
 
   export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
@@ -4989,9 +5052,12 @@ export namespace Prisma {
     _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type ContactMessageCountOrderByAggregateInput = {
@@ -5022,14 +5088,6 @@ export namespace Prisma {
     message?: SortOrder
     isRead?: SortOrder
     createdAt?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -5224,6 +5282,11 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
     in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
@@ -5232,11 +5295,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
