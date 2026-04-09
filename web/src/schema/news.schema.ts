@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-export const NEWS_CATEGORIES = ["Tech", "IA", "Dev"] as const;
+export const NEWS_CATEGORIES = ["Tech", "AI", "Dev"] as const;
 
 export const newsSchema = yup.object({
   title: yup
