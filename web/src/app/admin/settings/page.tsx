@@ -17,6 +17,7 @@ import { getUser } from "@/utils/auth";
 import Loading from "../dashboard/loading";
 import { updateAdminPasswordSettings, updateAdminProfileSettings } from "@/services/api";
 import { User, SettingsProfileFormValues, SettingsPasswordFormValues } from "@/types/globalTypes";
+import { updatePassword } from "@/schema/updatePasswordFormSchema";
 
 
 const SERVER_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -104,15 +105,18 @@ export default function SettingsPage() {
     setLoading(true);
     
     try {
-      if (values.newPassword !== values.confirmNewPassword) {
-        message.error("Les mots de passe ne correspondent pas");
-        return;
-      }
+      await updatePassword.validate(values, { abortEarly: false });
 
-      await updateAdminPasswordSettings({ newPassword: values.confirmNewPassword });
+      await updateAdminPasswordSettings({ newPassword: values.newPassword });
       message.success("Mot de passe mis à jour !");
-    } catch (err) {
-      message.error("Une erreur est survenue");
+    } catch (err: any) {
+      if (err.inner) {
+      err.inner.forEach((e: any) => {
+        message.error(e.message);
+      });
+    } else {
+      message.error(err.message || "Une erreur est survenue");
+    }
     } finally {
       setLoading(false);
     }
