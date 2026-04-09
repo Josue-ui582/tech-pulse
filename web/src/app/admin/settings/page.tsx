@@ -109,7 +109,7 @@ export default function SettingsPage() {
         return;
       }
 
-      await updateAdminPasswordSettings(values.confirmNewPassword);
+      await updateAdminPasswordSettings({ newPassword: values.confirmNewPassword });
       message.success("Mot de passe mis à jour !");
     } catch (err) {
       message.error("Une erreur est survenue");
