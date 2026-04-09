@@ -4,6 +4,8 @@ import { Category, SupportData, UpdateNewsData } from "../types/globalTypes";
 const API_URL = "http://localhost:3001/api/news"
 const API_URL_Auth = "http://localhost:3001/api"
 const API_URL_Contact = "http://localhost:3001/api/contact"
+const API_URL_Generate2FA = "http://localhost:3001/api/2fa/generate"
+const API_URL_Verify2FA = "http://localhost:3001/api/2fa/verify"
 
 
 export const getNews = async (category?: Category, search?: string) => {
@@ -266,5 +268,45 @@ export const updateAdminPasswordSettings = async (password: unknown) => {
   } catch (error) {
     if (error instanceof Error) throw error;
     throw new Error("Une erreur inconnue est survenue lors de la mise à jour du mot de passe");
+  }
+};
+
+export const handleGenerate2FA = async () => {
+  try {
+    const response = await fetch(`${API_URL_Generate2FA}`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erreur lors de la génération du QR code");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new Error("Une erreur inconnue est survenue lors de la génération du QR code");
+  }
+};
+
+export const handleVerify2FA = async (token: string) => {
+  try {
+    const response = await fetch(`${API_URL_Verify2FA}`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erreur lors de la vérification du code 2FA");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new Error("Une erreur inconnue est survenue lors de la vérification du code 2FA");
   }
 };
