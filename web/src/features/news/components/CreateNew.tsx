@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Form, Input, Button, Select, message, Card, Upload } from 'antd';
 import { CreateNewsForms } from '@/services/api';
 import { UploadOutlined } from '@ant-design/icons';
+import { newsSchema } from '@/schema/news.schema';
 
 const CreateNewsForm = ({ onSucess }: { onSucess: () => void }) => {
   const [error, setError] = useState<string | null>(null);
@@ -11,6 +12,17 @@ const CreateNewsForm = ({ onSucess }: { onSucess: () => void }) => {
   const [form] = Form.useForm();
 
   const onFinish = async (values: any) => {
+    const cleanedValues = await newsSchema.validate(values, { abortEarly: false }).catch((err) => {
+      if (err.inner) {
+        const errorFields = err.inner.map((error: any) => ({
+          name: error.path,
+          errors: [error.message],
+        }));
+        form.setFields(errorFields);
+      }
+      throw new Error("Veuillez corriger les erreurs dans le formulaire.");
+    });
+
     setLoading(true);
     setError(null);
 
@@ -22,12 +34,7 @@ const CreateNewsForm = ({ onSucess }: { onSucess: () => void }) => {
         throw new Error("Fichier image introuvable. Veuillez réessayer.");
       }
 
-      await CreateNewsForms(
-        values.title,
-        values.description,
-        values.category,
-        fileToUpload
-      );
+      await CreateNewsForms(cleanedValues.title, cleanedValues.description, cleanedValues.category, fileToUpload);
 
       message.success("Article publié avec succès !");
       form.resetFields();

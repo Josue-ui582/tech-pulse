@@ -27,7 +27,6 @@ const extractToken = (req: Request): string | null => {
 export const authorize = (requiredRole?: string) => {
     return (req: Request, res: Response, next: NextFunction) => {
         const token = extractToken(req);
-        console.log("Token extrait:", token);
 
         if (!token) {
             return res.status(401).json({

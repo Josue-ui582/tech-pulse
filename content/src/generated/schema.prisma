@@ -24,14 +24,26 @@ enum Category {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  name     String?
-  email    String  @unique
-  password String?
-  role     Role    @default(user)
+  id           String  @id @default(uuid())
+  name         String?
+  email        String  @unique
+  password     String?
+  role         Role    @default(user)
+  profileImage String?
+  bio          String?
 }
 
 enum Role {
   admin
   user
+}
+
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
 }
