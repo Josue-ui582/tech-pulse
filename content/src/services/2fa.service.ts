@@ -2,9 +2,10 @@ import speakeasy from 'speakeasy';
 import QRCode from 'qrcode';
 import { prisma } from '../lib/pisma.js';
 
-export const generate2FACode = async (id : string): Promise<{ secret: string; qrCode: string }> => {
+export const generate2FACode = async (id : string): Promise<{ qrCode: string }> => {
     const secret = speakeasy.generateSecret({
-    name: "TechPulse (2FA)",
+    name: `TechPulse (${id})`,
+    otpauth_url: true
   });
   
   const qrCode = await QRCode.toDataURL(secret.otpauth_url);
@@ -13,7 +14,7 @@ export const generate2FACode = async (id : string): Promise<{ secret: string; qr
     where: { id },
     data: { twoFactorSecret: secret.base32 },
   });
-  return { secret: secret.base32, qrCode };
+  return { qrCode };
 }
 
 export const verify2FACode = async (id: string, token: string): Promise<boolean> => {
@@ -35,10 +36,12 @@ export const verify2FACode = async (id: string, token: string): Promise<boolean>
 
     if (!isValid) {
         throw new Error("Code 2FA invalide.");
+    } else {
+        await prisma.user.update({
+            where: { id },
+            data: { isTwoFactorEnabled: true }
+        });
     }
 
-    return prisma.user.update({
-        where: { id },
-        data: { twoFactorSecret: null }
-    }).then(() => true);
+    return isValid;
 }

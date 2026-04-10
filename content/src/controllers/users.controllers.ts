@@ -4,7 +4,6 @@ import type { Request, Response } from "express";
 import { createUserSchema } from "../schema/users.schema.js";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import { email } from 'zod';
 
 const JWT_SECRET = process.env.JWT_SECRET_SECRET as string;
 
