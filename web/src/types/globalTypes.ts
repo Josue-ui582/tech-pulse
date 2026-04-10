@@ -22,6 +22,7 @@ export type AuthForm = {
   password: string;
   firstName?: string;
   lastName?: string;
+  twoFactorCode?: string;
 };
 
 export type User = {

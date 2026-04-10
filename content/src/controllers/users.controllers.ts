@@ -4,7 +4,6 @@ import type { Request, Response } from "express";
 import { createUserSchema } from "../schema/users.schema.js";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import { email } from 'zod';
 
 const JWT_SECRET = process.env.JWT_SECRET_SECRET as string;
 
@@ -69,6 +68,21 @@ export const loginUserController = async (req: Request, res: Response) => {
                 success: false,
                 message: "Email ou mot de passe incorrect"
             })
+        }
+
+        if (user.isTwoFactorEnabled) {
+            res.cookie("temp_user_id", user.id, {
+                httpOnly: true,
+                secure: false, // true en production
+                sameSite: "lax",
+                maxAge: 5 * 60 * 1000
+            });
+
+            return res.status(200).json({
+                success: true,
+                requires2FA: true,
+                message: "Veuillez entrer votre code 2FA"
+            });
         }
 
         const token = jwt.sign(

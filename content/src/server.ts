@@ -2,15 +2,14 @@ import express from 'express';
 import cors from 'cors';
 import swaggerSpec from './config/swagger.config.js';
 import swaggerUi from 'swagger-ui-express';
-import newsRoute from "../src/routes/news.routes.js"
-import usersRoute from "../src/routes/users.routes.js"
-import xfaRoute from "../src/routes/2fa.route.js"
-import authRoute from "../src/routes/auth.route.js"
+import newsRoute from "./routes/news.routes.js"
+import usersRoute from "./routes/users.routes.js"
+import authRoute from "./routes/auth.route.js"
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import cookieParser from "cookie-parser";
 import contactRoute from './routes/contact.route.js';
-import { fa } from 'zod/locales';
+import doubleAuthRoute from './routes/2fa.routes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,7 +37,7 @@ app.use("/api/users", usersRoute);
 app.use("/api/login", authRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/contact", contactRoute);
-app.use("/api/2fa", xfaRoute);
+app.use("/api/2fa", doubleAuthRoute);
 
 app.listen(PORT, () => {
   console.log(`[server]: Server running on http://localhost:${PORT}`);
