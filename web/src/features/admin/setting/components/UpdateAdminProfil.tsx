@@ -11,7 +11,7 @@ const { Text } = Typography
 
 const SERVER_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const UpdateAdminProfileSettings = async () => {
+export const UpdateAdminProfileSettings = () => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
     const [user, setUser] = useState<any>(null)
