@@ -4,6 +4,7 @@ import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { generate2FACode, verify2FACode } from "../services/2fa.service.js";
 
+const JWT_SECRET = process.env.JWT_SECRET_SECRET as string;
 
 export const generateQRCode = async (req: Request, res: Response) => {
     const token = req.cookies.token;
@@ -12,7 +13,7 @@ export const generateQRCode = async (req: Request, res: Response) => {
     }
 
     try {
-        const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
+        const decoded: any = jwt.verify(token, JWT_SECRET);
         const {  qrCode } = await generate2FACode(decoded.id);
         res.json({ qrCode });
     } catch (err) {
@@ -33,7 +34,7 @@ export const verifyQRCode = async (req: Request, res: Response) => {
     }
 
     try {
-        const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
+        const decoded: any = jwt.verify(token, JWT_SECRET);
         const isValid = await verify2FACode(decoded.id, String(code));
         if (isValid) {
             res.json({ message: "2FA vérifié avec succès." });

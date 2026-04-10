@@ -20,10 +20,10 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "NODE_OPTIONS='--loader ts-node/esm --no-warnings' nodemon src/server.ts",
+    "dev": "nodemon --exec tsx src/server.ts",
     "build": "tsc",
-    "start": "nodemon dist/index.js"
-  },
+    "start": "node dist/server.js" 
+},
   "engines": {
     "node": "20"
   },
@@ -41,6 +41,7 @@
     "nodemon": "^3.1.14",
     "prisma": "^7.5.0",
     "ts-node-dev": "^2.0.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }
