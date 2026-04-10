@@ -1,24 +1,26 @@
+import 'dotenv/config';
+
 import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { generate2FACode, verify2FACode } from "../services/2fa.service.js";
 
 
-const generateQRCode = async (req: Request, res: Response) => {
+export const generateQRCode = async (req: Request, res: Response) => {
     const token = req.cookies.token;
     if (!token) {
         return res.status(401).json({ message: "Token d'authentification manquant." });
     }
 
     try {
-        const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
-        const { secret, qrCode } = await generate2FACode(decoded.id);
-        res.json({ secret, qrCode });
+        const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
+        const {  qrCode } = await generate2FACode(decoded.id);
+        res.json({ qrCode });
     } catch (err) {
         res.status(400).json({ message: err instanceof Error ? err.message : "Erreur lors de la génération du QR code." });
     }
 }
 
-const verifyQRCode = async (req: Request, res: Response) => {
+export const verifyQRCode = async (req: Request, res: Response) => {
     const token = req.cookies.token;
     const { code } = req.body;
 
@@ -31,8 +33,8 @@ const verifyQRCode = async (req: Request, res: Response) => {
     }
 
     try {
-        const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
-        const isValid = await verify2FACode(decoded.id, code);
+        const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
+        const isValid = await verify2FACode(decoded.id, String(code));
         if (isValid) {
             res.json({ message: "2FA vérifié avec succès." });
         } else {
@@ -42,5 +44,3 @@ const verifyQRCode = async (req: Request, res: Response) => {
         res.status(400).json({ message: err instanceof Error ? err.message : "Erreur lors de la vérification du code 2FA." });
     }
 }
-
-export { generateQRCode, verifyQRCode };
