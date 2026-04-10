@@ -70,6 +70,21 @@ export const loginUserController = async (req: Request, res: Response) => {
             })
         }
 
+        if (user.isTwoFactorEnabled) {
+            res.cookie("temp_user_id", user.id, {
+                httpOnly: true,
+                secure: false, // true en production
+                sameSite: "lax",
+                maxAge: 5 * 60 * 1000
+            });
+
+            return res.status(200).json({
+                success: true,
+                requires2FA: true,
+                message: "Veuillez entrer votre code 2FA"
+            });
+        }
+
         const token = jwt.sign(
             { id: user.id, role: user.role },
             JWT_SECRET,
