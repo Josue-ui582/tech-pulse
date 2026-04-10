@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Layout, Menu, Badge } from 'antd';
 import {
   DashboardOutlined,
@@ -11,8 +11,7 @@ import {
 import { useRouter, usePathname } from 'next/navigation';
 import Loading from './dashboard/loading';
 import AdminAvatar from '@/components/layout/Avatar';
-import { getUser } from '@/utils/auth';
-import { logOutUser } from '@/services/api';
+import { useAuth } from '@/hooks/useAuth';
 
 const { Header, Content, Sider } = Layout;
 
@@ -25,26 +24,22 @@ type User = {
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { user, loading, logout } = useAuth();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const userData = await getUser();
-      
-      if (!userData) {
-        router.replace("/auth");
-        return;
-      }
+    if (loading) return;
 
-      setUser(userData);
-      setLoading(false);
-    };
+    if (!user) {
+      router.replace("/auth");
+      return;
+    }
 
-    fetchUser();
-  }, []);
+    if (user.role !== "admin") {
+      router.replace("/unauthorized");
+    }
+  }, [user, loading, router]);
 
-  if(loading) {
+  if (loading || !user) {
     return <Loading />;
   }
 
@@ -85,9 +80,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               icon: <LogoutOutlined />,
               label: 'Déconnexion',
               danger: true,
-              onClick: () => {
-                logOutUser();
-                router.push("/auth")
+              onClick: async () => {
+                await logout();
+                router.push("/auth");
               }
             }
           ]}
