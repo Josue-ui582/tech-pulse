@@ -22,11 +22,8 @@ export default function AuthPage() {
     try {
 
       if (isLogin) {
-        const cleanedValues = await loginSchema.validate(values, { abortEarly: false });
-        const result = await authService.login(cleanedValues);
-
-        if (show2FA ) {
-          const codeString = values.twoFactorCode?.toString() || ""; 
+        if (show2FA) {
+          const codeString = values.twoFactorCode?.toString() || "";
           const result = await verify2FA(codeString);
           if (result?.error) {
             throw new Error("Code 2FA invalide");
@@ -36,6 +33,8 @@ export default function AuthPage() {
           return;
         }
 
+        const cleanedValues = await loginSchema.validate(values, { abortEarly: false });
+        const result = await authService.login(cleanedValues);
         if (result?.error) {
           throw new Error("Identifiants invalides");
         }
