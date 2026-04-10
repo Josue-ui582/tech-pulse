@@ -8,19 +8,19 @@ import { MailOutlined, LockOutlined,
 import { authService, verify2FA } from '@/services/api';
 import { AuthForm } from '@/types/globalTypes';
 import { loginSchema, registerSchema } from '@/schema/auth.schema';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const { loading, refreshUser } = useAuth();
   const [show2FA, setShow2FA] = useState(false);
   const [form] = Form.useForm();
   const router = useRouter();
 
   const onFinish = async (values: AuthForm) => {
-    setLoading(true);
+    if(loading) return;
     
     try {
-
       if (isLogin) {
         if (show2FA) {
           const codeString = values.twoFactorCode?.toString() || "";
@@ -43,6 +43,7 @@ export default function AuthPage() {
           setShow2FA(true);
           message.info("Veuillez entrer votre code 2FA");
         } else {
+          await refreshUser();
           const path = result.user.role === "admin" ? "/admin/dashboard" : "/news";
           message.success("Connexion réussie !");
           router.replace(path);
@@ -56,8 +57,6 @@ export default function AuthPage() {
       }
     } catch (error: any) {
       message.error(error.message || "Une erreur est survenue");
-    } finally {
-      setLoading(false);
     }
   };
 

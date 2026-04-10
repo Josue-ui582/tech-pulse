@@ -25,11 +25,21 @@ export type AuthForm = {
   twoFactorCode?: string;
 };
 
+export interface AuthContextValue {
+  user: User | null;
+  loading: boolean;
+  isAuthenticated: boolean;
+  refreshUser: () => Promise<void>;
+  logout: () => Promise<void>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+}
+
 export type User = {
   id: string;
   name: string;
   email: string;
   bio?: string;
+  role: string;
   profileImage?: string;
 };
 

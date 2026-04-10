@@ -7,7 +7,7 @@ import {
   SafetyCertificateOutlined 
 } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
-import { logOutUser } from '@/services/api';
+import { useAuth } from '@/hooks/useAuth';
 
 const { Text } = Typography;
 
@@ -15,6 +15,7 @@ const SERVER_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function AdminAvatar({ user }: { user: any }) {
   const router = useRouter();
+  const { logout } = useAuth();
 
   const items = [
     {
@@ -43,8 +44,8 @@ export default function AdminAvatar({ user }: { user: any }) {
       label: 'Déconnexion',
       icon: <LogoutOutlined />,
       danger: true,
-      onClick: () => {
-        logOutUser();
+      onClick: async () => {
+        await logout();
         router.push('/auth');
       },
     },
