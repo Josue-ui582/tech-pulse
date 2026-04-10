@@ -271,7 +271,7 @@ export const updateAdminPasswordSettings = async (password: unknown) => {
   }
 };
 
-export const handleGenerate2FA = async () => {
+export const generate2FA = async () => {
   try {
     const response = await fetch(`${API_URL_Generate2FA}`, {
       method: 'POST',
@@ -290,13 +290,13 @@ export const handleGenerate2FA = async () => {
   }
 };
 
-export const handleVerify2FA = async (token: string) => {
+export const verify2FA = async (code: string) => {
   try {
     const response = await fetch(`${API_URL_Verify2FA}`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token }),
+      body: JSON.stringify({ code }),
     });
 
     if (!response.ok) {

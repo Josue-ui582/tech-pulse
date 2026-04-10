@@ -2,8 +2,9 @@ import { motion } from "framer-motion"
 import { Typography, Form, Input, Button, Divider, message } from "antd"
 import { SettingsPasswordFormValues } from "@/types/globalTypes"
 import { updatePassword } from "@/schema/updatePasswordFormSchema"
-import { updateAdminPasswordSettings } from "@/services/api"
+import { generate2FA, updateAdminPasswordSettings, verify2FA } from "@/services/api"
 import Loading from "@/app/admin/dashboard/loading"
+import { useState } from "react"
 
 type UpdateAdminPasswordSettingsProps = {
     loading: boolean;
@@ -14,6 +15,9 @@ const { Title, Paragraph } = Typography
 
 export const UpdateAdminPasswordSettings = ({ loading, setLoading }: UpdateAdminPasswordSettingsProps) => {
     const [form] = Form.useForm()
+    const [faForm] = Form.useForm()
+    const [qrCode, setQrCode] = useState<string | null>(null);
+    const [show2FA, setShow2FA] = useState(false);
 
     const onPasswordFinish = async (values: SettingsPasswordFormValues) => {
         setLoading(true);
@@ -40,6 +44,30 @@ export const UpdateAdminPasswordSettings = ({ loading, setLoading }: UpdateAdmin
         return <Loading />
     }
 
+    const handleGenerate2FA = async () => {
+        try {
+          const data = await generate2FA();
+          setQrCode(data.qrCode);
+          setShow2FA(true);
+        } catch (err) {
+          message.error("Erreur lors de la génération du QR code");
+        }
+      };
+    
+      const handleVerify2FA = async (values: { verificationCode: string }) => {
+        setLoading(true);
+        try {
+            await verify2FA(values.verificationCode);
+            message.success("2FA activée avec succès !");
+            setShow2FA(false);
+            faForm.resetFields();
+        } catch (err) {
+            message.error("Code de vérification invalide");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     
     return (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="max-w-md">
@@ -55,12 +83,52 @@ export const UpdateAdminPasswordSettings = ({ loading, setLoading }: UpdateAdmin
               Mettre à jour le mot de passe
             </Button>
           </Form>
+
           <Divider className="my-8" />
-          <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100">
-            <Title level={5} className="text-amber-800!">Double Authentification (2FA)</Title>
-            <Paragraph className="text-amber-700/80 text-sm">Ajoutez une couche de sécurité supplémentaire à votre compte admin.</Paragraph>
-            <Button danger ghost className="rounded-lg">Activer maintenant</Button>
-          </div>
+
+          {!show2FA ? (
+            <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100">
+              <Title level={5} className="text-amber-800!">Double Authentification (2FA)</Title>
+              <Paragraph className="text-amber-700/80 text-sm">Ajoutez une couche de sécurité supplémentaire.</Paragraph>
+              <Button 
+                danger ghost 
+                className="rounded-lg" 
+                onClick={handleGenerate2FA}
+                loading={loading}
+              >
+                Activer maintenant
+                    </Button>
+                </div>
+            ) : (
+                <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }} 
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="p-4 bg-white rounded-2xl border border-blue-100 shadow-sm"
+                >
+                    <Title level={5} className="text-blue-800!">Configurer le 2FA</Title>
+                    <Paragraph className="text-slate-500 text-sm">Scannez ce code avec Google Authenticator ou Authy.</Paragraph>
+                    
+                    {qrCode && <div className="bg-white p-2 inline-block border rounded-xl mb-4"><img src={qrCode} alt="QR Code" /></div>}
+                    
+                    <Form layout="vertical" form={faForm} onFinish={handleVerify2FA}>
+                        <Form.Item 
+                            label="Code à 6 chiffres" 
+                            name="verificationCode" 
+                            rules={[{ required: true, len: 6, message: "Entrez les 6 chiffres" }]}
+                        >
+                            <Input placeholder="000000" className="rounded-xl h-11 text-center text-lg tracking-widest" />
+                        </Form.Item>
+                        <div className="flex gap-2">
+                            <Button type="primary" className="h-11 rounded-xl bg-blue-600 flex-1" htmlType="submit" loading={loading}>
+                                Vérifier & Activer
+                            </Button>
+                            <Button className="h-11 rounded-xl flex-1" onClick={() => setShow2FA(false)}>
+                                Annuler
+                            </Button>
+                        </div>
+                    </Form>
+                </motion.div>
+            )}
         </motion.div>
-    )
-}
+    );
+};
