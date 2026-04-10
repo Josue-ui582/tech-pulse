@@ -3,7 +3,7 @@ import { CameraOutlined, MailFilled, SaveOutlined, UserOutlined } from "@ant-des
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 import Loading from "@/app/admin/dashboard/loading"
-import { getUser } from "@/utils/auth"
+import { useAuth } from "@/hooks/useAuth"
 import { SettingsProfileFormValues } from "@/types/globalTypes"
 import { updateAdminProfileSettings } from "@/services/api"
 
@@ -14,34 +14,29 @@ const SERVER_URL = process.env.NEXT_PUBLIC_API_URL;
 export const UpdateAdminProfileSettings = () => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
-    const [user, setUser] = useState<any>(null)
+    const { user } = useAuth()
 
     useEffect(() => {
-    const fetchUser = async () => {
-      const userData = await getUser();
-      setUser(userData);
+      if (!user) return;
 
       form.setFieldsValue({
-        name: userData?.name,
-        email: userData?.email,
-        bio: userData?.bio || "",
-        profilePictureUrl: userData?.profileImage ? [{
+        name: user.name,
+        email: user.email,
+        bio: user.bio || "",
+        profilePictureUrl: user.profileImage ? [{
             uid: '-1',
             name: 'Photo de profil actuelle',
             status: 'done',
-            url: `${SERVER_URL}/${userData.profileImage}`,
+            url: `${SERVER_URL}/${user.profileImage}`,
         }] : [],
       });
-    };
+    }, [user, form]);
 
-    fetchUser();
-  }, []);
-
-  if (!user) {
-    return (
-      <Loading />
-    );
-  }
+    if (!user) {
+      return (
+        <Loading />
+      );
+    }
 
     const onProfileFinish = async (values: SettingsProfileFormValues) => {
       setLoading(true);

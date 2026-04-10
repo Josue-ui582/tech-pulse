@@ -10,7 +10,8 @@ import { deleteNew, getNews } from '@/services/api';
 import Image from 'next/image';
 import { formatDate } from '@/utils/formatDate';
 import UpdateNewsForm from '@/features/news/components/UpdateNew';
-import { getUser } from '@/utils/auth';
+import { useAuth } from '@/hooks/useAuth';
+import Loading from '@/app/admin/dashboard/loading';
 import { useRouter } from 'next/navigation';
 
 const { Title, Text } = Typography;
@@ -24,38 +25,40 @@ export default function NewsAdminPage() {
   const [selectedNewsId, setSelectedNewsId] = useState<string | null>(null);
   const [searchText, setSearchText] = useState('');
   const [news, setNews] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [newsLoading, setNewsLoading] = useState(false);
 
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const userData = await getUser();
+    if (authLoading) return;
 
-    if(!userData) {
+    if (!user) {
       router.replace("/auth");
       return;
     }
 
-    if (userData.role !== "admin") {
+    if (user.role !== "admin") {
       router.push("/unauthorized");
     }
+  }, [user, authLoading, router]);
+
+  if (authLoading || !user) {
+    return <Loading />;
   }
-  checkAuth();
-  }, []);
 
   const fetchNews = useCallback(async (search?: string) => {
     
-    setLoading(true);
+    setNewsLoading(true);
     try {
       const response = await getNews(undefined, search);
       setNews(response.data || response);
     } catch (error: any) {
       message.error(error.message || "Erreur de chargement");
     } finally {
-      setLoading(false);
+      setNewsLoading(false);
     }
-  }, [status]);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -204,7 +207,7 @@ export default function NewsAdminPage() {
                 className: "pr-4",
                 showSizeChanger: false
               }} 
-              loading={loading}
+              loading={newsLoading}
               rowKey="id"
               scroll={{ x: 'max-content' }}
               className="modern-table"

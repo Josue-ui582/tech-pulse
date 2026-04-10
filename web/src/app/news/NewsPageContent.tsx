@@ -3,39 +3,31 @@
 import NewsCard from "@/features/news/components/NewsCard";
 import { SearchBar } from "@/features/search/components/SearchBar";
 import { SearchCategory } from "@/features/search/components/searchCategory";
-import { News } from "@/types/news";
-import { useEffect, useState } from "react";
+import { News } from "@/types/globalTypes";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getUser } from "@/utils/auth";
+import { useAuth } from "@/hooks/useAuth";
 import Loading from "../admin/dashboard/loading";
 import { Navbar } from "@/components/layout/navbar";
 import { motion } from "framer-motion";
 
 export default function NewsPageContent({ news }: { news: News[] }) {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const { user, loading } = useAuth();
 
- useEffect(() => {
-  const checkAuth = async () => {
-    const userData = await getUser();
-
-    if (!userData) {
+  useEffect(() => {
+    if (loading) return;
+    if (!user) {
       router.replace("/auth");
       return;
     }
 
-    if (userData.role !== "user") {
+    if (user.role !== "user") {
       router.replace("/unauthorized");
-      return;
     }
+  }, [user, loading, router]);
 
-    setLoading(false);
-  };
-
-  checkAuth();
-}, []);
-
-  if (loading) return <Loading />;
+  if (loading || !user) return <Loading />;
 
   return (
     <motion.main

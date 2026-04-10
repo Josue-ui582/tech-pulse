@@ -8,7 +8,7 @@ import {
 import { 
   UserOutlined, LockOutlined, BellOutlined
 } from "@ant-design/icons";
-import { getUser } from "@/utils/auth";
+import { useAuth } from "@/hooks/useAuth";
 import { UpdateAdminProfileSettings } from "@/features/admin/setting/components/UpdateAdminProfil";
 import { UpdateAdminPasswordSettings } from "@/features/admin/setting/components/UpdateAdminPassword";
 import { ActiveNotification } from "@/features/admin/setting/components/ActiveNotification";
@@ -20,22 +20,22 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const userData = await getUser();
+    if (authLoading) return;
 
-    if(!userData) {
+    if (!user) {
       router.replace("/auth");
       return;
     }
 
-    if (userData.role !== "admin") {
+    if (user.role !== "admin") {
       router.push("/unauthorized");
     }
-  }
-  checkAuth();
-  }, []);
+  }, [user, authLoading, router]);
+
+  if (authLoading) return null;
 
 
   const tabItems = [

@@ -1,65 +1,30 @@
 "use client"
 
-import { logOutUser } from '@/services/api';
-import { getUser } from '@/utils/auth';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 export const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const { user, logout } = useAuth();
   const [buttonText, setButtonText] = useState("Accéder à mon compte");
 
-  const switchButton = async () => {
-    switch (pathname) {
-      case "/":
-        const checkAuth = await getUser();
-        setButtonText(checkAuth ? "Déconnexion" : "Accéder à mon compte");
-        break;
-      case "/news":
-        setButtonText("Déconnexion");
-        break;
-      case "/contact":
-      case "/about":
-        const checkAuths = await getUser();
-        setButtonText(checkAuths ? "Déconnexion" : "Accéder à mon compte");
-        break;
-      default:
-        setButtonText("Accéder à mon compte");
-        break;
-    }
-  };
-
   useEffect(() => {
-    switchButton();
-  }, [pathname]);
+    if (pathname === "/news") {
+      setButtonText("Déconnexion");
+      return;
+    }
+
+    setButtonText(user ? "Déconnexion" : "Accéder à mon compte");
+  }, [pathname, user]);
 
   const handleClick = async () => {
-    switch (pathname) {
-      case "/":
-       const checkAuth = await getUser();
-        if (checkAuth) {
-          logOutUser();
-        }
-        router.replace("/auth");
-        break;
-      case "/news":
-        logOutUser();
-        router.replace("/auth");
-        break;
-      case "/contact":
-      case "/about":
-        const checkAuths = await getUser();
-        if (checkAuths) {
-          logOutUser();
-        }
-        router.replace("/auth");
-        break;
-      default:
-        router.replace("/auth");
-        break;
+    if (user) {
+      await logout();
     }
+    router.replace("/auth");
   };
 
   return(
