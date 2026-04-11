@@ -6,6 +6,7 @@ import Loading from "@/app/admin/dashboard/loading"
 import { useAuth } from "@/hooks/useAuth"
 import { SettingsProfileFormValues } from "@/types/globalTypes"
 import { updateAdminProfileSettings } from "@/services/api"
+import { useFormSubmit } from "@/hooks"
 
 const { Text } = Typography
 
@@ -13,7 +14,6 @@ const SERVER_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const UpdateAdminProfileSettings = () => {
     const [form] = Form.useForm()
-    const [loading, setLoading] = useState(false)
     const { user } = useAuth()
 
     useEffect(() => {
@@ -38,31 +38,39 @@ export const UpdateAdminProfileSettings = () => {
       );
     }
 
-    const onProfileFinish = async (values: SettingsProfileFormValues) => {
-      setLoading(true);
+    const submitProfile = async (values: SettingsProfileFormValues) => {
+      const formData = new FormData();
     
-        try {
-          const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("email", values.email);
+      formData.append("bio", values.bio);
     
-          formData.append("name", values.name);
-          formData.append("email", values.email);
-          formData.append("bio", values.bio);
+      const fileItem = values.profilePictureUrl?.[0];
     
-          const fileItem = values.profilePictureUrl?.[0];
+      if (fileItem?.originFileObj) {
+        formData.append("profileImage", fileItem.originFileObj);
+      }
     
-          if (fileItem?.originFileObj) {
-            formData.append("profileImage", fileItem.originFileObj);
-          }
-    
-          await updateAdminProfileSettings(formData);
-    
+      await updateAdminProfileSettings(formData);
+    };
+
+    const { loading, handleSubmit } = useFormSubmit(
+      form,
+      submitProfile,
+      {
+        onSuccess: () => {
           message.success("Profil mis à jour avec succès !");
-        } catch (err) {
+        },
+        onError: (error) => {
           message.error("Une erreur est survenue");
-        } finally {
-          setLoading(false);
-        }
-      };
+        },
+        successMessage: "Profil mis à jour avec succès !",
+      }
+    );
+
+    const onProfileFinish = (values: SettingsProfileFormValues) => {
+      handleSubmit(values);
+    };
     return(
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <Form form={form} layout="vertical" onFinish={onProfileFinish} className="max-w-2xl">
