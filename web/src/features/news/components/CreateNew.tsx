@@ -5,45 +5,41 @@ import { Form, Input, Button, Select, message, Card, Upload } from 'antd';
 import { CreateNewsForms } from '@/services/api';
 import { UploadOutlined } from '@ant-design/icons';
 import { newsSchema } from '@/schema/news.schema';
+import { useFormSubmit } from '@/hooks';
 
 const CreateNewsForm = ({ onSucess }: { onSucess: () => void }) => {
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
-  const onFinish = async (values: any) => {
-    const cleanedValues = await newsSchema.validate(values, { abortEarly: false }).catch((err) => {
-      if (err.inner) {
-        const errorFields = err.inner.map((error: any) => ({
-          name: error.path,
-          errors: [error.message],
-        }));
-        form.setFields(errorFields);
-      }
-      throw new Error("Veuillez corriger les erreurs dans le formulaire.");
-    });
+  const submitNews = async (values: any) => {
+    const fileItem = values.imageUrl?.[0]; 
+    const fileToUpload = fileItem?.originFileObj;
 
-    setLoading(true);
-    setError(null);
-
-    try {
-      const fileItem = values.imageUrl?.[0]; 
-      const fileToUpload = fileItem?.originFileObj;
-
-      if (!fileToUpload) {
-        throw new Error("Fichier image introuvable. Veuillez réessayer.");
-      }
-
-      await CreateNewsForms(cleanedValues.title, cleanedValues.description, cleanedValues.category, fileToUpload);
-
-      message.success("Article publié avec succès !");
-      form.resetFields();
-      onSucess()
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    if (!fileToUpload) {
+      throw new Error("Fichier image introuvable. Veuillez réessayer.");
     }
+
+    await CreateNewsForms(values.title, values.description, values.category, fileToUpload);
+  };
+
+  const { loading, handleSubmit } = useFormSubmit(
+    form,
+    submitNews,
+    {
+      schema: newsSchema,
+      onSuccess: () => {
+        form.resetFields();
+        onSucess();
+      },
+      onError: (error) => setError(error.message),
+      successMessage: "Article publié avec succès !",
+      resetOnSuccess: true,
+    }
+  );
+
+  const onFinish = (values: any) => {
+    setError(null);
+    handleSubmit(values);
   };
 
 

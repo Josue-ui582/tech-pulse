@@ -1,5 +1,5 @@
 import { getNews } from "@/services/api";
-import { Category } from "@/types/news";
+import { Category } from "@/types/globalTypes";
 import NewsPageContent from "./NewsPageContent";
 
 export const revalidate = 60;

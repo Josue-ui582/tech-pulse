@@ -1,14 +1,14 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Button, Tag, Divider, Typography, message } from "antd";
 import { ArrowLeftOutlined, CalendarOutlined, EyeOutlined, ClockCircleOutlined, ShareAltOutlined } from "@ant-design/icons";
-import { News } from "@/types/news";
 import { formatDate } from "@/utils/formatDate";
 import { getUniqueNew } from "@/services/api";
 import Loading from "@/app/admin/dashboard/loading";
+import { useAsyncData } from "@/hooks";
 
 const { Title, Paragraph } = Typography;
 const BACKEND_URL = "http://localhost:3001";
@@ -16,28 +16,17 @@ const BACKEND_URL = "http://localhost:3001";
 export default function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = use(params); 
   const slug = resolvedParams.slug;
-
   const router = useRouter();
-  const [article, setArticle] = useState<News | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchArticle = async () => {
-      try {
-        const data = await getUniqueNew(slug);
-        setArticle(data);
-      } catch (error: unknown) {
-        message.error("Erreur lors de la récupération de l'article :");
-        setError(error instanceof Error ? error.message : "Erreur inconnue");
-      } finally {
-        setLoading(false);
+  const { data: article, loading, error } = useAsyncData(
+    () => getUniqueNew(slug),
+    [slug],
+    {
+      onError: (error) => {
+        message.error("Erreur lors de la récupération de l'article :" + (error.message || "Erreur inconnue"));
       }
-    };
-
-    fetchArticle();
-    setLoading(false);
-  }, [slug]);
+    }
+  );
 
   if (loading) return <Loading />;
   if (error) return (

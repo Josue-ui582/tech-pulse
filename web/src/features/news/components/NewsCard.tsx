@@ -6,13 +6,22 @@ import { formatDate } from "@/utils/formatDate";
 import { increateNewView } from "@/services/api";
 import { ReadMoreIcon } from "../../../../public/icons/readMoreIcon";
 import { useRouter } from "next/navigation";
+import { useCachedData } from "@/hooks";
 
 const BACKEND_URL = "http://localhost:3001";
 
 const NewsCard = ({ article }: { article: News }) => {
   const [expanded, setExpanded] = useState(false);
-  const [currentViews, setCurrentViews] = useState(article.viewsCount);
   const router = useRouter();
+
+  // Cache des vues d'articles (5 minutes)
+  const { data: viewData, refetch: incrementView } = useCachedData(
+    `article-views-${article.id}`,
+    () => increateNewView(article.id),
+    5 * 60 * 1000 // 5 minutes
+  );
+
+  const currentViews = viewData?.viewsCount ?? article.viewsCount;
 
   const handleExpand = async () => {
     setExpanded(prev => !prev);
@@ -23,13 +32,9 @@ const NewsCard = ({ article }: { article: News }) => {
         const viewedNews = stored ? JSON.parse(stored) : [];
 
         if (!viewedNews.includes(article.id)) {
-          const updateData = await increateNewView(article.id);
-
-          if (updateData) {
-            setCurrentViews(updateData.viewsCount);
-            viewedNews.push(article.id);
-            localStorage.setItem("viewed_news", JSON.stringify(viewedNews));
-          }
+          await incrementView();
+          viewedNews.push(article.id);
+          localStorage.setItem("viewed_news", JSON.stringify(viewedNews));
         }
       } catch (error) {
         console.error("Erreur gestion des vues :", error);
