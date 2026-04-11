@@ -27,19 +27,29 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
       }
     }
   );
-  const [views, setViews] = useState(article?.viewsCount);
+  const [views, setViews] = useState<number>(0);
 
   useEffect(() => {
-    const viewed = sessionStorage.getItem(`viewed-${slug}`);
+  if (article) {
+    setViews(article.viewsCount);
+  }
+}, [article]);
 
-    if (!viewed) {
-      setViews((prev : number) => prev + 1);
+useEffect(() => {
+  if (!article) return;
 
-      increateNewView(slug)
+  const viewed = sessionStorage.getItem(`viewed-${slug}`);
 
-      sessionStorage.setItem(`viewed-${slug}`, "true");
-    }
-  }, [slug]);
+  if (!viewed) {
+    setViews(article.viewsCount + 1);
+
+    increateNewView(slug).catch(() => {
+      setViews(article.viewsCount); // rollback
+    });
+
+    sessionStorage.setItem(`viewed-${slug}`, "true");
+  }
+}, [article, slug]);
 
   if (loading) return <Loading />;
   if (error) return (
@@ -94,7 +104,7 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
             </span>
             <span className="flex items-center gap-2">
               <EyeOutlined className="text-indigo-500" />
-              {views || 0} vues
+              {views} vues
             </span>
           </div>
         </motion.div>
