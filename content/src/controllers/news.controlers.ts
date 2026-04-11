@@ -54,6 +54,12 @@ export const createNewsController = async (req: Request, res: Response) => {
 
 export const incrementViewsController = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
+    const { token } = req.cookies;
+
+    if (!token) {
+        res.status(401).json({ message: "Token d'authentification manquant." });
+        return;
+    }
 
     try {
         const updatedNews = await incrementViewsService(id as string);

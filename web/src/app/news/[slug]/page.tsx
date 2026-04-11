@@ -1,14 +1,15 @@
 "use client";
 
-import { use } from "react";
+import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Button, Tag, Divider, Typography, message } from "antd";
 import { ArrowLeftOutlined, CalendarOutlined, EyeOutlined, ClockCircleOutlined, ShareAltOutlined } from "@ant-design/icons";
 import { formatDate } from "@/utils/formatDate";
-import { getUniqueNew } from "@/services/api";
+import { getUniqueNew, increateNewView } from "@/services/api";
 import Loading from "@/app/admin/dashboard/loading";
 import { useAsyncData } from "@/hooks";
+import { number } from "yup";
 
 const { Title, Paragraph } = Typography;
 const BACKEND_URL = "http://localhost:3001";
@@ -17,7 +18,6 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
   const resolvedParams = use(params); 
   const slug = resolvedParams.slug;
   const router = useRouter();
-
   const { data: article, loading, error } = useAsyncData(
     () => getUniqueNew(slug),
     [slug],
@@ -27,6 +27,29 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
       }
     }
   );
+  const [views, setViews] = useState<number>(0);
+
+  useEffect(() => {
+  if (article) {
+    setViews(article.viewsCount);
+  }
+}, [article]);
+
+useEffect(() => {
+  if (!article) return;
+
+  const viewed = sessionStorage.getItem(`viewed-${slug}`);
+
+  if (!viewed) {
+    setViews(article.viewsCount + 1);
+
+    increateNewView(slug).catch(() => {
+      setViews(article.viewsCount); // rollback
+    });
+
+    sessionStorage.setItem(`viewed-${slug}`, "true");
+  }
+}, [article, slug]);
 
   if (loading) return <Loading />;
   if (error) return (
@@ -81,7 +104,7 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
             </span>
             <span className="flex items-center gap-2">
               <EyeOutlined className="text-indigo-500" />
-              {article?.viewsCount || 0} vues
+              {views} vues
             </span>
           </div>
         </motion.div>
