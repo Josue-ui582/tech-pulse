@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { News } from "@/types/news";
+import { News } from "@/types/globalTypes";
 import { formatDate } from "@/utils/formatDate";
 import { increateNewView } from "@/services/api";
 import { ReadMoreIcon } from "../../../../public/icons/readMoreIcon";
@@ -11,41 +10,11 @@ import { useCachedData } from "@/hooks";
 const BACKEND_URL = "http://localhost:3001";
 
 const NewsCard = ({ article }: { article: News }) => {
-  const [expanded, setExpanded] = useState(false);
   const router = useRouter();
-
-  // Cache des vues d'articles (5 minutes)
-  const { data: viewData, refetch: incrementView } = useCachedData(
-    `article-views-${article.id}`,
-    () => increateNewView(article.id),
-    5 * 60 * 1000 // 5 minutes
-  );
-
-  const currentViews = viewData?.viewsCount ?? article.viewsCount;
-
-  const handleExpand = async () => {
-    setExpanded(prev => !prev);
-
-    if (!expanded) {
-      try {
-        const stored = localStorage.getItem("viewed_news");
-        const viewedNews = stored ? JSON.parse(stored) : [];
-
-        if (!viewedNews.includes(article.id)) {
-          await incrementView();
-          viewedNews.push(article.id);
-          localStorage.setItem("viewed_news", JSON.stringify(viewedNews));
-        }
-      } catch (error) {
-        console.error("Erreur gestion des vues :", error);
-      }
-    }
-  };
-
+  
   return (
     <>
       <div 
-        onClick={handleExpand}
         className="relative aspect-16/10 w-full rounded-4xl overflow-hidden mb-6 cursor-pointer group"
       >
         <div className="absolute inset-0 bg-slate-900/5 z-10 group-hover:bg-transparent transition-colors duration-500" />
@@ -91,7 +60,7 @@ const NewsCard = ({ article }: { article: News }) => {
 
         <div className="mt-6 flex items-center gap-4 text-sm">
           <span className="text-gray-500">
-            👁 {currentViews}
+            👁 {article.viewsCount}
           </span>
 
           <button className="flex items-center gap-2 text-indigo-600 font-bold cursor-pointer" onClick={() => router.replace(`/news/${article.id}`)}>

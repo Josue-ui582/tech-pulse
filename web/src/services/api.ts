@@ -176,6 +176,7 @@ export const increateNewView = async (id: string) => {
     const response = await fetch(`${API_URL}/${id}/view`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
     });
 
     if (!response.ok) {
