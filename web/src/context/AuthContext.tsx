@@ -1,11 +1,27 @@
 "use client";
 
-import React, { createContext, useCallback, useEffect, useMemo, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { getUser } from "@/utils/auth";
 import { logOutUser } from "@/services/api";
-import { User } from "@/types/globalTypes";
-import { AuthContextValue } from "@/types/globalTypes";
-import message from "antd/es/message";
+
+export type User = {
+  id: string;
+  name: string;
+  role: string;
+  email?: string;
+  bio?: string;
+  profileImage?: string;
+  [key: string]: any;
+};
+
+export interface AuthContextValue {
+  user: User | null;
+  loading: boolean;
+  isAuthenticated: boolean;
+  refreshUser: () => Promise<void>;
+  logout: () => Promise<void>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+}
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
@@ -31,8 +47,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await logOutUser();
     } catch {
-      // Faire en sorte que l'état local persiste même en cas d'erreur de logout
-        message.error("Erreur lors de la déconnexion, mais vous avez été déconnecté localement.");
+      // Keep the local state consistent even if server logout fails.
     } finally {
       setUser(null);
     }
