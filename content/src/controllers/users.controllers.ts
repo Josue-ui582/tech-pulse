@@ -75,7 +75,7 @@ export const loginUserController = async (req: Request, res: Response) => {
                 httpOnly: true,
                 secure: false, // true en production
                 sameSite: "lax",
-                maxAge: 5 * 60 * 1000
+                maxAge: 5 * 60 * 1000,
             });
 
             return res.status(200).json({

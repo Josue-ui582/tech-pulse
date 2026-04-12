@@ -87,6 +87,7 @@ export const authService = {
   async register(data: any) {
     const response = await fetch(`${API_URL_Auth}/users`, {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
