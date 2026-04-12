@@ -45,3 +45,25 @@ export const verify2FACode = async (id: string, token: string): Promise<boolean>
 
     return isValid;
 }
+
+export const disabled2FAService = async (id: string): Promise<void> => {
+    const user = await prisma.user.findUnique({
+        where: { id },
+        select: { twoFactorSecret: true, isTwoFactorEnabled: true}
+    });
+
+    if (!user || user.twoFactorSecret) {
+        throw new Error("2FA non configuré");
+    }
+
+    if (!user.isTwoFactorEnabled) {
+        throw new Error("2FA non active pour utilisateur");
+    }
+
+    await prisma.user.update({
+        where: { id },
+        data: {
+            isTwoFactorEnabled: false, twoFactorSecret: null
+        }
+    })
+}
