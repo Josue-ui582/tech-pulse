@@ -2,8 +2,9 @@ import 'dotenv/config';
 
 import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { generate2FACode, verify2FACode } from "../services/2fa.service.js";
+import { generate2FACode, verify2FACode, disabled2FAService } from "../services/2fa.service.js";
 import { prisma } from '../lib/pisma.js';
+import { success } from 'zod';
 
 const JWT_SECRET = process.env.JWT_SECRET_SECRET as string;
 
@@ -25,8 +26,6 @@ export const generateQRCode = async (req: Request, res: Response) => {
 export const verifyQRCode = async (req: Request, res: Response) => {
     const userId = req.cookies.temp_user_id;
     const { code } = req.body;
-    console.log("userId:", userId);
-    console.log("code:", code);
 
     if (!userId) {
         return res.status(400).json({ message: "Session expirée ou code manquant." });
@@ -60,5 +59,26 @@ export const verifyQRCode = async (req: Request, res: Response) => {
         }
     } catch (err) {
         res.status(400).json({ message: err instanceof Error ? err.message : "Erreur lors de la vérification du code 2FA." });
+    }
+}
+
+export const desabled2FAController = async (req: Request, res: Response) => {
+    const userId = req.user?.id;
+
+    if (!userId) {
+        throw new Error("Session expirée ou non autorisée.");
+    }
+
+    try {
+        await disabled2FAService(userId);
+        return res.status(200).json({
+            success: true,
+            message : "2FA désactivé avec succès "
+        })
+    } catch (error: any) {
+        return res.status(400).json({
+        success: false,
+        message: error.message || "Erreur lors de la désactivation du 2FA",
+    });
     }
 }
