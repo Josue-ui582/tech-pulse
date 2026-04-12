@@ -23,11 +23,17 @@ export default function AuthPage() {
     try {
       if (isLogin) {
         if (show2FA) {
-          const codeString = values.twoFactorCode?.toString() || "";
-          const result = await verify2FA(codeString);
-          if (result?.error) {
+          if (!values.twoFactorCode) {
+            throw new Error("Code 2FA requis");
+          }
+
+          const verify = await verify2FA(values.twoFactorCode.toString());
+
+          if (verify?.error) {
             throw new Error("Code 2FA invalide");
           }
+
+          await refreshUser();
           message.success("Connexion réussie !");
           router.replace("/admin/dashboard");
           return;
@@ -35,6 +41,7 @@ export default function AuthPage() {
 
         const cleanedValues = await loginSchema.validate(values, { abortEarly: false });
         const result = await authService.login(cleanedValues);
+
         if (result?.error) {
           throw new Error("Identifiants invalides");
         }
@@ -44,16 +51,10 @@ export default function AuthPage() {
           message.info("Veuillez entrer votre code 2FA");
         } else {
           await refreshUser();
-          const path = result.user.role === "admin" ? "/admin/dashboard" : "/news";
+          form.resetFields();
           message.success("Connexion réussie !");
-          router.replace(path);
+          router.replace(result.user.role === "admin" ? "/admin/dashboard" : "/news");
         }
-      } else {
-        const cleanedValues = await registerSchema.validate(values, { abortEarly: false });
-        await authService.register(cleanedValues);
-        message.success("Compte créé ! Connectez-vous.");
-        setIsLogin(true);
-        form.resetFields();
       }
     } catch (error: any) {
       message.error(error.message || "Une erreur est survenue");
