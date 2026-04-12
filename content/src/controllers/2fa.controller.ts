@@ -25,9 +25,15 @@ export const generateQRCode = async (req: Request, res: Response) => {
 export const verifyQRCode = async (req: Request, res: Response) => {
     const userId = req.cookies.temp_user_id;
     const { code } = req.body;
+    console.log("userId:", userId);
+    console.log("code:", code);
 
-    if (!userId || !code) {
+    if (!userId) {
         return res.status(400).json({ message: "Session expirée ou code manquant." });
+    }
+
+    if (!code) {
+        return res.status(400).json({ message: "Code non envoyé."})
     }
 
     try {

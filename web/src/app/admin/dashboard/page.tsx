@@ -32,7 +32,6 @@ export default function NewsAdminPage() {
 
   useEffect(() => {
     if (loading) return;
-    console.log("User in dashboard:", user);
     if (!user) {
       router.replace("/auth");
       return;
