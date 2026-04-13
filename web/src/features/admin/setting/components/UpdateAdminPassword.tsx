@@ -2,9 +2,10 @@ import { motion } from "framer-motion"
 import { Typography, Form, Input, Button, Divider, message } from "antd"
 import { SettingsPasswordFormValues } from "@/types/globalTypes"
 import { updatePassword } from "@/schema/updatePasswordFormSchema"
-import { generate2FA, updateAdminPasswordSettings, verify2FA } from "@/services/api"
+import { desabled2FA, generate2FA, updateAdminPasswordSettings, verify2FA } from "@/services/api"
 import Loading from "@/app/admin/dashboard/loading"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useAuth } from "@/hooks/useAuth"
 
 type UpdateAdminPasswordSettingsProps = {
     loading: boolean;
@@ -18,6 +19,14 @@ export const UpdateAdminPasswordSettings = ({ loading, setLoading }: UpdateAdmin
     const [faForm] = Form.useForm()
     const [qrCode, setQrCode] = useState<string | null>(null);
     const [show2FA, setShow2FA] = useState(false);
+    const [isAuthenticateActive, setIsAuthenticateActive] = useState(false);
+    const { user } = useAuth();
+
+    useEffect(() => {
+      if (user) {
+        setIsAuthenticateActive(user.isTwoFactorEnabled);
+      }
+    }, [user]);
 
     const onPasswordFinish = async (values: SettingsPasswordFormValues) => {
         setLoading(true);
@@ -60,6 +69,7 @@ export const UpdateAdminPasswordSettings = ({ loading, setLoading }: UpdateAdmin
             await verify2FA(values.verificationCode);
             message.success("2FA activée avec succès !");
             setShow2FA(false);
+            setIsAuthenticateActive(true)
             faForm.resetFields();
         } catch (err) {
             message.error("Code de vérification invalide");
@@ -67,6 +77,19 @@ export const UpdateAdminPasswordSettings = ({ loading, setLoading }: UpdateAdmin
             setLoading(false);
         }
     };
+
+    const handeDisabled2FA = async () => {
+      setLoading(true);
+      try {
+        await desabled2FA()
+        message.success("2FA désactivé avec succès");
+        setIsAuthenticateActive(false);
+      } catch (err: any) {
+        message.error(err.message || "Erreur lors de la désactivation du 2FA");
+      } finally {
+        setLoading(false);
+      }
+    }
 
     
     return (
@@ -95,8 +118,9 @@ export const UpdateAdminPasswordSettings = ({ loading, setLoading }: UpdateAdmin
                 className="rounded-lg" 
                 onClick={handleGenerate2FA}
                 loading={loading}
+                disabled={isAuthenticateActive}
               >
-                Activer maintenant
+                Activé mainteant
                     </Button>
                 </div>
             ) : (
@@ -128,6 +152,11 @@ export const UpdateAdminPasswordSettings = ({ loading, setLoading }: UpdateAdmin
                         </div>
                     </Form>
                 </motion.div>
+            )}
+            {isAuthenticateActive && (
+              <Button onClick={handeDisabled2FA} danger loading={loading}>
+                Désactivé le 2FA
+              </Button>
             )}
         </motion.div>
     );
