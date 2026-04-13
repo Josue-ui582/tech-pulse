@@ -6,6 +6,7 @@ const API_URL_Auth = "http://localhost:3001/api"
 const API_URL_Contact = "http://localhost:3001/api/contact"
 const API_URL_Generate2FA = "http://localhost:3001/api/2fa/generate"
 const API_URL_Verify2FA = "http://localhost:3001/api/2fa/verify"
+const API_URL_Desabled2FA = "http://localhost:3001/api/2fa/desabled"
 
 
 export const getNews = async (category?: Category, search?: string) => {
@@ -312,3 +313,18 @@ export const verify2FA = async (code: string) => {
     throw new Error("Une erreur inconnue est survenue lors de la vérification du code 2FA");
   }
 };
+
+export const desabled2FA = async () => {
+  try {
+    const response = await fetch(`${API_URL_Desabled2FA}`, {
+      method: "POST",
+      credentials: "include",
+    })
+
+    if (!response.ok) {
+      throw new Error("Erreur lors de la désactivation de 2FA")
+    }
+  } catch (error: any) {
+    throw new Error(error.message || "Erreur réseau")
+  }
+}

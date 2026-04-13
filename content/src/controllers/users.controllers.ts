@@ -75,7 +75,7 @@ export const loginUserController = async (req: Request, res: Response) => {
                 httpOnly: true,
                 secure: false, // true en production
                 sameSite: "lax",
-                maxAge: 5 * 60 * 1000,
+                maxAge: 60 * 60 * 1000,
             });
 
             return res.status(200).json({
@@ -103,7 +103,8 @@ export const loginUserController = async (req: Request, res: Response) => {
             user: {
                 id: user.id,
                 name: user.name,
-                role: user.role
+                role: user.role,
+                isTwoFactorEnabled: user.isTwoFactorEnabled
             }
         });
     } catch (error) {
@@ -145,7 +146,8 @@ export const meController = async (req: Request, res: Response) => {
                 email: user.email,
                 role: user.role,
                 profileImage: user.profileImage,
-                bio: user.bio
+                bio: user.bio,
+                isTwoFactorEnabled: user.isTwoFactorEnabled
             }
         });
 

@@ -4,7 +4,6 @@ import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { generate2FACode, verify2FACode, disabled2FAService } from "../services/2fa.service.js";
 import { prisma } from '../lib/pisma.js';
-import { success } from 'zod';
 
 const JWT_SECRET = process.env.JWT_SECRET_SECRET as string;
 
@@ -24,11 +23,20 @@ export const generateQRCode = async (req: Request, res: Response) => {
 }
 
 export const verifyQRCode = async (req: Request, res: Response) => {
-    const userId = req.cookies.temp_user_id;
+    let userId = req.cookies.temp_user_id;
     const { code } = req.body;
 
+    if (!userId && req.cookies.token) {
+        try {
+            const decoded: any = jwt.verify(req.cookies.token, JWT_SECRET);
+            userId = decoded.id;
+        } catch (err) {
+            
+        }
+    }
+
     if (!userId) {
-        return res.status(400).json({ message: "Session expirée ou code manquant." });
+        return res.status(400).json({ message: "Session expirée ou utilisateur non identifié." });
     }
 
     if (!code) {
@@ -63,10 +71,19 @@ export const verifyQRCode = async (req: Request, res: Response) => {
 }
 
 export const desabled2FAController = async (req: Request, res: Response) => {
-    const userId = req.user?.id;
+    let userId = req.cookies.temp_user_id;
+
+    if (!userId && req.cookies.token) {
+        try {
+            const decoded: any = jwt.verify(req.cookies.token, JWT_SECRET);
+            userId = decoded.id;
+        } catch (err) {
+            
+        }
+    }
 
     if (!userId) {
-        throw new Error("Session expirée ou non autorisée.");
+        return res.status(400).json({ message: "Session expirée ou non autorisé." });
     }
 
     try {

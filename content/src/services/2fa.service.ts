@@ -52,7 +52,7 @@ export const disabled2FAService = async (id: string): Promise<void> => {
         select: { twoFactorSecret: true, isTwoFactorEnabled: true}
     });
 
-    if (!user || user.twoFactorSecret) {
+    if (!user || !user.twoFactorSecret) {
         throw new Error("2FA non configuré");
     }
 
@@ -63,7 +63,8 @@ export const disabled2FAService = async (id: string): Promise<void> => {
     await prisma.user.update({
         where: { id },
         data: {
-            isTwoFactorEnabled: false, twoFactorSecret: null
+            isTwoFactorEnabled: false, 
+            twoFactorSecret: null
         }
     })
 }
