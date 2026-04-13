@@ -1,3 +1,5 @@
+"use client";
+
 import { BellOutlined, DashboardOutlined, LogoutOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { Badge, Layout, Menu } from "antd";
 import { useRouter, usePathname } from "next/navigation";
