@@ -11,7 +11,7 @@ const { Title, Paragraph, Text } = Typography;
 export default function ContactPage() {
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] py-16 px-6">
+    <div className="min-h-screen py-16 px-6">
       <Navbar />
       <div className="max-w-6xl mx-auto">
         
@@ -20,7 +20,7 @@ export default function ContactPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <Title className="font-black! text-4xl! md:text-6xl! text-slate-900! mb-4">
+          <Title className="font-black! text-4xl! md:text-6xl! mb-4">
             Contactez <span className="text-blue-600">l'équipe</span>
           </Title>
           <Paragraph className="text-slate-500 text-lg max-w-2xl mx-auto">
