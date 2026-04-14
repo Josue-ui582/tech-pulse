@@ -16,16 +16,15 @@ export default function HomePage() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen bg-white"
     >
       <Navbar />
       <main>
         <Hero />
-        <section id="news" className="py-20 bg-[#fafafa]">
+        <section id="news" className="py-20 ">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex items-end justify-between mb-12">
               <div>
-                <h2 className="text-3xl font-bold text-slate-900 mb-4">Dernières pépites</h2>
+                <h2 className="text-3xl font-bold dark:text-gray-500 mb-4">Dernières pépites</h2>
                 <p className="text-slate-500">Les articles qui font vibrer l'écosystème en ce moment.</p>
               </div>
               <button className="hidden sm:block text-indigo-600 font-semibold hover:underline">
@@ -46,7 +45,7 @@ export default function HomePage() {
               }}
               className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {featuredNews.map((item) => (
-                <div key={item.id} className="group bg-white p-3 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-100/50 transition-all duration-500">
+                <div key={item.id} className="group p-3 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-100/50 transition-all duration-500">
   
                 <div className="relative aspect-16/10 w-full rounded-4xl overflow-hidden mb-6">
                   <div className="absolute inset-0 bg-slate-900/5 z-10 group-hover:bg-transparent transition-colors duration-500" />
@@ -60,7 +59,7 @@ export default function HomePage() {
                   />
                   
                   <div className="absolute top-4 left-4 z-20">
-                    <span className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold text-slate-900 uppercase tracking-widest shadow-sm">
+                    <span className="px-3 py-1 rounded-full backdrop-blur-md text-[10px] font-bold text-slate-900 uppercase tracking-widest shadow-sm">
                       {item.category}
                     </span>
                   </div>
@@ -78,7 +77,7 @@ export default function HomePage() {
                     <span>5 min de lecture</span>
                   </div>
                   
-                  <h3 className="text-xl font-bold text-slate-900 leading-snug group-hover:text-indigo-600 transition-colors duration-300">
+                  <h3 className="text-xl font-bold leading-snug group-hover:text-indigo-600 transition-colors duration-300">
                     {item.title}
                   </h3>
                   
