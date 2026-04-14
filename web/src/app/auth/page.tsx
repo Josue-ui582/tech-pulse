@@ -16,6 +16,7 @@ export default function AuthPage() {
   const [show2FA, setShow2FA] = useState(false);
   const [form] = Form.useForm();
   const router = useRouter();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const onFinish = async (values: AuthForm) => {
     if(loading) return;
@@ -34,7 +35,7 @@ export default function AuthPage() {
           }
 
           await refreshUser();
-          message.success("Connexion réussie !");
+          messageApi.success("Connexion réussie !");
           router.replace("/admin/dashboard");
           return;
         }
@@ -48,11 +49,11 @@ export default function AuthPage() {
 
         if (result.requires2FA) {
           setShow2FA(true);
-          message.info("Veuillez entrer votre code 2FA");
+          messageApi.info("Veuillez entrer votre code 2FA");
         } else {
           await refreshUser();
           form.resetFields();
-          message.success("Connexion réussie !");
+          messageApi.success("Connexion réussie !");
           router.replace(result.user.role === "admin" ? "/admin/dashboard" : "/news");
         }
       }
@@ -73,7 +74,8 @@ export default function AuthPage() {
       </div>
 
       <Divider plain className="text-gray-300 text-[10px] uppercase font-bold tracking-widest">Ou par email</Divider>
-
+      
+      {contextHolder}
       <Form form={form} layout="vertical" onFinish={onFinish} requiredMark={false}>
         {show2FA ? (
           <div className="animate-in fade-in duration-500">

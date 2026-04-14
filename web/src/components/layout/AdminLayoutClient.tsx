@@ -1,12 +1,13 @@
 "use client";
 
-import { BellOutlined, DashboardOutlined, LogoutOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
+import { BellOutlined, DashboardOutlined, LogoutOutlined, MoonOutlined, SettingOutlined, SunOutlined, UserOutlined } from "@ant-design/icons";
 import { Badge, Layout, Menu } from "antd";
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Loading from "@/app/admin/dashboard/loading";
 import AdminAvatar from "@/components/layout/Avatar";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "next-themes";
 
 const { Header, Content, Sider } = Layout;
 
@@ -16,6 +17,10 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
   const router = useRouter();
   const pathname = usePathname();
   const { user, loading, logout } = useAuth();
+  const { setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (loading) return;
@@ -43,6 +48,8 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
   if (loading) {
     return <Loading />;
   }
+
+  if (!mounted) return null; 
 
   return (
     <Layout className="min-h-screen bg-[#F8FAFC]">
@@ -89,12 +96,23 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
           </div>
 
           <div className="flex items-center gap-5">
-            <Badge dot color="blue">
-              <BellOutlined className="text-xl cursor-pointer text-gray-400 hover:text-blue-600 transition-colors" />
-            </Badge>
-            <div
-              className="flex items-center gap-3 p-1 pr-3 bg-gray-50 rounded-full cursor-pointer hover:bg-gray-100 transition-all border border-gray-100"
-            >
+                <button 
+                    onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+                    className="flex items-center justify-center w-9 h-9 rounded-xl border border-gray-200 dark:border-slate-700 transition-all cursor-pointer"
+                >
+                    {resolvedTheme === 'dark' ? (
+                    <div className="text-white"><SunOutlined /></div>
+                    ) : (
+                    <div className="text-white"><MoonOutlined /></div>
+                    )}
+                </button>
+
+                <Badge dot>
+                    <div className="text-white">
+                      <BellOutlined />
+                    </div>
+                </Badge>
+            <div className="flex items-center gap-3 p-1 pr-3 dark:bg-slate-800 rounded-full cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700 transition-all">
               <AdminAvatar user={user} />
             </div>
           </div>

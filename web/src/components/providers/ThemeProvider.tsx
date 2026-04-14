@@ -3,6 +3,7 @@
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import { ConfigProvider, theme } from "antd";
 import { useEffect, useState } from "react";
+import { App } from "antd";
 
 function AntdConfig({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useTheme();
@@ -21,7 +22,9 @@ function AntdConfig({ children }: { children: React.ReactNode }) {
         },
       }}
     >
-      {children}
+      <App>
+        {children}
+      </App>
     </ConfigProvider>
   );
 }
