@@ -3,3 +3,7 @@
 @theme {
   --color-primary: #2563eb;
 }
+
+:root {
+  color-scheme: light dark;
+}

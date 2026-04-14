@@ -24,7 +24,7 @@ export const SearchCategory = () => {
     return "bg-transparent text-slate-500 hover:bg-slate-100 border-transparent";
   };
     return (
-        <div className="inline-flex items-center p-1.5 bg-slate-50 border border-slate-200 rounded-2xl gap-1">
+        <div className="inline-flex items-center p-1.5 border border-slate-200 rounded-2xl gap-1">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 hidden sm:block">
                 Catégorie
             </span>

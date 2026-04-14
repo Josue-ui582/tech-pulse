@@ -138,7 +138,9 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
             </button>
           ))}
           <button
-            onClick={() => (localStorage.removeItem("user"), localStorage.removeItem("token"), router.replace("/auth"))}
+            onClick={
+              async () => (await logout(),
+              router.replace("/auth"))}
             className="flex flex-col items-center gap-1 text-red-400"
           >
             <LogoutOutlined className="text-xl" />
