@@ -50,7 +50,7 @@ const NewsCard = ({ article }: { article: News }) => {
           <span>5 min de lecture</span>
         </div>
 
-        <h3 className="text-xl font-bold text-slate-900 leading-snug group-hover:text-indigo-600 transition-colors duration-300">
+        <h3 className="text-xl font-bold leading-snug group-hover:text-indigo-600 transition-colors duration-300">
           {article.title}
         </h3>
 
