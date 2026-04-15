@@ -9,3 +9,14 @@ export const addCommentService = async (newId: string, comment: string) => {
         }
     })
 }
+
+export const updateCommentService = async (commentId: string, newContent: string) => {
+    return await prisma.comments.update({
+        where: { 
+            id: commentId 
+        },
+        data: {
+            content: newContent
+        }
+    })
+}
