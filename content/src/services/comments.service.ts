@@ -56,3 +56,10 @@ export const deleteCommentService = async (commentId: string, userId: string) =>
          }
     })
 }
+
+export const getCommentsByNewsService = async (newsId: string) => {
+    return await prisma.comments.findMany({
+        where: { newsId: newsId },
+        orderBy: { createdAt: 'desc' }
+    });
+};

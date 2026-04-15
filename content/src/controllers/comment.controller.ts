@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 import type { Request, Response } from "express";
-import { addCommentService, deleteCommentService, updateCommentService } from "../services/comments.service.js";
+import { addCommentService, deleteCommentService, getCommentsByNewsService, updateCommentService } from "../services/comments.service.js";
 import jwt from "jsonwebtoken"
 
 const JWT_SECRET = process.env.JWT_SECRET_SECRET as string;
@@ -96,3 +96,16 @@ export const deleteCommentController = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const getCommentsController = async (req: Request, res: Response) => {
+    const { newId } = req.query;
+    try {
+        const comments = await getCommentsByNewsService(newId as string);
+        return res.status(200).json({
+            message: "Commentaire récupérer avec succès",
+            data: comments
+        });
+    } catch (error: any) {
+        return res.status(500).json({ message: error.message });
+    }
+};

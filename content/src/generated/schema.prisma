@@ -25,7 +25,7 @@ model Comments {
   content   String
   createdAt DateTime @default(now())
   authorId  String
-  news      News     @relation(fields: [newsId], references: [id])
+  news      News     @relation(fields: [newsId], references: [id], onDelete: Cascade)
   newsId    String
 }
 
