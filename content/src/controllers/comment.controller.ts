@@ -1,5 +1,10 @@
+import 'dotenv/config';
+
 import type { Request, Response } from "express";
 import { addCommentService, deleteCommentService, updateCommentService } from "../services/comments.service.js";
+import jwt from "jsonwebtoken"
+
+const JWT_SECRET = process.env.JWT_SECRET_SECRET as string;
 
 export const addCommentController = async (req: Request, res: Response) => {
     const { token } = req.cookies;
@@ -15,7 +20,10 @@ export const addCommentController = async (req: Request, res: Response) => {
     }
 
     try {
-        const reponse = await addCommentService(newId as string, comment);
+        const decoded = jwt.verify(token, JWT_SECRET) as {id: string, role: string}
+        const userId = decoded.id;
+
+        const reponse = await addCommentService(newId as string, comment, userId as string);
 
         return res.status(201).json({
             message: "Commentaire ajouté avec succès",
@@ -44,7 +52,10 @@ export const updateCommentController = async (req: Request, res: Response) => {
     }
 
     try {
-        const response = await updateCommentService(commentId as string, comment);
+        const decoded = jwt.verify(token, JWT_SECRET) as {id: string, role: string}
+        const userId = decoded.id;
+
+        const response = await updateCommentService(commentId as string, comment, userId as string);
 
         return res.status(200).json({
             message: "Commentaire mis à jour",
@@ -71,14 +82,17 @@ export const deleteCommentController = async (req: Request, res: Response) => {
     }
 
     try {
-        await deleteCommentService(commentId as string);
+        const decoded = jwt.verify(token, JWT_SECRET) as {id: string, role: string}
+        const userId = decoded.id;
+
+        await deleteCommentService(commentId as string, userId as string);
         return res.status(200).json({
             message: "Commentaire supprimé avec succès"
         })
     } catch (error: any) {
         return res.status(500).json({
             message: "Erreur lors de la suppression du commentaire",
-            error: error.message 
+            error: error.message
         });
     }
 }

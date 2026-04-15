@@ -136,6 +136,7 @@ exports.Prisma.CommentsScalarFieldEnum = {
   id: 'id',
   content: 'content',
   createdAt: 'createdAt',
+  authorId: 'authorId',
   newsId: 'newsId'
 };
 

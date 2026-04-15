@@ -24,6 +24,7 @@ model Comments {
   id        String   @id @default(uuid())
   content   String
   createdAt DateTime @default(now())
+  authorId  String
   news      News     @relation(fields: [newsId], references: [id])
   newsId    String
 }

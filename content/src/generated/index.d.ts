@@ -2382,6 +2382,7 @@ export namespace Prisma {
     id: string | null
     content: string | null
     createdAt: Date | null
+    authorId: string | null
     newsId: string | null
   }
 
@@ -2389,6 +2390,7 @@ export namespace Prisma {
     id: string | null
     content: string | null
     createdAt: Date | null
+    authorId: string | null
     newsId: string | null
   }
 
@@ -2396,6 +2398,7 @@ export namespace Prisma {
     id: number
     content: number
     createdAt: number
+    authorId: number
     newsId: number
     _all: number
   }
@@ -2405,6 +2408,7 @@ export namespace Prisma {
     id?: true
     content?: true
     createdAt?: true
+    authorId?: true
     newsId?: true
   }
 
@@ -2412,6 +2416,7 @@ export namespace Prisma {
     id?: true
     content?: true
     createdAt?: true
+    authorId?: true
     newsId?: true
   }
 
@@ -2419,6 +2424,7 @@ export namespace Prisma {
     id?: true
     content?: true
     createdAt?: true
+    authorId?: true
     newsId?: true
     _all?: true
   }
@@ -2499,6 +2505,7 @@ export namespace Prisma {
     id: string
     content: string
     createdAt: Date
+    authorId: string
     newsId: string
     _count: CommentsCountAggregateOutputType | null
     _min: CommentsMinAggregateOutputType | null
@@ -2523,6 +2530,7 @@ export namespace Prisma {
     id?: boolean
     content?: boolean
     createdAt?: boolean
+    authorId?: boolean
     newsId?: boolean
     news?: boolean | NewsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["comments"]>
@@ -2531,6 +2539,7 @@ export namespace Prisma {
     id?: boolean
     content?: boolean
     createdAt?: boolean
+    authorId?: boolean
     newsId?: boolean
     news?: boolean | NewsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["comments"]>
@@ -2539,6 +2548,7 @@ export namespace Prisma {
     id?: boolean
     content?: boolean
     createdAt?: boolean
+    authorId?: boolean
     newsId?: boolean
     news?: boolean | NewsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["comments"]>
@@ -2547,10 +2557,11 @@ export namespace Prisma {
     id?: boolean
     content?: boolean
     createdAt?: boolean
+    authorId?: boolean
     newsId?: boolean
   }
 
-  export type CommentsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "createdAt" | "newsId", ExtArgs["result"]["comments"]>
+  export type CommentsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "createdAt" | "authorId" | "newsId", ExtArgs["result"]["comments"]>
   export type CommentsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     news?: boolean | NewsDefaultArgs<ExtArgs>
   }
@@ -2570,6 +2581,7 @@ export namespace Prisma {
       id: string
       content: string
       createdAt: Date
+      authorId: string
       newsId: string
     }, ExtArgs["result"]["comments"]>
     composites: {}
@@ -2998,6 +3010,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Comments", 'String'>
     readonly content: FieldRef<"Comments", 'String'>
     readonly createdAt: FieldRef<"Comments", 'DateTime'>
+    readonly authorId: FieldRef<"Comments", 'String'>
     readonly newsId: FieldRef<"Comments", 'String'>
   }
     
@@ -5529,6 +5542,7 @@ export namespace Prisma {
     id: 'id',
     content: 'content',
     createdAt: 'createdAt',
+    authorId: 'authorId',
     newsId: 'newsId'
   };
 
@@ -5770,6 +5784,7 @@ export namespace Prisma {
     id?: StringFilter<"Comments"> | string
     content?: StringFilter<"Comments"> | string
     createdAt?: DateTimeFilter<"Comments"> | Date | string
+    authorId?: StringFilter<"Comments"> | string
     newsId?: StringFilter<"Comments"> | string
     news?: XOR<NewsScalarRelationFilter, NewsWhereInput>
   }
@@ -5778,6 +5793,7 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    authorId?: SortOrder
     newsId?: SortOrder
     news?: NewsOrderByWithRelationInput
   }
@@ -5789,6 +5805,7 @@ export namespace Prisma {
     NOT?: CommentsWhereInput | CommentsWhereInput[]
     content?: StringFilter<"Comments"> | string
     createdAt?: DateTimeFilter<"Comments"> | Date | string
+    authorId?: StringFilter<"Comments"> | string
     newsId?: StringFilter<"Comments"> | string
     news?: XOR<NewsScalarRelationFilter, NewsWhereInput>
   }, "id">
@@ -5797,6 +5814,7 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    authorId?: SortOrder
     newsId?: SortOrder
     _count?: CommentsCountOrderByAggregateInput
     _max?: CommentsMaxOrderByAggregateInput
@@ -5810,6 +5828,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Comments"> | string
     content?: StringWithAggregatesFilter<"Comments"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Comments"> | Date | string
+    authorId?: StringWithAggregatesFilter<"Comments"> | string
     newsId?: StringWithAggregatesFilter<"Comments"> | string
   }
 
@@ -6039,6 +6058,7 @@ export namespace Prisma {
     id?: string
     content: string
     createdAt?: Date | string
+    authorId: string
     news: NewsCreateNestedOneWithoutCommentInput
   }
 
@@ -6046,6 +6066,7 @@ export namespace Prisma {
     id?: string
     content: string
     createdAt?: Date | string
+    authorId: string
     newsId: string
   }
 
@@ -6053,6 +6074,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    authorId?: StringFieldUpdateOperationsInput | string
     news?: NewsUpdateOneRequiredWithoutCommentNestedInput
   }
 
@@ -6060,6 +6082,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    authorId?: StringFieldUpdateOperationsInput | string
     newsId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -6067,6 +6090,7 @@ export namespace Prisma {
     id?: string
     content: string
     createdAt?: Date | string
+    authorId: string
     newsId: string
   }
 
@@ -6074,12 +6098,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    authorId?: StringFieldUpdateOperationsInput | string
   }
 
   export type CommentsUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    authorId?: StringFieldUpdateOperationsInput | string
     newsId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -6444,6 +6470,7 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    authorId?: SortOrder
     newsId?: SortOrder
   }
 
@@ -6451,6 +6478,7 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    authorId?: SortOrder
     newsId?: SortOrder
   }
 
@@ -6458,6 +6486,7 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    authorId?: SortOrder
     newsId?: SortOrder
   }
 
@@ -6832,12 +6861,14 @@ export namespace Prisma {
     id?: string
     content: string
     createdAt?: Date | string
+    authorId: string
   }
 
   export type CommentsUncheckedCreateWithoutNewsInput = {
     id?: string
     content: string
     createdAt?: Date | string
+    authorId: string
   }
 
   export type CommentsCreateOrConnectWithoutNewsInput = {
@@ -6873,6 +6904,7 @@ export namespace Prisma {
     id?: StringFilter<"Comments"> | string
     content?: StringFilter<"Comments"> | string
     createdAt?: DateTimeFilter<"Comments"> | Date | string
+    authorId?: StringFilter<"Comments"> | string
     newsId?: StringFilter<"Comments"> | string
   }
 
@@ -6944,24 +6976,28 @@ export namespace Prisma {
     id?: string
     content: string
     createdAt?: Date | string
+    authorId: string
   }
 
   export type CommentsUpdateWithoutNewsInput = {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    authorId?: StringFieldUpdateOperationsInput | string
   }
 
   export type CommentsUncheckedUpdateWithoutNewsInput = {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    authorId?: StringFieldUpdateOperationsInput | string
   }
 
   export type CommentsUncheckedUpdateManyWithoutNewsInput = {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    authorId?: StringFieldUpdateOperationsInput | string
   }
 
 
