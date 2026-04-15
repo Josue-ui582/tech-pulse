@@ -14,7 +14,19 @@ model News {
   category    Category
   imageUrl    String?
   viewsCount  Int      @default(0)
+  comment    Comments[]
+  like        Int      @default(0)
+  Unlike      Int      @default(0)
   publishedAt DateTime @default(now())
+}
+
+model Comments {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  authorId  String
+  news      News     @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  newsId    String
 }
 
 enum Category {
