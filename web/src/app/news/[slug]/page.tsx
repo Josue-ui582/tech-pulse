@@ -4,13 +4,14 @@ import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Button, Tag, Divider, Typography, message } from "antd";
-import { ArrowLeftOutlined, CalendarOutlined, EyeOutlined, ClockCircleOutlined, ShareAltOutlined } from "@ant-design/icons";
-import { formatDate } from "@/utils/formatDate";
 import { getUniqueNew, increateNewView } from "@/services/api";
 import Loading from "@/app/admin/dashboard/loading";
 import { useAsyncData } from "@/hooks";
+import NewNav from "@/features/news/layout/NewNav";
+import NewsHeader from "@/features/news/layout/NewsHeader";
+import NewsFooter from "@/features/news/layout/NewsFooter";
 
-const { Title, Paragraph } = Typography;
+const { Paragraph } = Typography;
 const BACKEND_URL = "http://localhost:3001";
 
 export default function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -27,9 +28,6 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
     }
   );
   const [views, setViews] = useState<number>(0);
-  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
-  const encodedUrl = encodeURIComponent(shareUrl);
-  const encodedTitle = encodeURIComponent(article?.title || "");
 
   useEffect(() => {
   if (article) {
@@ -53,27 +51,6 @@ useEffect(() => {
   }
 }, [article, slug]);
 
-const handleSearch = async () => {
-  if(!article) return;
-
-  const searData = {
-    title: article.title,
-    texte: article.description,
-    url: window.location.href
-  };
-
-  try {
-    if (navigator.share) {
-      await navigator.share(searData)
-    }else {
-      await navigator.clipboard.writeText(searData.url);
-      message.success("Lien copié dans le presse-papier !")
-    }
-  } catch (error) {
-    message.error("Imposible de partager l'article pour le moment")
-  }
-}
-
   if (loading) return <Loading />;
   if (error) return (
     <div className="h-screen flex flex-col items-center justify-center">
@@ -91,47 +68,9 @@ const handleSearch = async () => {
       transition={{ duration: 0.5 }}
       className="max-w-4xl mx-auto px-4 py-12"
     >
-      <nav className="mb-8 flex justify-between items-center">
-        <Button 
-          type="text" 
-          icon={<ArrowLeftOutlined />} 
-          onClick={() => router.push("/news")}
-          className="flex items-center text-slate-500 hover:text-indigo-600 font-medium"
-        >
-          Retour aux actualités
-        </Button>
-        <Button shape="circle" icon={<ShareAltOutlined />} onClick={handleSearch} />
-      </nav>
+      <NewNav slug={slug} />
 
-      <header className="mb-10 text-center md:text-left">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Tag color="blue" className="mb-4 uppercase tracking-widest font-bold px-3 py-1 rounded-full border-none bg-indigo-50 text-indigo-600">
-            {article?.category || "Actualité"}
-          </Tag>
-          <Title level={1} className="text-4xl md:!text-5xl! font-black text-slate-900 leading-tight mb-6">
-            {article?.title || "Titre de l'article en cours de chargement"}
-          </Title>
-
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-slate-400 text-sm">
-            <span className="flex items-center gap-2">
-              <CalendarOutlined className="text-indigo-500" />
-              {article ? formatDate(article.publishedAt) : "--/--/----"}
-            </span>
-            <span className="flex items-center gap-2">
-              <ClockCircleOutlined className="text-indigo-500" />
-              5 min de lecture
-            </span>
-            <span className="flex items-center gap-2">
-              <EyeOutlined className="text-indigo-500" />
-              {views} vues
-            </span>
-          </div>
-        </motion.div>
-      </header>
+      <NewsHeader slug={slug} views={views} />
 
       <motion.div 
         initial={{ scale: 0.95, opacity: 0 }}
@@ -154,39 +93,7 @@ const handleSearch = async () => {
         <Divider />
       </article>
 
-      <footer className="mt-16 pt-8 border-t border-slate-100 flex flex-col items-center">
-        <h4 className="text-slate-900 font-bold mb-4">Partagez cet article</h4>
-        <div className="flex gap-4">
-           <Button
-            type="primary"
-            shape="round"
-            className="bg-indigo-600"
-            onClick={() =>
-              window.open(`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`, "_blank")
-            }
-          >
-            Twitter
-          </Button>
-
-          <Button
-            shape="round"
-            onClick={() =>
-              window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`, "_blank")
-            }
-          >
-            LinkedIn
-          </Button>
-
-          <Button
-            shape="round"
-            onClick={() =>
-              window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, "_blank")
-            }
-          >
-            Facebook
-          </Button>
-        </div>
-      </footer>
+      <NewsFooter slug={slug} />
     </motion.main>
   );
 }
