@@ -14,10 +14,18 @@ model News {
   category    Category
   imageUrl    String?
   viewsCount  Int      @default(0)
-  comments    String?
+  comment    Comments[]
   like        Int      @default(0)
   Unlike      Int      @default(0)
   publishedAt DateTime @default(now())
+}
+
+model Comments {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  news      News     @relation(fields: [newsId], references: [id])
+  newsId    String
 }
 
 enum Category {
