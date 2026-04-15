@@ -4,12 +4,13 @@ import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Button, Tag, Divider, Typography, message } from "antd";
-import { getUniqueNew, increateNewView } from "@/services/api";
+import { getUniqueNew, increateNewView } from "@/services/api.news";
 import Loading from "@/app/admin/dashboard/loading";
 import { useAsyncData } from "@/hooks";
 import NewNav from "@/features/news/layout/NewNav";
 import NewsHeader from "@/features/news/layout/NewsHeader";
 import NewsFooter from "@/features/news/layout/NewsFooter";
+import NewsComments from "@/features/news/layout/NewsComment";
 
 const { Paragraph } = Typography;
 const BACKEND_URL = "http://localhost:3001";
@@ -92,6 +93,7 @@ useEffect(() => {
         
         <Divider />
       </article>
+      <NewsComments slug={slug} />
 
       <NewsFooter slug={slug} />
     </motion.main>

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import Loading from "@/app/admin/dashboard/loading"
 import { useAuth } from "@/hooks/useAuth"
 import { SettingsProfileFormValues } from "@/types/globalTypes"
-import { updateAdminProfileSettings } from "@/services/api"
+import { updateAdminProfileSettings } from "@/services/api.adminProfile"
 import { useFormSubmit } from "@/hooks"
 
 const { Text } = Typography

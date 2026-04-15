@@ -6,7 +6,7 @@ import {
   SearchOutlined, EyeOutlined, MoreOutlined 
 } from '@ant-design/icons';
 import CreateNewsForm from '@/features/news/components/CreateNew';
-import { deleteNew, getNews } from '@/services/api';
+import { deleteNew, getNews } from '@/services/api.news';
 import Image from 'next/image';
 import { formatDate } from '@/utils/formatDate';
 import UpdateNewsForm from '@/features/news/components/UpdateNew';

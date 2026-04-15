@@ -1,5 +1,5 @@
 import { useAsyncData } from "@/hooks";
-import { getUniqueNew } from "@/services/api";
+import { getUniqueNew } from "@/services/api.news";
 import { Button, message } from "antd"
 import { useRouter } from "next/navigation"
 import { ArrowLeftOutlined, ShareAltOutlined } from "@ant-design/icons";

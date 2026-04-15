@@ -4,7 +4,7 @@ import { SendOutlined } from "@ant-design/icons"
 import { motion } from "framer-motion"
 import { ValidationError } from "yup"
 import { contactFormSchema } from "../../schema/contactFormSchema"
-import { contactSupport } from "@/services/api"
+import { contactSupport } from "@/services/api.contact"
 
 const ContactForm = () => {
   const [form] = Form.useForm()

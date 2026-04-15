@@ -1,4 +1,4 @@
-import { getNews } from "@/services/api";
+import { getNews } from "@/services/api.news";
 import { Category } from "@/types/globalTypes";
 import NewsPageContent from "./NewsPageContent";
 

@@ -5,7 +5,8 @@ import { Form, Input, Button, Divider, message } from 'antd';
 import { MailOutlined, LockOutlined, 
   UserOutlined 
 } from '@ant-design/icons';
-import { authService, verify2FA } from '@/services/api';
+import { verify2FA } from '@/services/api.2fa';
+import { authService } from '@/services/api.user';
 import { AuthForm } from '@/types/globalTypes';
 import { loginSchema, registerSchema } from '@/schema/auth.schema';
 import { useAuth } from '@/hooks/useAuth';

@@ -2,10 +2,8 @@
 
 import { News } from "@/types/globalTypes";
 import { formatDate } from "@/utils/formatDate";
-import { increateNewView } from "@/services/api";
 import { ReadMoreIcon } from "../../../../public/icons/readMoreIcon";
 import { useRouter } from "next/navigation";
-import { useCachedData } from "@/hooks";
 
 const BACKEND_URL = "http://localhost:3001";
 
