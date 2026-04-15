@@ -1092,10 +1092,14 @@ export namespace Prisma {
 
   export type NewsAvgAggregateOutputType = {
     viewsCount: number | null
+    like: number | null
+    Unlike: number | null
   }
 
   export type NewsSumAggregateOutputType = {
     viewsCount: number | null
+    like: number | null
+    Unlike: number | null
   }
 
   export type NewsMinAggregateOutputType = {
@@ -1105,6 +1109,9 @@ export namespace Prisma {
     category: $Enums.Category | null
     imageUrl: string | null
     viewsCount: number | null
+    comments: string | null
+    like: number | null
+    Unlike: number | null
     publishedAt: Date | null
   }
 
@@ -1115,6 +1122,9 @@ export namespace Prisma {
     category: $Enums.Category | null
     imageUrl: string | null
     viewsCount: number | null
+    comments: string | null
+    like: number | null
+    Unlike: number | null
     publishedAt: Date | null
   }
 
@@ -1125,6 +1135,9 @@ export namespace Prisma {
     category: number
     imageUrl: number
     viewsCount: number
+    comments: number
+    like: number
+    Unlike: number
     publishedAt: number
     _all: number
   }
@@ -1132,10 +1145,14 @@ export namespace Prisma {
 
   export type NewsAvgAggregateInputType = {
     viewsCount?: true
+    like?: true
+    Unlike?: true
   }
 
   export type NewsSumAggregateInputType = {
     viewsCount?: true
+    like?: true
+    Unlike?: true
   }
 
   export type NewsMinAggregateInputType = {
@@ -1145,6 +1162,9 @@ export namespace Prisma {
     category?: true
     imageUrl?: true
     viewsCount?: true
+    comments?: true
+    like?: true
+    Unlike?: true
     publishedAt?: true
   }
 
@@ -1155,6 +1175,9 @@ export namespace Prisma {
     category?: true
     imageUrl?: true
     viewsCount?: true
+    comments?: true
+    like?: true
+    Unlike?: true
     publishedAt?: true
   }
 
@@ -1165,6 +1188,9 @@ export namespace Prisma {
     category?: true
     imageUrl?: true
     viewsCount?: true
+    comments?: true
+    like?: true
+    Unlike?: true
     publishedAt?: true
     _all?: true
   }
@@ -1262,6 +1288,9 @@ export namespace Prisma {
     category: $Enums.Category
     imageUrl: string | null
     viewsCount: number
+    comments: string
+    like: number
+    Unlike: number
     publishedAt: Date
     _count: NewsCountAggregateOutputType | null
     _avg: NewsAvgAggregateOutputType | null
@@ -1291,6 +1320,9 @@ export namespace Prisma {
     category?: boolean
     imageUrl?: boolean
     viewsCount?: boolean
+    comments?: boolean
+    like?: boolean
+    Unlike?: boolean
     publishedAt?: boolean
   }, ExtArgs["result"]["news"]>
 
@@ -1301,6 +1333,9 @@ export namespace Prisma {
     category?: boolean
     imageUrl?: boolean
     viewsCount?: boolean
+    comments?: boolean
+    like?: boolean
+    Unlike?: boolean
     publishedAt?: boolean
   }, ExtArgs["result"]["news"]>
 
@@ -1311,6 +1346,9 @@ export namespace Prisma {
     category?: boolean
     imageUrl?: boolean
     viewsCount?: boolean
+    comments?: boolean
+    like?: boolean
+    Unlike?: boolean
     publishedAt?: boolean
   }, ExtArgs["result"]["news"]>
 
@@ -1321,10 +1359,13 @@ export namespace Prisma {
     category?: boolean
     imageUrl?: boolean
     viewsCount?: boolean
+    comments?: boolean
+    like?: boolean
+    Unlike?: boolean
     publishedAt?: boolean
   }
 
-  export type NewsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "category" | "imageUrl" | "viewsCount" | "publishedAt", ExtArgs["result"]["news"]>
+  export type NewsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "category" | "imageUrl" | "viewsCount" | "comments" | "like" | "Unlike" | "publishedAt", ExtArgs["result"]["news"]>
 
   export type $NewsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "News"
@@ -1336,6 +1377,9 @@ export namespace Prisma {
       category: $Enums.Category
       imageUrl: string | null
       viewsCount: number
+      comments: string
+      like: number
+      Unlike: number
       publishedAt: Date
     }, ExtArgs["result"]["news"]>
     composites: {}
@@ -1766,6 +1810,9 @@ export namespace Prisma {
     readonly category: FieldRef<"News", 'Category'>
     readonly imageUrl: FieldRef<"News", 'String'>
     readonly viewsCount: FieldRef<"News", 'Int'>
+    readonly comments: FieldRef<"News", 'String'>
+    readonly like: FieldRef<"News", 'Int'>
+    readonly Unlike: FieldRef<"News", 'Int'>
     readonly publishedAt: FieldRef<"News", 'DateTime'>
   }
     
@@ -4237,6 +4284,9 @@ export namespace Prisma {
     category: 'category',
     imageUrl: 'imageUrl',
     viewsCount: 'viewsCount',
+    comments: 'comments',
+    like: 'like',
+    Unlike: 'Unlike',
     publishedAt: 'publishedAt'
   };
 
@@ -4404,6 +4454,9 @@ export namespace Prisma {
     category?: EnumCategoryFilter<"News"> | $Enums.Category
     imageUrl?: StringNullableFilter<"News"> | string | null
     viewsCount?: IntFilter<"News"> | number
+    comments?: StringFilter<"News"> | string
+    like?: IntFilter<"News"> | number
+    Unlike?: IntFilter<"News"> | number
     publishedAt?: DateTimeFilter<"News"> | Date | string
   }
 
@@ -4414,6 +4467,9 @@ export namespace Prisma {
     category?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
     viewsCount?: SortOrder
+    comments?: SortOrder
+    like?: SortOrder
+    Unlike?: SortOrder
     publishedAt?: SortOrder
   }
 
@@ -4427,6 +4483,9 @@ export namespace Prisma {
     category?: EnumCategoryFilter<"News"> | $Enums.Category
     imageUrl?: StringNullableFilter<"News"> | string | null
     viewsCount?: IntFilter<"News"> | number
+    comments?: StringFilter<"News"> | string
+    like?: IntFilter<"News"> | number
+    Unlike?: IntFilter<"News"> | number
     publishedAt?: DateTimeFilter<"News"> | Date | string
   }, "id">
 
@@ -4437,6 +4496,9 @@ export namespace Prisma {
     category?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
     viewsCount?: SortOrder
+    comments?: SortOrder
+    like?: SortOrder
+    Unlike?: SortOrder
     publishedAt?: SortOrder
     _count?: NewsCountOrderByAggregateInput
     _avg?: NewsAvgOrderByAggregateInput
@@ -4455,6 +4517,9 @@ export namespace Prisma {
     category?: EnumCategoryWithAggregatesFilter<"News"> | $Enums.Category
     imageUrl?: StringNullableWithAggregatesFilter<"News"> | string | null
     viewsCount?: IntWithAggregatesFilter<"News"> | number
+    comments?: StringWithAggregatesFilter<"News"> | string
+    like?: IntWithAggregatesFilter<"News"> | number
+    Unlike?: IntWithAggregatesFilter<"News"> | number
     publishedAt?: DateTimeWithAggregatesFilter<"News"> | Date | string
   }
 
@@ -4599,6 +4664,9 @@ export namespace Prisma {
     category: $Enums.Category
     imageUrl?: string | null
     viewsCount?: number
+    comments: string
+    like: number
+    Unlike: number
     publishedAt?: Date | string
   }
 
@@ -4609,6 +4677,9 @@ export namespace Prisma {
     category: $Enums.Category
     imageUrl?: string | null
     viewsCount?: number
+    comments: string
+    like: number
+    Unlike: number
     publishedAt?: Date | string
   }
 
@@ -4619,6 +4690,9 @@ export namespace Prisma {
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     viewsCount?: IntFieldUpdateOperationsInput | number
+    comments?: StringFieldUpdateOperationsInput | string
+    like?: IntFieldUpdateOperationsInput | number
+    Unlike?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -4629,6 +4703,9 @@ export namespace Prisma {
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     viewsCount?: IntFieldUpdateOperationsInput | number
+    comments?: StringFieldUpdateOperationsInput | string
+    like?: IntFieldUpdateOperationsInput | number
+    Unlike?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -4639,6 +4716,9 @@ export namespace Prisma {
     category: $Enums.Category
     imageUrl?: string | null
     viewsCount?: number
+    comments: string
+    like: number
+    Unlike: number
     publishedAt?: Date | string
   }
 
@@ -4649,6 +4729,9 @@ export namespace Prisma {
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     viewsCount?: IntFieldUpdateOperationsInput | number
+    comments?: StringFieldUpdateOperationsInput | string
+    like?: IntFieldUpdateOperationsInput | number
+    Unlike?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -4659,6 +4742,9 @@ export namespace Prisma {
     category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     viewsCount?: IntFieldUpdateOperationsInput | number
+    comments?: StringFieldUpdateOperationsInput | string
+    like?: IntFieldUpdateOperationsInput | number
+    Unlike?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -4887,11 +4973,16 @@ export namespace Prisma {
     category?: SortOrder
     imageUrl?: SortOrder
     viewsCount?: SortOrder
+    comments?: SortOrder
+    like?: SortOrder
+    Unlike?: SortOrder
     publishedAt?: SortOrder
   }
 
   export type NewsAvgOrderByAggregateInput = {
     viewsCount?: SortOrder
+    like?: SortOrder
+    Unlike?: SortOrder
   }
 
   export type NewsMaxOrderByAggregateInput = {
@@ -4901,6 +4992,9 @@ export namespace Prisma {
     category?: SortOrder
     imageUrl?: SortOrder
     viewsCount?: SortOrder
+    comments?: SortOrder
+    like?: SortOrder
+    Unlike?: SortOrder
     publishedAt?: SortOrder
   }
 
@@ -4911,11 +5005,16 @@ export namespace Prisma {
     category?: SortOrder
     imageUrl?: SortOrder
     viewsCount?: SortOrder
+    comments?: SortOrder
+    like?: SortOrder
+    Unlike?: SortOrder
     publishedAt?: SortOrder
   }
 
   export type NewsSumOrderByAggregateInput = {
     viewsCount?: SortOrder
+    like?: SortOrder
+    Unlike?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
