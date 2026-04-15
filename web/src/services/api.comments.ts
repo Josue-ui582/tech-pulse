@@ -11,11 +11,10 @@ export const getComments = async (newId: string) => {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || `Erreur HTTP: ${response.status}`);
     }
-
-    return await response.json();
+    const result = await response.json();
+    return result.data;
   } catch (error: any) {
-    console.error("Erreur dans getComments:", error.message);
-    throw error; // On propage l'erreur pour que le composant puisse l'afficher
+    throw new Error("Erreur dans lors de la récupération des commentaire:", error.message);
   }
 };
 
@@ -35,8 +34,7 @@ export const addComment = async (newId: string, comment: string) => {
 
     return await response.json();
   } catch (error: any) {
-    console.error("Erreur dans addComment:", error.message);
-    throw error;
+    throw new Error("Erreur lors de l'ajout du commentaire", error.message);
   }
 };
 
@@ -56,8 +54,7 @@ export const updateComment = async (commentId: string, comment: string) => {
 
     return await response.json();
   } catch (error: any) {
-    console.error("Erreur dans updateComment:", error.message);
-    throw error;
+    throw new Error("Erreur lors de la modification du commentaire", error.message);
   }
 };
 
@@ -75,7 +72,6 @@ export const deleteComment = async (commentId: string) => {
 
     return await response.json();
   } catch (error: any) {
-    console.error("Erreur dans deleteComment:", error.message);
-    throw error;
+    throw new Error("Erreur lors de la suppression de l'article", error.message);
   }
 };

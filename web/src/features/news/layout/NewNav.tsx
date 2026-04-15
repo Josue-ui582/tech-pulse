@@ -14,9 +14,9 @@ const NewNav = ( { slug }: NewNavProps ) => {
         () => getUniqueNew(slug),
         [slug],
         {
-        onError: (error) => {
-            message.error("Erreur lors de la récupération de l'article :" + (error.message || "Erreur inconnue"));
-        }
+            onError: (error) => {
+                message.error("Erreur lors de la récupération de l'article :" + (error.message || "Erreur inconnue"));
+            }
         }
     );
 

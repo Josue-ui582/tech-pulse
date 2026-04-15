@@ -22,7 +22,7 @@ const NewsFooter = ({ slug }: NewsFooterProps) => {
     const encodedTitle = encodeURIComponent(article?.title || "");
     return(
         <footer className="mt-16 pt-8 border-t border-slate-100 flex flex-col items-center">
-        <h4 className="text-slate-900 font-bold mb-4">Partagez cet article</h4>
+        <h4 className="font-bold mb-4">Partagez cet article</h4>
         <div className="flex gap-4">
            <Button
             type="primary"
