@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Form, Input, Button, Select, message, Card, Upload } from 'antd';
-import { CreateNewsForms } from '@/services/api';
+import { CreateNewsForms } from '@/services/api.news';
 import { UploadOutlined } from '@ant-design/icons';
 import { newsSchema } from '@/schema/news.schema';
 import { useFormSubmit } from '@/hooks';

@@ -66,3 +66,10 @@ export type SupportData = {
   email: string;
   message: string;
 };
+
+export type CommentType = {
+  id: string;
+  content: string;
+  createdAt: string;
+  authorId: string;
+}

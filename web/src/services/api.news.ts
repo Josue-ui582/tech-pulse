@@ -1,0 +1,160 @@
+import { Category, UpdateNewsData } from "../types/globalTypes";
+
+const API_URL = "http://localhost:3001/api/news"
+
+export const getNews = async (category?: Category, search?: string) => {
+    const params = new URLSearchParams();
+    if (category && category.trim() !== "") {
+        params.append("category", category);
+    }
+    
+    if (search && search.trim() !== "") {
+        params.append("search", search);
+    }
+
+    try {
+        const res = await fetch(`${API_URL}?${params.toString()}`, {
+            cache: "no-store"
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({}));
+            throw new Error(errorData.error || `Erreur HTTP: ${res.status} (Impossible de charger les articles)`);
+        }
+
+        return await res.json();
+    } catch (error) {
+        if(error instanceof ReferenceError) throw error;
+        throw new ReferenceError("Le serveur est injoignable. Vérifier votre connexion");
+    }
+}
+
+export const getUniqueNew = async (id: string) => {
+    try {
+        const res = await fetch(`${API_URL}/${id}`, {
+            cache: "no-store"
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({}));
+            throw new Error(errorData.error || `Erreur HTTP: ${res.status} (Impossible de charger l'article)`);
+        }
+
+        return await res.json();
+    } catch (error) {
+        if(error instanceof ReferenceError) throw error;
+        throw new ReferenceError("Article introuvable ou serveur injoignable. Vérifier votre connexion");
+    }
+}
+
+export const CreateNewsForms = async (title: string, description: string, category: Category, imageFile?: File) => {
+
+    try {
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('category', category);
+        
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
+
+        const res = await fetch(API_URL, {
+            method: "POST",
+            body: formData,
+            credentials: 'include', // Important pour inclure les cookies d'authentification
+        });
+
+        if (!res.ok) {
+            const errorBody = await res.json().catch(() => ({})); 
+            throw new Error(errorBody.message || errorBody.error || `Erreur : ${res.status}`);
+        }
+
+        return await res.json();
+    } catch (error) {
+        if(error instanceof Error) throw error;
+        throw new Error("Une erreur inconnue est survenue");
+    }
+}
+
+export const updateNews = async (id: string, data: UpdateNewsData) => {
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ data: data }), 
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Erreur lors de la mise à jour');
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getNewsById = async (id: string) => {
+  try {
+    const response = await fetch(`${API_URL}/${id}`);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Impossible de récupérer l'article");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if(error instanceof Error) throw error;
+    throw new ReferenceError("Erreur serveur, vérifiez votre connexion");
+  }
+};
+
+export const deleteNew = async (id: string) => {
+  
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Impossible de supprimer l'article");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new ReferenceError("Erreur serveur lors de la suppression");
+  }
+};
+
+export const increateNewView = async (id: string) => {
+  try {
+    const response = await fetch(`${API_URL}/${id}/view`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error('Erreur lors de la mise à jour des vues');
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message)
+    }
+    throw error;
+  }
+};
