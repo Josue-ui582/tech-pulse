@@ -65,7 +65,7 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <header>
-        <Title level={2} className="font-black! text-slate-900! mb-1">Réglages</Title>
+        <Title level={2} className="font-black! mb-1">Réglages</Title>
         <Text className="text-slate-400">Gérez votre compte et les préférences de la plateforme.</Text>
       </header>
 

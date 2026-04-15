@@ -127,7 +127,17 @@ exports.Prisma.NewsScalarFieldEnum = {
   category: 'category',
   imageUrl: 'imageUrl',
   viewsCount: 'viewsCount',
+  like: 'like',
+  Unlike: 'Unlike',
   publishedAt: 'publishedAt'
+};
+
+exports.Prisma.CommentsScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  createdAt: 'createdAt',
+  authorId: 'authorId',
+  newsId: 'newsId'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -179,6 +189,7 @@ exports.Role = exports.$Enums.Role = {
 
 exports.Prisma.ModelName = {
   News: 'News',
+  Comments: 'Comments',
   User: 'User',
   ContactMessage: 'ContactMessage'
 };
