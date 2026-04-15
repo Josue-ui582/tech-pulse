@@ -11,6 +11,7 @@ import NewNav from "@/features/news/layout/NewNav";
 import NewsHeader from "@/features/news/layout/NewsHeader";
 import NewsFooter from "@/features/news/layout/NewsFooter";
 import NewsComments from "@/features/news/layout/NewsComment";
+import { Navbar } from "@/components/layout/navbar";
 
 const { Paragraph } = Typography;
 const BACKEND_URL = "http://localhost:3001";
@@ -63,39 +64,42 @@ useEffect(() => {
   );
 
   return (
-    <motion.main 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="max-w-4xl mx-auto px-4 py-12"
-    >
-      <NewNav slug={slug} />
-
-      <NewsHeader slug={slug} views={views} />
-
-      <motion.div 
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
-        className="relative aspect-video w-full rounded-[2.5rem] overflow-hidden shadow-2xl mb-12"
+    <>
+      <Navbar />
+      <motion.main 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-4xl mx-auto px-4 py-12 mt-8"
       >
-        <img
-          alt={article?.title}
-          src={article?.imageUrl ? `${BACKEND_URL}/${article.imageUrl}` : "https://alipayobjects.com"}
-          className="object-cover w-full h-full"
-        />
-      </motion.div>
+        <NewNav slug={slug} />
 
-      <article className="prose prose-slate prose-lg max-w-none">
-        <Paragraph className="text-xl text-slate-600 font-medium leading-relaxed italic mb-8 border-l-4 border-indigo-500 pl-6">
-          {article?.description || "Résumé de l'article..."}
-        </Paragraph>
-        
-        <Divider />
-      </article>
-      <NewsComments slug={slug} />
+        <NewsHeader slug={slug} views={views} />
 
-      <NewsFooter slug={slug} />
-    </motion.main>
+        <motion.div 
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="relative aspect-video w-full rounded-[2.5rem] overflow-hidden shadow-2xl mb-12"
+        >
+          <img
+            alt={article?.title}
+            src={article?.imageUrl ? `${BACKEND_URL}/${article.imageUrl}` : "https://alipayobjects.com"}
+            className="object-cover w-full h-full"
+          />
+        </motion.div>
+
+        <article className="prose prose-slate prose-lg max-w-none">
+          <Paragraph className="text-xl text-slate-600 font-medium leading-relaxed italic mb-8 border-l-4 border-indigo-500 pl-6">
+            {article?.description || "Résumé de l'article..."}
+          </Paragraph>
+          
+          <Divider />
+        </article>
+        <NewsComments slug={slug} />
+
+        <NewsFooter slug={slug} />
+      </motion.main>
+    </>
   );
 }
