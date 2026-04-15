@@ -2,10 +2,11 @@ import { motion } from "framer-motion"
 import { Typography, Form, Input, Button, Divider, message } from "antd"
 import { SettingsPasswordFormValues } from "@/types/globalTypes"
 import { updatePassword } from "@/schema/updatePasswordFormSchema"
-import { desabled2FA, generate2FA, updateAdminPasswordSettings, verify2FA } from "@/services/api"
+import { desabled2FA, generate2FA, verify2FA } from "@/services/api.2fa"
 import Loading from "@/app/admin/dashboard/loading"
 import { useEffect, useState } from "react"
 import { useAuth } from "@/hooks/useAuth"
+import { updateAdminPasswordSettings } from "@/services/api.password"
 
 type UpdateAdminPasswordSettingsProps = {
     loading: boolean;

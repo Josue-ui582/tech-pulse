@@ -1,5 +1,5 @@
 import { useAsyncData } from "@/hooks";
-import { getUniqueNew } from "@/services/api";
+import { getUniqueNew } from "@/services/api.news";
 import { message, Tag, Typography } from "antd"
 import { motion } from "framer-motion"
 import { CalendarOutlined, EyeOutlined, ClockCircleOutlined } from "@ant-design/icons";

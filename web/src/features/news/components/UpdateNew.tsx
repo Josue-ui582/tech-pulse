@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Select, message, Upload, Spin } from 'antd';
-import { updateNews, getNewsById } from '@/services/api';
+import { updateNews, getNewsById } from '@/services/api.news';
 import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useAsyncData, useFormSubmit } from '@/hooks';
 

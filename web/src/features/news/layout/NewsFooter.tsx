@@ -1,5 +1,5 @@
 import { useAsyncData } from "@/hooks";
-import { getUniqueNew } from "@/services/api";
+import { getUniqueNew } from "@/services/api.news";
 import { Button, message } from "antd"
 
 interface NewsFooterProps {

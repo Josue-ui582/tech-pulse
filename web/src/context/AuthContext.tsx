@@ -2,7 +2,7 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { getUser } from "@/utils/auth";
-import { logOutUser } from "@/services/api";
+import { logOutUser } from "@/services/api.user";
 
 export type User = {
   id: string;
