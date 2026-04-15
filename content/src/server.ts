@@ -10,6 +10,7 @@ import path from 'node:path';
 import cookieParser from "cookie-parser";
 import contactRoute from './routes/contact.route.js';
 import doubleAuthRoute from './routes/2fa.routes.js';
+import commentRoute from "./routes/comment.route.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,6 +39,7 @@ app.use("/api/login", authRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/contact", contactRoute);
 app.use("/api/2fa", doubleAuthRoute);
+app.use("/api", commentRoute);
 
 app.listen(PORT, () => {
   console.log(`[server]: Server running on http://localhost:${PORT}`);
