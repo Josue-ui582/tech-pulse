@@ -127,6 +127,9 @@ exports.Prisma.NewsScalarFieldEnum = {
   category: 'category',
   imageUrl: 'imageUrl',
   viewsCount: 'viewsCount',
+  comments: 'comments',
+  like: 'like',
+  Unlike: 'Unlike',
   publishedAt: 'publishedAt'
 };
 
