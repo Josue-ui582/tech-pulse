@@ -20,3 +20,11 @@ export const updateCommentService = async (commentId: string, newContent: string
         }
     })
 }
+
+export const deleteCommentService = async (commentId: string) => {
+    return await prisma.comments.delete({
+        where: { 
+            id: commentId
+         }
+    })
+}
