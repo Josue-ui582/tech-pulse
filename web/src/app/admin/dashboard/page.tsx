@@ -6,12 +6,12 @@ import {
   SearchOutlined, EyeOutlined, MoreOutlined 
 } from '@ant-design/icons';
 import CreateNewsForm from '@/features/news/components/CreateNew';
-import { deleteNew, getNews } from '@/services/api';
+import { deleteNew, getNews } from '@/services/api.news';
 import Image from 'next/image';
 import { formatDate } from '@/utils/formatDate';
 import UpdateNewsForm from '@/features/news/components/UpdateNew';
-import { getUser } from '@/utils/auth';
-import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
+import Loading from '@/app/admin/dashboard/loading';import { useDebounce } from '@/hooks';import { useRouter } from 'next/navigation';
 
 const { Title, Text } = Typography;
 
@@ -24,47 +24,46 @@ export default function NewsAdminPage() {
   const [selectedNewsId, setSelectedNewsId] = useState<string | null>(null);
   const [searchText, setSearchText] = useState('');
   const [news, setNews] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [newsLoading, setNewsLoading] = useState(false);
 
   const router = useRouter();
+  const { user, loading } = useAuth();
+  const debouncedSearchText = useDebounce(searchText, 500);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const userData = await getUser();
-
-    if(!userData) {
+    if (loading) return;
+    if (!user) {
       router.replace("/auth");
       return;
     }
 
-    if (userData.role !== "admin") {
+    if (user.role !== "admin") {
       router.push("/unauthorized");
     }
+  }, [user, loading, router]);
+
+  if (loading || !user) {
+    return <Loading />;
   }
-  checkAuth();
-  }, []);
 
   const fetchNews = useCallback(async (search?: string) => {
     
-    setLoading(true);
+    setNewsLoading(true);
     try {
       const response = await getNews(undefined, search);
       setNews(response.data || response);
     } catch (error: any) {
       message.error(error.message || "Erreur de chargement");
     } finally {
-      setLoading(false);
+      setNewsLoading(false);
     }
-  }, [status]);
+  }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchNews(searchText);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [searchText, fetchNews]);
+    fetchNews(debouncedSearchText);
+  }, [debouncedSearchText, fetchNews]);
 
-  const columns = [
+  const columns: any[] = [
     {
       title: 'Article',
       dataIndex: 'title',
@@ -90,7 +89,7 @@ export default function NewsAdminPage() {
       title: 'Catégorie', 
       dataIndex: 'category', 
       key: 'category',
-      responsive: ['md'],
+      responsive: ['md'] as const,
       render: (cat: string) => (
         <Tag className="rounded-full px-3 border-none bg-blue-50 text-blue-600 font-medium">
           {cat}
@@ -204,7 +203,7 @@ export default function NewsAdminPage() {
                 className: "pr-4",
                 showSizeChanger: false
               }} 
-              loading={loading}
+              loading={newsLoading}
               rowKey="id"
               scroll={{ x: 'max-content' }}
               className="modern-table"

@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "News" ADD COLUMN     "Unlike" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "comments" TEXT,
+ADD COLUMN     "like" INTEGER NOT NULL DEFAULT 0;

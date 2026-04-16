@@ -1,4 +1,4 @@
-export type Category = "Tech"| "IA" | "Dev";
+export type Category = "Tech"| "AI" | "Dev";
 
 export interface News {
     id: string,
@@ -22,13 +22,24 @@ export type AuthForm = {
   password: string;
   firstName?: string;
   lastName?: string;
+  twoFactorCode?: string;
 };
+
+export interface AuthContextValue {
+  user: User | null;
+  loading: boolean;
+  isAuthenticated: boolean;
+  refreshUser: () => Promise<void>;
+  logout: () => Promise<void>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+}
 
 export type User = {
   id: string;
   name: string;
   email: string;
   bio?: string;
+  role: string;
   profileImage?: string;
 };
 
@@ -55,3 +66,18 @@ export type SupportData = {
   email: string;
   message: string;
 };
+
+export type CommentType = {
+  id: string;
+  content: string;
+  createdAt: string;
+  authorId: string;
+}
+
+export type  NewsReactionsProps = {
+  newsId: string;
+  initialLikes: number;
+  initialUnlikes: number;
+  userHasLiked?: boolean;
+  userHasUnliked?: boolean;
+}

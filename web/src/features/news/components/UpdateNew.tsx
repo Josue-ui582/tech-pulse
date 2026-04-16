@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Select, message, Upload, Spin } from 'antd';
-import { updateNews, getNewsById } from '@/services/api';
+import { updateNews, getNewsById } from '@/services/api.news';
 import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
+import { useAsyncData, useFormSubmit } from '@/hooks';
 
 interface UpdateNewsFormProps {
   newsId: string;
@@ -13,16 +14,13 @@ interface UpdateNewsFormProps {
 const SERVER_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const UpdateNewsForm: React.FC<UpdateNewsFormProps> = ({ newsId, onSuccess }) => {
-  const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(true);
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    const fetchNewsData = async () => {
-      setFetching(true);
-      try {
-        const news = await getNewsById(newsId);
-        
+  const { data: news, loading: fetching } = useAsyncData(
+    () => getNewsById(newsId),
+    [newsId],
+    {
+      onSuccess: (news) => {
         form.setFieldsValue({
           title: news.title,
           description: news.description,
@@ -34,38 +32,42 @@ const UpdateNewsForm: React.FC<UpdateNewsFormProps> = ({ newsId, onSuccess }) =>
             url: `${SERVER_URL}/${news.imageUrl}`, 
           }] : [],
         });
-      } catch (err) {
+      },
+      onError: () => {
         message.error("Impossible de charger les données de l'article");
-      } finally {
-        setFetching(false);
       }
-    };
-
-    if (newsId) fetchNewsData();
-  }, [newsId, form]);
-
-  const onFinish = async (values: any) => {
-    setLoading(true);
-    try {
-      const fileItem = values.imageUrl?.[0];
-      const newFile = fileItem?.originFileObj;
-
-      await updateNews(newsId, {
-        title: values.title,
-        description: values.description,
-        category: values.category,
-        image: newFile
-      });
-
-      message.success("Article mis à jour avec succès !");
-      
-      if (onSuccess) onSuccess();
-      
-    } catch (err: any) {
-      message.error(err.message || "Erreur lors de la mise à jour");
-    } finally {
-      setLoading(false);
     }
+  );
+
+  const submitUpdate = async (values: any) => {
+    const fileItem = values.imageUrl?.[0];
+    const newFile = fileItem?.originFileObj;
+
+    await updateNews(newsId, {
+      title: values.title,
+      description: values.description,
+      category: values.category,
+      image: newFile
+    });
+  };
+
+  const { loading, handleSubmit } = useFormSubmit(
+    form,
+    submitUpdate,
+    {
+      onSuccess: () => {
+        message.success("Article mis à jour avec succès !");
+        onSuccess?.();
+      },
+      onError: (error) => {
+        message.error(error.message || "Erreur lors de la mise à jour");
+      },
+      successMessage: "Article mis à jour avec succès !",
+    }
+  );
+
+  const onFinish = (values: any) => {
+    handleSubmit(values);
   };
 
   if (fetching) {

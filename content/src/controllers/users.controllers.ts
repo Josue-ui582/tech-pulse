@@ -4,7 +4,6 @@ import type { Request, Response } from "express";
 import { createUserSchema } from "../schema/users.schema.js";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import { email } from 'zod';
 
 const JWT_SECRET = process.env.JWT_SECRET_SECRET as string;
 
@@ -71,6 +70,21 @@ export const loginUserController = async (req: Request, res: Response) => {
             })
         }
 
+        if (user.isTwoFactorEnabled) {
+            res.cookie("temp_user_id", user.id, {
+                httpOnly: true,
+                secure: false, // true en production
+                sameSite: "lax",
+                maxAge: 60 * 60 * 1000,
+            });
+
+            return res.status(200).json({
+                success: true,
+                requires2FA: true,
+                message: "Veuillez entrer votre code 2FA"
+            });
+        }
+
         const token = jwt.sign(
             { id: user.id, role: user.role },
             JWT_SECRET,
@@ -89,7 +103,8 @@ export const loginUserController = async (req: Request, res: Response) => {
             user: {
                 id: user.id,
                 name: user.name,
-                role: user.role
+                role: user.role,
+                isTwoFactorEnabled: user.isTwoFactorEnabled
             }
         });
     } catch (error) {
@@ -131,7 +146,8 @@ export const meController = async (req: Request, res: Response) => {
                 email: user.email,
                 role: user.role,
                 profileImage: user.profileImage,
-                bio: user.bio
+                bio: user.bio,
+                isTwoFactorEnabled: user.isTwoFactorEnabled
             }
         });
 

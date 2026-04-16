@@ -3,46 +3,38 @@
 import NewsCard from "@/features/news/components/NewsCard";
 import { SearchBar } from "@/features/search/components/SearchBar";
 import { SearchCategory } from "@/features/search/components/searchCategory";
-import { News } from "@/types/news";
-import { useEffect, useState } from "react";
+import { News } from "@/types/globalTypes";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getUser } from "@/utils/auth";
+import { useAuth } from "@/hooks/useAuth";
 import Loading from "../admin/dashboard/loading";
 import { Navbar } from "@/components/layout/navbar";
 import { motion } from "framer-motion";
 
 export default function NewsPageContent({ news }: { news: News[] }) {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const { user, loading } = useAuth();
 
- useEffect(() => {
-  const checkAuth = async () => {
-    const userData = await getUser();
-
-    if (!userData) {
+  useEffect(() => {
+    if (loading) return;
+    if (!user) {
       router.replace("/auth");
       return;
     }
 
-    if (userData.role !== "user") {
+    if (user.role !== "user") {
       router.replace("/unauthorized");
-      return;
     }
+  }, [user, loading, router]);
 
-    setLoading(false);
-  };
-
-  checkAuth();
-}, []);
-
-  if (loading) return <Loading />;
+  if (loading || !user) return <Loading />;
 
   return (
     <motion.main
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen bg-[#FAFAFA] selection:bg-indigo-100"
+      className="min-h-screen selection:bg-indigo-100"
     >
       <Navbar />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-150 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(79,70,229,0.04)_0%,transparent_100%)] pointer-events-none" />
@@ -58,7 +50,7 @@ export default function NewsPageContent({ news }: { news: News[] }) {
             Flux en direct
           </div>
           
-          <h1 className="text-5xl md:text-8xl font-black tracking-tight text-slate-900 mb-8 leading-[0.9]">
+          <h1 className="text-5xl md:text-8xl font-black tracking-tight mb-8 leading-[0.9]">
             L'actualité Tech, <br />
             <span className="text-indigo-600 font-serif italic font-medium">réinventée.</span>
           </h1>
@@ -70,16 +62,16 @@ export default function NewsPageContent({ news }: { news: News[] }) {
         </header>
 
         <div className="sticky top-6 z-30 mb-16">
-          <div className="p-2 bg-white/70 backdrop-blur-2xl border border-white/50 rounded-[2.5rem] shadow-xl shadow-slate-200/50 flex flex-col md:flex-row items-center gap-3">
+          <div className="p-2 backdrop-blur-2xl border border-white/50 rounded-[2.5rem] shadow-xl shadow-slate-200/50 flex flex-col md:flex-row items-center gap-3">
             <SearchBar />
-            <div className="h-8 w-px bg-slate-200 hidden md:block" />
+            <div className="h-8 w-px hidden md:block" />
             <SearchCategory />
           </div>
         </div>
 
         <article className="relative">
           {news.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-32 rounded-[3.5rem] bg-white border border-slate-100 shadow-sm relative overflow-hidden">
+            <div className="flex flex-col items-center justify-center py-32 rounded-[3.5rem] border border-slate-100 shadow-sm relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(79,70,229,0.03),transparent)]" />
                 <div className="relative flex flex-col items-center">
                   <span className="text-6xl mb-6 grayscale opacity-50">🔭</span>
@@ -94,7 +86,7 @@ export default function NewsPageContent({ news }: { news: News[] }) {
               {news.map((article: News) => (
                 <div 
                   key={article.id} 
-                  className="group bg-white p-3 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-100/50 transition-all duration-500"
+                  className="group p-3 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-100/50 transition-all duration-500"
                 >
                   <NewsCard article={article} />
                 </div>

@@ -8,13 +8,38 @@ datasource db {
 }
 
 model News {
-  id          String   @id @default(uuid())
+  id          String     @id @default(uuid())
   title       String
   description String
   category    Category
   imageUrl    String?
-  viewsCount  Int      @default(0)
-  publishedAt DateTime @default(now())
+  viewsCount  Int        @default(0)
+  comments    Comments[]
+  reactions   Reaction[] // Nouvelle relation
+  publishedAt DateTime   @default(now())
+}
+
+model Reaction {
+  id        String       @id @default(uuid())
+  type      ReactionType
+  userId    String
+  news      News         @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  newsId    String
+  @@unique([userId, newsId]) 
+}
+
+enum ReactionType {
+  Like
+  Unlike
+}
+
+model Comments {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  authorId  String
+  news      News     @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  newsId    String
 }
 
 enum Category {
@@ -31,6 +56,8 @@ model User {
   role          Role      @default(user)
   profileImage  String?
   bio           String?
+  isTwoFactorEnabled Boolean  @default(false)
+  twoFactorSecret    String?
 }
 
 enum Role {

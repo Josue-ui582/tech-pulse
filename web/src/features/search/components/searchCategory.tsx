@@ -1,19 +1,15 @@
 "use client"
 
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useQueryParams } from '@/hooks';
 
 const filtre = ["Tech", "AI", "Dev"];
 
 export const SearchCategory = () => {
-    const router = useRouter();
-    const params = useSearchParams();
-    const currentCategory = params.get("category");
-    const pathname = usePathname();
+    const { getParam, setParam, deleteParam } = useQueryParams();
+    const currentCategory = getParam("category");
 
     const handleChange = (category: string) => {
-        const query = new URLSearchParams(params.toString());
-        query.set("category", category);
-        router.push(`${pathname}?${query.toString()}`);
+        setParam("category", category);
     }
 
     const getStyle = (f: string) => {
@@ -28,7 +24,7 @@ export const SearchCategory = () => {
     return "bg-transparent text-slate-500 hover:bg-slate-100 border-transparent";
   };
     return (
-        <div className="inline-flex items-center p-1.5 bg-slate-50 border border-slate-200 rounded-2xl gap-1">
+        <div className="inline-flex items-center p-1.5 border border-slate-200 rounded-2xl gap-1">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 hidden sm:block">
                 Catégorie
             </span>
@@ -39,7 +35,7 @@ export const SearchCategory = () => {
                     key={f}
                     onClick={() => handleChange(f)}
                     className={`
-                    relative px-4 py-2 rounded-xl text-xs font-bold capitalize 
+                    relative px-4 py-2 rounded-xl text-xs font-bold capitalize
                     transition-all duration-200 ease-out border
                     flex items-center gap-2 cursor-pointer
                     ${getStyle(f)}
@@ -60,7 +56,7 @@ export const SearchCategory = () => {
 
             {currentCategory && (
                 <button 
-                onClick={() => router.push(`${pathname}`)}
+                onClick={() => deleteParam("category")}
                 className="ml-1 p-2 text-slate-400 hover:text-rose-500 transition-colors cursor-pointer"
                 title="Effacer le filtre"
                 >

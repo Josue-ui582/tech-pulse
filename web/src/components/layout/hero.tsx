@@ -17,7 +17,7 @@ export const Hero = () => {
         </span>
         Le futur de la tech est ici
       </div>
-      <h1 className="text-5xl md:text-8xl font-black text-slate-900 tracking-tight mb-8">
+      <h1 className="text-5xl md:text-8xl font-black dark:text-gray-700 tracking-tight mb-8">
         L'info tech, <br />
         <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-600 to-violet-500">sans le bruit.</span>
       </h1>
