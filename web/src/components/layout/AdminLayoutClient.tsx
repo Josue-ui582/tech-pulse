@@ -52,7 +52,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
   if (!mounted) return null; 
 
   return (
-    <Layout className="min-h-screen bg-[#F8FAFC]">
+    <Layout className="min-h-screen">
       <Sider
         width={260}
         theme="light"
@@ -62,7 +62,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
           <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-200">
             N
           </div>
-          <span className="ml-3 font-black text-gray-800 tracking-tight text-lg">NEWS ADMIN</span>
+          <span className="ml-3 font-black tracking-tight text-lg">NEWS ADMIN</span>
         </div>
 
         <Menu

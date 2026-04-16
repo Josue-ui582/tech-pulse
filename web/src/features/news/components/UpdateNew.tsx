@@ -81,7 +81,7 @@ const UpdateNewsForm: React.FC<UpdateNewsFormProps> = ({ newsId, onSuccess }) =>
 
   return (
     <div className="max-w-2xl mx-auto p-2">
-      <h2 className="text-2xl font-black text-slate-900 mb-6 text-center italic uppercase tracking-tight">
+      <h2 className="text-2xl font-black mb-6 text-center italic uppercase tracking-tight">
         Modifier l'Article
       </h2>
       
@@ -93,7 +93,7 @@ const UpdateNewsForm: React.FC<UpdateNewsFormProps> = ({ newsId, onSuccess }) =>
       >
         <Form.Item 
           name="title" 
-          label={<span className="font-bold text-gray-700">Titre</span>} 
+          label={<span className="font-bold">Titre</span>} 
           rules={[{ required: true, message: 'Le titre est requis' }]}
         >
           <Input size="large" className="rounded-xl h-12" placeholder="Titre de l'article" />
@@ -101,7 +101,7 @@ const UpdateNewsForm: React.FC<UpdateNewsFormProps> = ({ newsId, onSuccess }) =>
 
         <Form.Item 
           name="category" 
-          label={<span className="font-bold text-gray-700">Catégorie</span>} 
+          label={<span className="font-bold">Catégorie</span>} 
           rules={[{ required: true }]}
         >
           <Select size="large" className="rounded-xl h-12">
@@ -113,7 +113,7 @@ const UpdateNewsForm: React.FC<UpdateNewsFormProps> = ({ newsId, onSuccess }) =>
 
         <Form.Item 
           name="imageUrl" 
-          label={<span className="font-bold text-gray-700">Image de couverture</span>}
+          label={<span className="font-bold">Image de couverture</span>}
           valuePropName="fileList" 
           getValueFromEvent={(e) => Array.isArray(e) ? e : e?.fileList}
           extra="Laissez tel quel pour conserver l'image actuelle."
@@ -132,7 +132,7 @@ const UpdateNewsForm: React.FC<UpdateNewsFormProps> = ({ newsId, onSuccess }) =>
 
         <Form.Item 
           name="description" 
-          label={<span className="font-bold text-gray-700">Contenu</span>} 
+          label={<span className="font-bold">Contenu</span>} 
           rules={[{ required: true, message: 'Le contenu est requis' }]}
         >
           <Input.TextArea rows={6} className="rounded-xl p-4" placeholder="Description détaillée..." />
