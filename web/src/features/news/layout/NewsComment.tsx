@@ -115,7 +115,7 @@ const handleDelete = async (commentId: string) => {
               <Avatar icon={<UserOutlined />} className="bg-slate-200" />
               <div className="flex-1">
                 <div className="flex justify-between items-center mb-1">
-                  <span className="font-bold">{user?.name}</span>
+                  <span className="font-bold">{item.authorId === user?.id ? user?.name : null}</span>
                   
                   <Space size="middle">
                     <span className="text-xs text-slate-400 italic">{formatDate(item.createdAt)}</span>
