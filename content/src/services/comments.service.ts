@@ -66,6 +66,6 @@ export const getCommentsByNewsService = async (newsId: string) => {
                 select: {
                     name: true
                 }
-        }
+        }   }
     });
 };
