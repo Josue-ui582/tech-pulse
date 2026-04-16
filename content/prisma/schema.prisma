@@ -38,6 +38,7 @@ model Comments {
   content   String
   createdAt DateTime @default(now())
   authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
   news      News     @relation(fields: [newsId], references: [id], onDelete: Cascade)
   newsId    String
 }
@@ -55,6 +56,7 @@ model User {
   password      String?
   role          Role      @default(user)
   profileImage  String?
+  comments      Comments[]
   bio           String?
   isTwoFactorEnabled Boolean  @default(false)
   twoFactorSecret    String?
