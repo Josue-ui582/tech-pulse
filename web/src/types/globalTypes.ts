@@ -73,3 +73,11 @@ export type CommentType = {
   createdAt: string;
   authorId: string;
 }
+
+export type  NewsReactionsProps = {
+  newsId: string;
+  initialLikes: number;
+  initialUnlikes: number;
+  userHasLiked?: boolean;
+  userHasUnliked?: boolean;
+}
