@@ -130,11 +130,6 @@ export const deleteNewController = async (req: Request<{id: string}>, res: Respo
 export const getUniqueNewController = async (req: Request<{id: string}>, res: Response) => {
     try {
         const { id } = req.params;
-        const { token } = req.cookies;
-
-        if (!token) {
-            return res.status(401).json({ message: "Authentification requise" });
-        }
 
         const uniqueNew = await getUniqueNewService(id);
 

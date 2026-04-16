@@ -12,6 +12,7 @@ import NewsHeader from "@/features/news/layout/NewsHeader";
 import NewsFooter from "@/features/news/layout/NewsFooter";
 import NewsComments from "@/features/news/layout/NewsComment";
 import { Navbar } from "@/components/layout/navbar";
+import NewsReactions from "@/features/news/layout/NewsReactions";
 
 const { Paragraph } = Typography;
 const BACKEND_URL = "http://localhost:3001";
@@ -96,6 +97,15 @@ useEffect(() => {
           
           <Divider />
         </article>
+        {article && (
+          <NewsReactions 
+            newsId={article.id} 
+            initialLikes={article.likesCount || 0}
+            initialUnlikes={article.unlikesCount || 0}
+            userHasLiked={article.userHasLiked}
+            userHasUnliked={article.userHasUnliked}
+          />
+        )}
         <NewsComments slug={slug} />
 
         <NewsFooter slug={slug} />

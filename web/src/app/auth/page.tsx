@@ -57,7 +57,18 @@ export default function AuthPage() {
           messageApi.success("Connexion réussie !");
           router.replace(result.user.role === "admin" ? "/admin/dashboard" : "/news");
         }
+      }else {
+      const cleanedValues = await registerSchema.validate(values, { abortEarly: false });
+      const result = await authService.register(cleanedValues);
+
+      if (result?.error) {
+        throw new Error(result.error || "Erreur lors de l'inscription");
       }
+
+      messageApi.success("Compte créé avec succès ! Connectez-vous.");
+      setIsLogin(true);
+      form.resetFields();
+    }
     } catch (error: any) {
       message.error(error.message || "Une erreur est survenue");
     }
