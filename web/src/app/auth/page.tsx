@@ -59,14 +59,14 @@ export default function AuthPage() {
         }
       }else {
       const cleanedValues = await registerSchema.validate(values, { abortEarly: false });
-      const result = await authService.register(cleanedValues); // Appel au service register
+      const result = await authService.register(cleanedValues);
 
       if (result?.error) {
         throw new Error(result.error || "Erreur lors de l'inscription");
       }
 
       messageApi.success("Compte créé avec succès ! Connectez-vous.");
-      setIsLogin(true); // Redirige l'utilisateur vers le formulaire de connexion
+      setIsLogin(true);
       form.resetFields();
     }
     } catch (error: any) {
