@@ -47,7 +47,7 @@ const CreateNewsForm = ({ onSucess }: { onSucess: () => void }) => {
   return (
     <div className="max-w-2xl mx-auto">
       <Card className="rounded-3xl border-none bg-white/80 backdrop-blur-sm">
-        <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">Créer un nouvel article</h2>
+        <h2 className="text-3xl font-bold mb-8 text-center">Créer un nouvel article</h2>
 
         {error && (
           <div className="p-3 mb-6 rounded-xl bg-rose-50 border border-rose-100 text-rose-600 text-sm font-semibold">

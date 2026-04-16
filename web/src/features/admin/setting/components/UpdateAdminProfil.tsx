@@ -75,7 +75,7 @@ export const UpdateAdminProfileSettings = () => {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <Form form={form} layout="vertical" onFinish={onProfileFinish} className="max-w-2xl">
                 <div className="flex flex-col md:flex-row gap-8 items-start">
-                    <div className="flex flex-col items-center gap-4 bg-slate-50 p-6 rounded-3xl border border-dashed border-slate-200">
+                    <div className="flex flex-col items-center gap-4 p-6 rounded-3xl border border-dashed border-slate-200">
                         <div className="relative group cursor-pointer">
                             <Avatar 
                                 size={120} 
