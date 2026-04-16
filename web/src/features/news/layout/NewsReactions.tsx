@@ -31,7 +31,7 @@ export default function NewsReactions({ newsId, initialLikes, initialUnlikes, us
     }
 
     return (
-        <div className="flex justify-center my-8 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+        <div className="flex justify-center my-8 p-4 rounded-2xl">
             <Space size="large">
                 <Space>
                     <Button 
