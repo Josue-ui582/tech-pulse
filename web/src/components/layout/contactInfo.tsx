@@ -16,7 +16,7 @@ const ContactInfo = () => {
                 >
                   <Card className="rounded-3xl border-none shadow-sm hover:shadow-md transition-shadow">
                     <div className="flex items-center gap-5">
-                      <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-2xl flex items-center justify-center">
                         {info.icon}
                       </div>
                       <div>

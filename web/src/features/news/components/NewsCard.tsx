@@ -1,46 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import { News } from "@/types/news";
+import { News } from "@/types/globalTypes";
 import { formatDate } from "@/utils/formatDate";
-import { increateNewView } from "@/services/api";
 import { ReadMoreIcon } from "../../../../public/icons/readMoreIcon";
 import { useRouter } from "next/navigation";
 
 const BACKEND_URL = "http://localhost:3001";
 
 const NewsCard = ({ article }: { article: News }) => {
-  const [expanded, setExpanded] = useState(false);
-  const [currentViews, setCurrentViews] = useState(article.viewsCount);
   const router = useRouter();
-
-  const handleExpand = async () => {
-    setExpanded(prev => !prev);
-
-    if (!expanded) {
-      try {
-        const stored = localStorage.getItem("viewed_news");
-        const viewedNews = stored ? JSON.parse(stored) : [];
-
-        if (!viewedNews.includes(article.id)) {
-          const updateData = await increateNewView(article.id);
-
-          if (updateData) {
-            setCurrentViews(updateData.viewsCount);
-            viewedNews.push(article.id);
-            localStorage.setItem("viewed_news", JSON.stringify(viewedNews));
-          }
-        }
-      } catch (error) {
-        console.error("Erreur gestion des vues :", error);
-      }
-    }
-  };
-
+  
   return (
     <>
       <div 
-        onClick={handleExpand}
         className="relative aspect-16/10 w-full rounded-4xl overflow-hidden mb-6 cursor-pointer group"
       >
         <div className="absolute inset-0 bg-slate-900/5 z-10 group-hover:bg-transparent transition-colors duration-500" />
@@ -76,7 +48,7 @@ const NewsCard = ({ article }: { article: News }) => {
           <span>5 min de lecture</span>
         </div>
 
-        <h3 className="text-xl font-bold text-slate-900 leading-snug group-hover:text-indigo-600 transition-colors duration-300">
+        <h3 className="text-xl font-bold leading-snug group-hover:text-indigo-600 transition-colors duration-300">
           {article.title}
         </h3>
 
@@ -86,7 +58,7 @@ const NewsCard = ({ article }: { article: News }) => {
 
         <div className="mt-6 flex items-center gap-4 text-sm">
           <span className="text-gray-500">
-            👁 {currentViews}
+            👁 {article.viewsCount}
           </span>
 
           <button className="flex items-center gap-2 text-indigo-600 font-bold cursor-pointer" onClick={() => router.replace(`/news/${article.id}`)}>

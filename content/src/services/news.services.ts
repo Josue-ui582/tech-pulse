@@ -74,6 +74,15 @@ export const deleteNewService = async (id: string) => {
 
 export const getUniqueNewService = async (id: string) => {
   return await prisma.news.findUnique({
-    where: { id }
-  })
+    where: { id },
+    include: {
+        reactions: {
+          select: {
+            type: true,
+            userId: true
+          }
+        }
+      }
+    }
+  )
 }

@@ -7,7 +7,7 @@ import {
   SafetyCertificateOutlined 
 } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
-import { logOutUser } from '@/services/api';
+import { useAuth } from '@/hooks/useAuth';
 
 const { Text } = Typography;
 
@@ -15,6 +15,7 @@ const SERVER_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function AdminAvatar({ user }: { user: any }) {
   const router = useRouter();
+  const { logout } = useAuth();
 
   const items = [
     {
@@ -43,8 +44,8 @@ export default function AdminAvatar({ user }: { user: any }) {
       label: 'Déconnexion',
       icon: <LogoutOutlined />,
       danger: true,
-      onClick: () => {
-        logOutUser();
+      onClick: async () => {
+        await logout();
         router.push('/auth');
       },
     },
@@ -52,22 +53,22 @@ export default function AdminAvatar({ user }: { user: any }) {
 
   return (
     <Dropdown menu={{ items }} placement="bottomRight" arrow={{ pointAtCenter: true }} trigger={['click']}>
-      <div className="flex items-center gap-3 p-1.5 pr-4 rounded-full transition-all cursor-pointer group bg-transparent">
-        <Badge dot status="processing" offset={[-2, 32]} color="">
+      <div className="flex items-center p-2 gap-3 transition-all group">
+        <Badge dot status="processing" offset={[-2, 32]} color="#10b981">
           <Avatar 
             size={40} 
             src={user?.profileImage ? `${SERVER_URL}/${user.profileImage}` : undefined}
-            className="bg-blue-100 border-2 border-white shadow-sm group-hover:scale-105 transition-transform"
+            className="group-hover:scale-105 transition-transform"
             icon={<UserOutlined />}
           />
         </Badge>
         
         <div className="hidden md:flex flex-col items-start leading-tight">
-            <Text style={{ color: 'blue-500' }} className="font-bold text-sm">
+            <p className="font-bold text-sm text-white group-hover:text-black dark:hover:text-black">
                 {user?.name}
-            </Text>
+            </p>
 
-          <Tag className="m-0 border-none bg-blue-50 text-[10px] font-black lowercase tracking-tighter px-1.5">
+          <Tag className="m-0 border-none bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[10px] font-black lowercase tracking-tighter px-1.5">
             Propriétaire
           </Tag>
         </div>
