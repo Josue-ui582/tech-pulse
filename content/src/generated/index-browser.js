@@ -127,9 +127,14 @@ exports.Prisma.NewsScalarFieldEnum = {
   category: 'category',
   imageUrl: 'imageUrl',
   viewsCount: 'viewsCount',
-  like: 'like',
-  Unlike: 'Unlike',
   publishedAt: 'publishedAt'
+};
+
+exports.Prisma.ReactionScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  userId: 'userId',
+  newsId: 'newsId'
 };
 
 exports.Prisma.CommentsScalarFieldEnum = {
@@ -182,6 +187,11 @@ exports.Category = exports.$Enums.Category = {
   Dev: 'Dev'
 };
 
+exports.ReactionType = exports.$Enums.ReactionType = {
+  Like: 'Like',
+  Unlike: 'Unlike'
+};
+
 exports.Role = exports.$Enums.Role = {
   admin: 'admin',
   user: 'user'
@@ -189,6 +199,7 @@ exports.Role = exports.$Enums.Role = {
 
 exports.Prisma.ModelName = {
   News: 'News',
+  Reaction: 'Reaction',
   Comments: 'Comments',
   User: 'User',
   ContactMessage: 'ContactMessage'
