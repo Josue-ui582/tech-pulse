@@ -98,7 +98,7 @@ useEffect(() => {
           <Divider />
         </article>
         {article && (
-          <NewsReactions 
+          <NewsReactions
             newsId={article.id} 
             initialLikes={article.likesCount || 0}
             initialUnlikes={article.unlikesCount || 0}

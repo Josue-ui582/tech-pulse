@@ -72,6 +72,9 @@ export type CommentType = {
   content: string;
   createdAt: string;
   authorId: string;
+  author: {
+    name: string
+  }
 }
 
 export type  NewsReactionsProps = {

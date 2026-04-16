@@ -111,7 +111,7 @@ export const UpdateAdminPasswordSettings = ({ loading, setLoading }: UpdateAdmin
           <Divider className="my-8" />
 
           {!show2FA ? (
-            <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100">
+            <div className="p-4 rounded-2xl border border-amber-100">
               <Title level={5} className="text-amber-800!">Double Authentification (2FA)</Title>
               <Paragraph className="text-amber-700/80 text-sm">Ajoutez une couche de sécurité supplémentaire.</Paragraph>
               <Button 
@@ -128,12 +128,12 @@ export const UpdateAdminPasswordSettings = ({ loading, setLoading }: UpdateAdmin
                 <motion.div 
                     initial={{ opacity: 0, scale: 0.9 }} 
                     animate={{ opacity: 1, scale: 1 }}
-                    className="p-4 bg-white rounded-2xl border border-blue-100 shadow-sm"
+                    className="p-4 rounded-2xl border border-blue-100 shadow-sm"
                 >
                     <Title level={5} className="text-blue-800!">Configurer le 2FA</Title>
                     <Paragraph className="text-slate-500 text-sm">Scannez ce code avec Google Authenticator ou Authy.</Paragraph>
                     
-                    {qrCode && <div className="bg-white p-2 inline-block border rounded-xl mb-4"><img src={qrCode} alt="QR Code" /></div>}
+                    {qrCode && <div className="p-2 inline-block border rounded-xl mb-4"><img src={qrCode} alt="QR Code" /></div>}
                     
                     <Form layout="vertical" form={faForm} onFinish={handleVerify2FA}>
                         <Form.Item 
