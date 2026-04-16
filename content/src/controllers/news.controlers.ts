@@ -130,22 +130,27 @@ export const deleteNewController = async (req: Request<{id: string}>, res: Respo
 export const getUniqueNewController = async (req: Request<{id: string}>, res: Response) => {
     try {
         const { id } = req.params;
+        const { token } = req.cookies;
 
-        if (!id) {
-            return res.status(400).json({
-                message: "L'ID de l'article est requis"
-            });
+        if (!token) {
+            return res.status(401).json({ message: "Authentification requise" });
         }
 
         const uniqueNew = await getUniqueNewService(id);
 
         if (!uniqueNew) {
-            return res.status(404).json({
-                message: "Article non trouvé"
-            });
+            return res.status(404).json({ message: "Article non trouvé" });
         }
 
-        return res.status(200).json(uniqueNew);
+        const likesCount = uniqueNew.reactions.filter(r => r.type === "Like").length;
+        const unlikesCount = uniqueNew.reactions.filter(r => r.type === "Unlike").length;
+
+        return res.status(200).json({
+            ...uniqueNew,
+            likesCount,
+            unlikesCount,
+            reactions: undefined 
+        });
 
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "Erreur serveur";
